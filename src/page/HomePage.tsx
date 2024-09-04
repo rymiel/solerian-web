@@ -3,7 +3,7 @@ import { App, toastErrorHandler } from "../App";
 import { useEffect, useState } from "react";
 import { apiFetch, RawEntry } from "../api";
 import { partOfExtra, determineClass, defaultEntrySort } from "../lang/extra";
-import { decodeHtml, scriptMultiHTML } from "../lang/script";
+import { scriptMultiUnicode } from "../lang/script";
 
 export default function HomePage() {
   const [entries, setEntries] = useState<RawEntry[] | null>(null);
@@ -47,7 +47,7 @@ export default function HomePage() {
                 <td>{e.eng}</td>
                 <td className="dual">
                   <i>{e.sol}</i>
-                  <span className="sol">{decodeHtml(scriptMultiHTML(e.sol))}</span>
+                  <span className="sol">{scriptMultiUnicode(e.sol)}</span>
                 </td>
                 <td>{e.extra}</td>
               </tr>

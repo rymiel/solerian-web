@@ -1,52 +1,57 @@
-const LETTERS: Readonly<Record<string, number>> = {
-  s: 0x00,
-  m: 0x01,
-  n: 0x02,
-  ǹ: 0x03,
-  r: 0x04,
-  l: 0x05,
-  t: 0x06,
-  d: 0x07,
-  k: 0x08,
-  g: 0x09,
-  f: 0x0a,
-  p: 0x0b,
-  j: 0x0c,
-  x: 0x0d,
-  e: 0x11,
-  i: 0x12,
-  o: 0x13,
-  à: 0x14,
-  u: 0x15,
-  y: 0x16,
-} as const;
+const LETTERSX: Readonly<(string | null)[]> = [
+  "s",
+  "m",
+  "n",
+  "ǹ",
+  "r",
+  "l",
+  "t",
+  "d",
+  "k",
+  "g",
+  "f",
+  "p",
+  "j",
+  "x",
+  null,
+  null,
+  "a",
+  "e",
+  "i",
+  "o",
+  "à",
+  "u",
+  "y",
+] as const;
 
 class LetterContext {
-  letter: number;
-  form: number;
-  constructor(letter: number, form: number) {
-    this.letter = letter;
-    this.form = form;
+  private num: number;
+  constructor(letter: number) {
+    this.num = letter << 4;
   }
 
-  final(): LetterContext {
-    this.form |= 0x1;
-    return this;
+  vowel(): boolean {
+    return this.num >> 4 >= 0x10;
   }
 
-  initial(): LetterContext {
-    this.form |= 0x2;
-    return this;
+  final() {
+    this.num |= 0x1;
   }
 
-  withA(): LetterContext {
-    this.form |= 0x4;
-    return this;
+  initial() {
+    this.num |= 0x2;
   }
 
-  stress(): LetterContext {
-    this.form |= 0x8;
-    return this;
+  withA() {
+    this.num |= 0x4;
+  }
+
+  stress() {
+    this.num |= 0x8;
+  }
+
+  codepoint(): number {
+    return 0xe000 + this.num;
   }
 }
 
@@ -66,7 +71,7 @@ function toSuffixed(s: string): string {
   return s;
 }
 
-export function scriptHTML(text: string): string {
+export function scriptUnicode(text: string): string {
   const res: LetterContext[] = [];
   let flag = false; // detaching flag
 
@@ -74,26 +79,29 @@ export function scriptHTML(text: string): string {
     const first = res.length === 0;
     if (c === "a" && first) {
       // Initial 'a' has a special form
-      res.push(new LetterContext(0x10, 0));
+      res.push(new LetterContext(0x10));
     } else if (c === "a") {
-      // Attach 'a' diacrtici
-      res[res.length - 1] = res[res.length - 1].withA();
-    } else if (c === "'" && !first && res[res.length - 1].letter >= 0x10) {
+      // Attach 'a' diacritic
+      res[res.length - 1].withA();
+    } else if (c === "'" && !first && res[res.length - 1].vowel()) {
       // stress vowels
-      res[res.length - 1] = res[res.length - 1].stress();
+      res[res.length - 1].stress();
     } else {
-      const letter = LETTERS[c];
-      if (letter === undefined) {
+      const letter = LETTERSX.indexOf(c);
+      if (letter === -1) {
         continue; // skip nonexistent letters
       }
 
       if (c === "m" && !first) {
         // detach last letter
-        res[res.length - 1] = res[res.length - 1].final();
+        res[res.length - 1].final();
       }
 
       // detach this letter if flagged
-      res.push(new LetterContext(letter, flag ? 2 : 0));
+      res.push(new LetterContext(letter));
+      if (flag) {
+        res[res.length - 1].initial();
+      }
 
       // letters which will detach next letter (flag)
       flag = c === "à" || c === "m";
@@ -104,17 +112,13 @@ export function scriptHTML(text: string): string {
     return "";
   }
 
-  res[0] = res[0].initial();
-  res[res.length - 1] = res[res.length - 1].final();
+  res[0].initial();
+  res[res.length - 1].final();
 
-  let buffer = "&#x202e"; // RTL
-  res.forEach((i) => {
-    buffer += "&#xe" + i.letter.toString(16).padStart(2, "0") + i.form.toString(16);
-  });
-  return buffer;
+  return String.fromCodePoint(0x202e, ...res.map((i) => i.codepoint()));
 }
 
-export function scriptMultiHTML(words: string): string {
+export function scriptMultiUnicode(words: string): string {
   words = words.trim();
   if (words.length === 0) {
     return "";
@@ -122,13 +126,7 @@ export function scriptMultiHTML(words: string): string {
 
   let buffer = "";
   words.split(" ").forEach((w) => {
-    buffer += scriptHTML(toSuffixed(w)) + " ";
+    buffer += scriptUnicode(toSuffixed(w)) + " ";
   });
   return buffer.trim();
-}
-
-export function decodeHtml(html: string): string {
-    var txt = document.createElement("textarea");
-    txt.innerHTML = html;
-    return txt.value;
 }
