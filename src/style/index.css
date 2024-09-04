@@ -1,4 +1,10 @@
 @font-face {
+  font-family: "Solera";
+  src: url("./soleraOrigin3.ttf") format("truetype");
+  font-display: swap;
+}
+
+@font-face {
   font-family: "Andika";
   src: url("./AndikaNewBasic-Custom-R.ttf") format("truetype");
   font-display: swap;
@@ -52,6 +58,22 @@ body {
 
 .andika {
   font-family: "Andika", sans-serif;
+}
+
+.sol,
+table.bp5-html-table td.sol {
+  font-family: "Solera", "Andika", sans-serif;
+  text-align: right;
+  font-size: 22px;
+}
+
+.dual {
+  display: flex;
+}
+
+.dual .sol {
+  flex-grow: 1;
+  padding-left: 0.4rem;
 }
 
 header,
@@ -247,12 +269,23 @@ header .bp5-divider {
   flex-shrink: 0;
 }
 
+table.bp5-html-table.bp5-compact.dictionary th,
+table.bp5-html-table.bp5-compact.dictionary td {
+  padding-bottom: 3px;
+  padding-top: 3px;
+}
+
 .thin-header {
   font-weight: normal;
 }
 
 .text-center {
   text-align: center;
+}
+
+.text-right,
+table.bp5-html-table th.text-right {
+  text-align: right;
 }
 
 footer p {
