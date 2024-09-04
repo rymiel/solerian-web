@@ -1,0 +1,281 @@
+@font-face {
+  font-family: "Andika";
+  src: url("./AndikaNewBasic-Custom-R.ttf") format("truetype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Andika";
+  src: url("./AndikaNewBasic-Custom-B.ttf") format("truetype");
+  font-weight: bold;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Andika";
+  src: url("./AndikaNewBasic-Custom-I.ttf") format("truetype");
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Andika";
+  src: url("./AndikaNewBasic-Custom-BI.ttf") format("truetype");
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Fira Sans";
+  src: url("./FiraSans.ttf") format("truetype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Fira Sans Extra Condensed";
+  src: url("./FiraSansCondensed.ttf") format("truetype");
+  font-display: swap;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  font-family: "Andika", sans-serif;
+  height: 100vh;
+  margin: 0;
+}
+
+body {
+  margin: 0;
+}
+
+.andika {
+  font-family: "Andika", sans-serif;
+}
+
+header,
+nav,
+footer,
+main,
+div.inter {
+  padding: 8px 12px;
+  scroll-behavior: smooth;
+}
+
+main {
+  flex: 1;
+  font-size: 18px;
+  line-height: 30px;
+  overflow: auto;
+  padding: 0;
+}
+
+p {
+  margin: 2px;
+  font-family: Andika, Solera, sans-serif;
+}
+
+footer {
+  display: flex;
+  flex-direction: column;
+}
+
+a {
+  transition: all 180ms;
+}
+
+.bp5-dark h1 a,
+.bp5-dark h1 a:visited,
+.bp5-dark h1 a:active,
+.bp5-dark h1 a:hover {
+  text-decoration: none;
+  color: #f6f7f9;
+}
+
+#center,
+#root {
+  display: flex;
+  overflow: auto;
+}
+
+#center {
+  flex-direction: row;
+  flex: 1;
+}
+
+#root {
+  flex-direction: column;
+  flex: 1;
+}
+
+#footer-message {
+  align-self: center;
+  flex: 1;
+  display: flex;
+}
+
+#usertext,
+#usertext:visited {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 10px 24px;
+  display: flex;
+}
+
+#versions {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 8px 22px;
+  line-height: 1.1;
+}
+
+.alert {
+  padding: 12px 18px 20px;
+  color: white;
+  margin-bottom: 15px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-size: 18px;
+}
+
+.error-alert {
+  color: #f2dede;
+  background-color: #b94a48;
+  border-color: #973c3b;
+}
+
+.success-alert {
+  color: #dff0d8;
+  background-color: #458a45;
+  border-color: #346635;
+}
+
+.message-alert {
+  color: #d9edf7;
+  background-color: #387fa2;
+  border-color: #2a607b;
+}
+
+.close-button {
+  margin-left: 10px;
+  color: inherit;
+  font-weight: bold;
+  float: right;
+  font-size: 24px;
+  line-height: 32px;
+  cursor: pointer;
+}
+
+.alert-container {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  padding: 8px 22px;
+}
+
+body.bp5-dark {
+  background-color: #252a31;
+}
+
+header,
+footer {
+  background-color: #452798;
+}
+
+header {
+  padding-top: 4px;
+}
+
+header h1.bp5-heading,
+header h2.bp5-heading,
+header h3.bp5-heading {
+  display: inline;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-right: 1rem;
+}
+
+header .bp5-divider {
+  display: inline-block;
+  height: 2rem;
+  margin-top: -0.5rem;
+  margin-bottom: -0.5rem;
+  margin-right: 1rem;
+}
+
+.sc {
+  font-variant-caps: small-caps;
+}
+
+.fit {
+  width: fit-content;
+}
+
+.flex-center {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.margin-auto {
+  margin: auto;
+  margin-top: 2rem;
+}
+
+.margin-2 {
+  margin: 2rem;
+}
+
+.margin-2-bottom {
+  margin-bottom: 2rem;
+}
+
+.dragging {
+  opacity: 0.4;
+}
+
+/* fix weird behaviour */
+.bp5-non-ideal-state > .bp5-fill.bp5-button-group {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.thin-header {
+  font-weight: normal;
+}
+
+.text-center {
+  text-align: center;
+}
+
+footer p {
+  display: inline-block;
+  padding-right: 0.6rem;
+  margin: 0;
+}
+
+.top-bar {
+  width: 100%;
+  min-height: 2rem;
+  margin-bottom: 1rem;
+}
+
+.darken {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.fill-100 {
+  height: 100%;
+  width: 100%;
+}
+
+.fill-width {
+  width: 100%;
+}
