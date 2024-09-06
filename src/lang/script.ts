@@ -1,3 +1,5 @@
+import { gsub, SubMap } from "./util";
+
 const LETTERSX: Readonly<(string | null)[]> = [
   "s",
   "m",
@@ -55,21 +57,15 @@ class LetterContext {
   }
 }
 
-function toSuffixed(s: string): string {
-  (
-    [
-      [/á/g, "à'"],
-      [/é/g, "e'"],
-      [/í/g, "i'"],
-      [/ó/g, "o'"],
-      [/ú/g, "u'"],
-      [/ý/g, "y'"],
-    ] as const
-  ).forEach(([k, v]) => {
-    s = s.replace(k, v);
-  });
-  return s;
-}
+const TO_SUFFIXED: SubMap = [
+  [/á/g, "à'"],
+  [/é/g, "e'"],
+  [/í/g, "i'"],
+  [/ó/g, "o'"],
+  [/ú/g, "u'"],
+  [/ý/g, "y'"],
+] as const;
+const toSuffixed = (s: string): string => gsub(s, TO_SUFFIXED);
 
 export function scriptUnicode(text: string): string {
   const res: LetterContext[] = [];
