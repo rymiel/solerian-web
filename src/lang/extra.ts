@@ -1,37 +1,37 @@
 import { RawEntry } from "../api";
 
-enum Part {
+export enum Part {
   Noun,
   Verb,
   // Pronoun
 }
 
-type Suffixes = { [P in Part]: readonly (readonly [RegExp, string])[] };
-const SUFFIXES: Suffixes = {
+const SUFFIXES = {
   [Part.Noun]: [
-    [/[áà]t$/, "1"],
-    [/[áà]d$/, "2"],
-    [/[ií]à$/, "3"],
-    [/[áà]x$/, "4"],
-    [/[áà]$/, "5"],
-    [/[eé]n$/, "6"],
-    [/m$/, "7"],
-    [/[eé]l$/, "8"],
-    [/r$/, "9"],
+    [/([áà]t)$/, "1"],
+    [/([áà]d)$/, "2"],
+    [/([ií]à)$/, "3"],
+    [/([áà]x)$/, "4"],
+    [/([áà])$/, "5"],
+    [/([eé]n)$/, "6"],
+    [/(m)$/, "7"],
+    [/([eé]l)$/, "8"],
+    [/(r)$/, "9"],
   ],
   [Part.Verb]: [
-    [/élus$/, "1"],
-    [/[aeiouyàáéíóúý]las$/, "2"],
-    [/[nm]lud$/, "3n"],
-    [/[r]lud$/, "3r"],
-    [/lud$/, "3"],
-    [/s[nm][úu]$/, "4s"],
-    [/[nm][úu]$/, "4"],
-    [/[tnm]lus$/, "5t"],
-    [/rlus$/, "5r"],
-    [/lus$/, "5"],
+    [/(élus)$/, "1"],
+    [/[aeiouyàáéíóúý](las)$/, "2"],
+    [/[nm](lud)$/, "3n"],
+    [/[r](lud)$/, "3r"],
+    [/(lud)$/, "3"],
+    [/(s(n|m)[úu])$/, "4s"],
+    [/((n|m)[úu])$/, "4"],
+    [/((t|n|m)lus)$/, "5t"],
+    [/r(lus)$/, "5r"],
+    [/(lus)$/, "5"],
   ],
 } as const;
+export type Types = { [P in Part]: (typeof SUFFIXES)[P][number][1] };
 
 export function partOfExtra(extra: string): Part | null {
   if (extra.startsWith("N")) {
@@ -43,11 +43,23 @@ export function partOfExtra(extra: string): Part | null {
   }
 }
 
-export function determineClass(word: string, part: Part): string | null {
-  const classes = SUFFIXES[part];
-  for (const [suffix, c] of classes) {
+export function determineType(word: string, part: Part): Types[Part] | null {
+  const types = SUFFIXES[part];
+  for (const [suffix, t] of types) {
     if (suffix.test(word)) {
-      return c;
+      return t;
+    }
+  }
+  return null;
+}
+
+export type SeparatedRoot = [result: RegExpExecArray, type: Types[Part]]
+export function separateRoot(word: string, part: Part): SeparatedRoot | null {
+  const classes = SUFFIXES[part];
+  for (const [suffix, t] of classes) {
+    const match = suffix.exec(word);
+    if (match != null) {
+      return [match, t];
     }
   }
   return null;

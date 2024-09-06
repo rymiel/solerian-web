@@ -1,4 +1,4 @@
-import { gsub, SubMap } from "./util";
+import { gsub, GSubMap } from "./util";
 
 const LETTERSX: Readonly<(string | null)[]> = [
   "s",
@@ -57,7 +57,7 @@ class LetterContext {
   }
 }
 
-const TO_SUFFIXED: SubMap = [
+const TO_SUFFIXED: GSubMap = [
   [/á/g, "à'"],
   [/é/g, "e'"],
   [/í/g, "i'"],

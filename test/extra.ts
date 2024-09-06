@@ -1,5 +1,5 @@
 import { type RawEntry } from "../src/api";
-import { defaultEntrySort, determineClass, partOfExtra } from "../src/lang/extra";
+import { defaultEntrySort, determineType, partOfExtra } from "../src/lang/extra";
 import { scriptMultiUnicode } from "../src/lang/script";
 import { soundChange } from "../src/lang/soundChange";
 
@@ -10,7 +10,7 @@ fetch("http://localhost:3000/api/temporary/v0/raw")
     i.sort(defaultEntrySort).map((i) => {
       const part = partOfExtra(i.extra);
       if (part !== null) {
-        const cls = determineClass(i.sol, part) ?? "?";
+        const cls = determineType(i.sol, part) ?? "?";
         return { ...i, extra: `${i.extra}-${cls}` };
       }
       return i;

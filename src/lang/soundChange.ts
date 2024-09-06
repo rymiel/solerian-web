@@ -1,4 +1,4 @@
-import { gsub, gsubBackreference, SubMap } from "./util";
+import { gsub, gsubBackreference, GSubMap } from "./util";
 
 const VOWEL = "əaeiouyáéíóúýæÆɐ";
 const STRESS = "áéíóúýƆÆ";
@@ -7,7 +7,7 @@ const V = `[${VOWEL}]`;
 const C = `[^${VOWEL}]`;
 const Vg = new RegExp(V, "g");
 
-const CHANGES: SubMap = [
+const CHANGES: GSubMap = [
   [`st([eéií])`, "ɕ\\1"],
   [`([^s]?)t([ií])`, "\\1ts\\2"],
   [`t([eéií])`, "ç\\1"],
@@ -52,13 +52,13 @@ const CHANGES: SubMap = [
   [`nŋ`, "ŋ"],
 ].map(([k, v]) => [new RegExp(k, "g"), v]);
 
-const PRE_UNROMANIZE: SubMap = [
+const PRE_UNROMANIZE: GSubMap = [
   ["a", "ə"],
   ["à", "a"],
   ["ǹ", "ɲ"],
 ];
 
-const POST_UNROMANIZE: SubMap = [
+const POST_UNROMANIZE: GSubMap = [
   ["á", "a"],
   ["é", "e"],
   ["í", "i"],
@@ -70,7 +70,7 @@ const POST_UNROMANIZE: SubMap = [
   ["ð", "ð̠"],
 ];
 
-const MAKE_STRESSED: SubMap = [
+const MAKE_STRESSED: GSubMap = [
   ["a", "á"],
   ["e", "é"],
   ["i", "í"],

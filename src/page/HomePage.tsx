@@ -2,9 +2,10 @@ import { HTMLTable, NonIdealState, Spinner, SpinnerSize } from "@blueprintjs/cor
 import { App, toastErrorHandler } from "../App";
 import { useEffect, useState } from "react";
 import { apiFetch, RawEntry } from "../api";
-import { partOfExtra, determineClass, defaultEntrySort } from "../lang/extra";
+import { partOfExtra, determineType, defaultEntrySort, Part, separateRoot } from "../lang/extra";
 import { scriptMultiUnicode } from "../lang/script";
 import { soundChange } from "../lang/soundChange";
+import { applyFromSeparatedRoot } from "../lang/inflection";
 
 interface FullEntry extends RawEntry {
   script: string;
@@ -23,7 +24,7 @@ export default function HomePage() {
             let extra = i.extra;
             const part = partOfExtra(i.extra);
             if (part !== null) {
-              const cls = determineClass(i.sol, part) ?? "?";
+              const cls = determineType(i.sol, part) ?? "?";
               extra = `${i.extra}-${cls}`;
             }
             return { ...i, extra, script: scriptMultiUnicode(i.sol), ipa: soundChange(i) };
