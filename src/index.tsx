@@ -7,12 +7,13 @@ import { createHashRouter, RouterProvider } from "react-router-dom";
 import { createContext, StrictMode, useState } from "react";
 import HomePage from "./page/HomePage";
 import { OverlaysProvider } from "@blueprintjs/core";
+import ErrorPage from "./page/ErrorPage";
 
 const router = createHashRouter([
   {
     path: "/",
     element: <HomePage />,
-    // errorElement: <ErrorPage />,
+    errorElement: <ErrorPage />,
   },
 ]);
 
