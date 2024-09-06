@@ -4,9 +4,15 @@ import { useEffect, useState } from "react";
 import { apiFetch, RawEntry } from "../api";
 import { partOfExtra, determineClass, defaultEntrySort } from "../lang/extra";
 import { scriptMultiUnicode } from "../lang/script";
+import { soundChange } from "../lang/soundChange";
+
+interface FullEntry extends RawEntry {
+  script: string;
+  ipa: string;
+}
 
 export default function HomePage() {
-  const [entries, setEntries] = useState<RawEntry[] | null>(null);
+  const [entries, setEntries] = useState<FullEntry[] | null>(null);
   let content = <NonIdealState icon={<Spinner size={SpinnerSize.LARGE} />} />;
 
   useEffect(() => {
@@ -14,12 +20,13 @@ export default function HomePage() {
       try {
         setEntries(
           (await apiFetch<RawEntry[]>("/raw")).sort(defaultEntrySort).map((i) => {
+            let extra = i.extra;
             const part = partOfExtra(i.extra);
             if (part !== null) {
               const cls = determineClass(i.sol, part) ?? "?";
-              return { ...i, extra: `${i.extra}-${cls}` };
+              extra = `${i.extra}-${cls}`;
             }
-            return i;
+            return { ...i, extra, script: scriptMultiUnicode(i.sol), ipa: soundChange(i) };
           })
         );
       } catch (error) {
@@ -38,6 +45,7 @@ export default function HomePage() {
               <th>English</th>
               <th>Solerian</th>
               <th>Extra</th>
+              <th>Pronunciation</th>
             </tr>
           </thead>
           <tbody>
@@ -47,9 +55,10 @@ export default function HomePage() {
                 <td>{e.eng}</td>
                 <td className="dual">
                   <i>{e.sol}</i>
-                  <span className="sol">{scriptMultiUnicode(e.sol)}</span>
+                  <span className="sol">{e.script}</span>
                 </td>
                 <td>{e.extra}</td>
+                <td>{e.ipa}</td>
               </tr>
             ))}
           </tbody>
