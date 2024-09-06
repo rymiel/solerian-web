@@ -53,13 +53,13 @@ export function determineType(word: string, part: Part): Types[Part] | null {
   return null;
 }
 
-export type SeparatedRoot = [result: RegExpExecArray, type: Types[Part]]
+export type SeparatedRoot = [result: RegExpExecArray, part: Part, type: Types[Part]]
 export function separateRoot(word: string, part: Part): SeparatedRoot | null {
   const classes = SUFFIXES[part];
   for (const [suffix, t] of classes) {
     const match = suffix.exec(word);
     if (match != null) {
-      return [match, t];
+      return [match, part, t];
     }
   }
   return null;

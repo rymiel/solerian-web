@@ -192,11 +192,11 @@ function applyFrom<P extends Part>(
   }) as unknown as Forms[P][Types[P]];
 }
 
-export function applyFromSeparatedRoot<P extends Part>([match, type]: SeparatedRoot, part: P, markStress = true): Forms[P][Types[P]] {
+export function applyFromSeparatedRoot([match, part, type]: SeparatedRoot, markStress = true): string[] {
   const word = match.input;
   const cutoff = match[1].length;
   const root = word.slice(0, -cutoff);
   const suffix = word.slice(-cutoff);
   const special = match[2] || "";
-  return applyFrom(root, suffix, special, part, type as Types[P], markStress);
+  return applyFrom(root, suffix, special, part, type, markStress) as string[];
 }

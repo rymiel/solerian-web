@@ -14,7 +14,7 @@ fetch("http://localhost:3000/api/temporary/v0/raw")
         const s = separateRoot(i.sol, part);
         if (s !== null) {
           const markStress = !i.extra.startsWith("NAME");
-          const forms = applyFromSeparatedRoot(s, part, markStress) as string[];
+          const forms = applyFromSeparatedRoot(s, markStress) as string[];
           forms.forEach((f, fi) => {
             const script = scriptMultiUnicode(f).replace(/[^ ]/g, (c) => "&#x" + c.charCodeAt(0).toString(16));
             const ipa = soundChange({ sol: f, extra: i.extra });
