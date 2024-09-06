@@ -53,8 +53,10 @@ export function determineClass(word: string, part: Part): string | null {
   return null;
 }
 
+const compare = (a: string, b: string): number => (((a as any) > b) as any) - (((a as any) < b) as any);
+
 export const defaultEntrySort = (a: RawEntry, b: RawEntry): number => {
-  const f = (((a.extra as any) > b.extra) as any) - (((a.extra as any) < b.extra) as any);
-  if (f === 0) return a.eng.localeCompare(b.eng);
+  const f = compare(a.extra, b.extra);
+  if (f === 0) return compare(a.eng, b.eng);
   else return f;
 };
