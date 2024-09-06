@@ -20,11 +20,12 @@ export function gsubBackreference(str: string, map: GSubMap): string {
 
 export type SubMap = readonly (readonly [string, string])[];
 export function sub(str: string, map: SubMap): string {
-  const [rk, ri, rv] = map
-    .map(([k, v]) => [k, str.indexOf(k), v] as const)
-    .filter(([_k, i, _v]) => i !== -1)
-    .reduce(([k0, i0, v0], [k1, i1, v1]) => (i0 <= i1 ? [k0, i0, v0] : [k1, i1, v1]), ["", Infinity, ""]);
+  for (const c of str) {
+    const r = map.find(([k, _]) => k === c);
+    if (r !== undefined) {
+      return str.replace(c, r[1]);
+    }
+  }
 
-  if (ri === Infinity) return str;
-  return str.replace(rk, rv);
+  return str;
 }
