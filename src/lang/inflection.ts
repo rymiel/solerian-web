@@ -1,7 +1,7 @@
-import { Types, Part, SeparatedRoot, separateRoot } from "./extra";
-import { gsub, sub, GSubMap, SubMap } from "./util";
+import { Types, Part, SeparatedRoot } from "./extra";
+import { gsub, sub, SubMap } from "./util";
 
-const FORM_NAMES = {
+export const FORM_NAMES = {
   [Part.Noun]: [
     "nom_sg",
     "acc_sg",
@@ -51,6 +51,7 @@ const FORM_NAMES = {
     "old_2sg_imp",
   ] as const,
 };
+export type FormNames<P extends Part> = (typeof FORM_NAMES)[P][number];
 
 type SlotStrings<Tuple extends readonly [...any[]]> = {
   [Index in keyof Tuple]: Tuple[Index] extends string ? string : never;

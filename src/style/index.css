@@ -275,6 +275,10 @@ table.bp5-html-table.bp5-compact.dictionary td {
   padding-top: 3px;
 }
 
+table.bp5-html-table.bp5-compact.inflection p {
+  margin-bottom: 0;
+}
+
 .thin-header {
   font-weight: normal;
 }
@@ -285,6 +289,27 @@ table.bp5-html-table.bp5-compact.dictionary td {
 
 .text-right,
 table.bp5-html-table th.text-right {
+  text-align: right;
+}
+
+.hl {
+  font-weight: bold;
+  text-align: center;
+}
+
+.rb {
+  border-right: 3px solid;
+}
+
+.db {
+  border-bottom: 3px solid;
+}
+
+.ub {
+  border-top: 3px solid;
+}
+
+table.bp5-html-table.bp5-compact.inflection .rb {
   text-align: right;
 }
 
