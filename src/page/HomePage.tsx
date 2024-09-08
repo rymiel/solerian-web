@@ -1,12 +1,13 @@
 import { Dialog, EntityTitle, HTMLTable, NonIdealState, Spinner, SpinnerSize } from "@blueprintjs/core";
-import { App, toastErrorHandler } from "../App";
-import { PropsWithChildren, useEffect, useState } from "react";
-import { apiFetch, RawEntry } from "../api";
-import { partOfExtra, determineType, defaultEntrySort, Part, separateRoot } from "../lang/extra";
+import { App } from "../App";
+import { PropsWithChildren, useContext, useState } from "react";
+import { RawEntry } from "../api";
+import { Part, separateRoot } from "../lang/extra";
 import { scriptMultiUnicode } from "../lang/script";
 import { soundChange } from "../lang/soundChange";
 import { useNavigate, useParams } from "react-router";
 import { applyFromSeparatedRoot, FORM_NAMES, FormNames } from "../lang/inflection";
+import { Dictionary } from "../dictionary";
 
 interface FullEntry extends RawEntry {
   part: Part | null;
@@ -51,7 +52,42 @@ function NounTableEntry({ word }: { word: DualInfo }) {
   );
 }
 
-function NounTable({ dictionary, noun }: { dictionary: FullEntry[] | null; noun: string }) {
+function NounTable({ forms }: { forms: readonly string[] }) {
+  const infos = forms.map((i) => populateDualInfo(i)); // TODO (mark stress)
+  const map = Object.fromEntries(FORM_NAMES[Part.Noun].map((k, i) => [k, infos[i]])) as Record<
+    FormNames<Part.Noun>,
+    DualInfo
+  >;
+
+  return (
+    <HTMLTable compact bordered className="inflection">
+      <tbody>
+        <tr>
+          <td className="rb"></td>
+          <th className="hl db">sg</th>
+          <th className="hl db">pl</th>
+        </tr>
+        <tr>
+          <td className="hl rb">nom</td>
+          <NounTableEntry word={map.nom_sg} />
+          <NounTableEntry word={map.nom_pl} />
+        </tr>
+        <tr>
+          <td className="hl rb">acc</td>
+          <NounTableEntry word={map.acc_sg} />
+          <NounTableEntry word={map.acc_pl} />
+        </tr>
+        <tr>
+          <td className="hl rb">gen</td>
+          <NounTableEntry word={map.gen_sg} />
+          <NounTableEntry word={map.gen_pl} />
+        </tr>
+      </tbody>
+    </HTMLTable>
+  );
+}
+
+function NounDialog({ dictionary, noun }: { dictionary: FullEntry[] | null; noun: string }) {
   const navigate = useNavigate();
   const [isOpen, setOpen] = useState(true);
 
@@ -65,38 +101,14 @@ function NounTable({ dictionary, noun }: { dictionary: FullEntry[] | null; noun:
   if (s === null) {
     content = <NonIdealState icon="error" />; // TODO
   } else {
-    const forms = applyFromSeparatedRoot(s, true).map((i) => populateDualInfo(i)); // TODO (mark stress)
-    const map = Object.fromEntries(FORM_NAMES[Part.Noun].map((k, i) => [k, forms[i]] as const)) as Record<
-      FormNames<Part.Noun>,
-      DualInfo
-    >;
+    const forms = applyFromSeparatedRoot(s, true);
     title = `${title} | pattern ${s[2]} ${Part[s[1]].toLowerCase()}`;
 
     content = (
-      <HTMLTable compact bordered className="inflection">
-        <tbody>
-          <tr>
-            <td className="rb"></td>
-            <th className="hl db">sg</th>
-            <th className="hl db">pl</th>
-          </tr>
-          <tr>
-            <td className="hl rb">nom</td>
-            <NounTableEntry word={map.nom_sg} />
-            <NounTableEntry word={map.nom_pl} />
-          </tr>
-          <tr>
-            <td className="hl rb">acc</td>
-            <NounTableEntry word={map.acc_sg} />
-            <NounTableEntry word={map.acc_pl} />
-          </tr>
-          <tr>
-            <td className="hl rb">gen</td>
-            <NounTableEntry word={map.gen_sg} />
-            <NounTableEntry word={map.gen_pl} />
-          </tr>
-        </tbody>
-      </HTMLTable>
+      <>
+        <NounTable forms={forms.cur} />
+        <NounTable forms={forms.old} />
+      </>
     );
   }
 
@@ -108,36 +120,17 @@ function NounTable({ dictionary, noun }: { dictionary: FullEntry[] | null; noun:
 }
 
 export default function HomePage() {
-  const [entries, setEntries] = useState<FullEntry[] | null>(null);
+  const { entries } = useContext(Dictionary);
   const { noun, verb } = useParams() as { noun?: string; verb?: string };
+  const navigate = useNavigate();
 
   let content = <NonIdealState icon={<Spinner size={SpinnerSize.LARGE} />} />;
   let overlay = null;
 
-  useEffect(() => {
-    (async () => {
-      try {
-        setEntries(
-          (await apiFetch<RawEntry[]>("/raw")).sort(defaultEntrySort).map((i) => {
-            let extra = i.extra;
-            const part = partOfExtra(i.extra);
-            if (part !== null) {
-              const cls = determineType(i.sol, part) ?? "?";
-              extra = `${i.extra}-${cls}`;
-            }
-            return { ...i, extra, part, script: scriptMultiUnicode(i.sol), ipa: soundChange(i) };
-          })
-        );
-      } catch (error) {
-        toastErrorHandler(error);
-      }
-    })();
-  }, []);
-
   if (entries) {
     content = (
       <div className="inter">
-        <HTMLTable className="margin-auto dictionary" compact striped>
+        <HTMLTable className="margin-auto dictionary" compact striped interactive>
           <thead>
             <tr>
               <th>#</th>
@@ -149,13 +142,11 @@ export default function HomePage() {
           </thead>
           <tbody>
             {entries.map((e, i) => (
-              <tr key={e.hash}>
+              <tr key={e.hash} onClick={() => navigate(`/w/${e.sol}`)}>
                 <td>{i + 1}</td>
                 <td>{e.eng}</td>
                 <td className="dual">
-                  <InflectionLink entry={e}>
-                    <i>{e.sol}</i>
-                  </InflectionLink>
+                  <i>{e.sol}</i>
                   <span className="sol">{e.script}</span>
                 </td>
                 <td>{e.extra}</td>
@@ -169,7 +160,7 @@ export default function HomePage() {
   }
 
   if (noun) {
-    overlay = <NounTable dictionary={entries} noun={noun} />;
+    overlay = <NounDialog dictionary={entries} noun={noun} />;
   }
 
   return App(

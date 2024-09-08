@@ -8,6 +8,7 @@ import { createContext, StrictMode, useState } from "react";
 import HomePage from "./page/HomePage";
 import { OverlaysProvider } from "@blueprintjs/core";
 import ErrorPage from "./page/ErrorPage";
+import { DictionaryProvider } from "./dictionary";
 
 const router = createHashRouter([
   {
@@ -18,7 +19,7 @@ const router = createHashRouter([
   {
     path: "/noun/:noun",
     element: <HomePage />,
-  }
+  },
 ]);
 
 export const ApiVersion = createContext<string | null>(null);
@@ -35,7 +36,9 @@ function Wrapper() {
     <StrictMode>
       <ApiVersion.Provider value={version}>
         <OverlaysProvider>
-          <RouterProvider router={router} />
+          <DictionaryProvider>
+            <RouterProvider router={router} />
+          </DictionaryProvider>
         </OverlaysProvider>
       </ApiVersion.Provider>
     </StrictMode>
