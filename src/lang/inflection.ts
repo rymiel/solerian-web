@@ -2,21 +2,7 @@ import { Types, Part, SeparatedRoot } from "./extra";
 import { gsub, sub, SubMap } from "./util";
 
 export const FORM_NAMES = {
-  [Part.Noun]: [
-    "nom_sg",
-    "acc_sg",
-    "gen_sg",
-    "nom_pl",
-    "acc_pl",
-    "gen_pl",
-    // old forms
-    "old_nom_sg",
-    "old_acc_sg",
-    "old_gen_sg",
-    "old_nom_pl",
-    "old_acc_pl",
-    "old_gen_pl",
-  ] as const,
+  [Part.Noun]: ["nom_sg", "acc_sg", "gen_sg", "nom_pl", "acc_pl", "gen_pl"] as const,
   [Part.Verb]: [
     "1_inf",
     "2_inf",
@@ -33,22 +19,6 @@ export const FORM_NAMES = {
     "2pl_pst",
     "3pl_pst",
     "2sg_imp",
-    // old forms
-    "old_1_inf",
-    "old_2_inf",
-    "old_1sg_prs",
-    "old_2sg_prs",
-    "old_3sg_prs",
-    "old_1pl_prs",
-    "old_2pl_prs",
-    "old_3pl_prs",
-    "old_1sg_pst",
-    "old_2sg_pst",
-    "old_3sg_pst",
-    "old_1pl_pst",
-    "old_2pl_pst",
-    "old_3pl_pst",
-    "old_2sg_imp",
   ] as const,
 };
 export type FormNames<P extends Part> = (typeof FORM_NAMES)[P][number];
@@ -58,53 +28,56 @@ type SlotStrings<Tuple extends readonly [...any[]]> = {
 };
 export type Forms = {
   readonly [P in Part]: {
-    readonly [T in Types[P]]: SlotStrings<(typeof FORM_NAMES)[P]>;
+    readonly [T in Types[P]]: {
+      readonly cur: SlotStrings<(typeof FORM_NAMES)[P]>;
+      readonly old: SlotStrings<(typeof FORM_NAMES)[P]>;
+    };
   };
 };
 
 // prettier-ignore
 const FORM_SUFFIXES: Forms = {
   [Part.Noun]: {
-    "1": ["àt", "en", "i", "àtún", "ent", "is",
-          "àt", "en", "is", "àtún", "etin", "iis"],
-    "2": ["àd", "ein", "i", "ánd", "end", "is",
-          "àd", "ein", "is", "ánd", "etin", "iis"],
-    "3": ["ià", "ie", "i", "áin", "ein", "ir",
-          "ià", "ie", "ir", "iáin", "iein", "iir"],
-    "4": ["àx", "ox", "i", "áxi", "oxe", "ixr",
-          "àx", "ox", "ir", "áxi", "oxe", "ixir"],
-    "5": ["à", "e", "i", "án", "en", "ir",
-          "à", "e", "ir", "áin", "ein", "iir"],
-    "6": ["en", "àan", "yr", "etén", "ànt", "yrs",
-          "en", "ean", "yr", "enét", "eant", "esyr"],
-    "7": ["m", "m", "mi", "mas", "mas", "ǹir",
-          "m", "m", "mer", "mas", "mas", "ǹir"],
-    "8": ["el", "aln", "il", "iEk", "elk", "ilar",
-          "el", "aln", "eler", "eek", "alnek", "elsar"],
-    "9": ["r", "ren", "ir", "àr", "rins", "rir",
-          "r", "rin", "ràr", "àr", "rinse", "riser"],
+    "1": {cur: ["àt", "en", "i", "àtún", "ent", "is"],
+          old: ["àt", "en", "is", "àtún", "etin", "iis"]},
+    "2": {cur: ["àd", "ein", "i", "ánd", "end", "is"],
+          old: ["àd", "ein", "is", "ánd", "etin", "iis"]},
+    "3": {cur: ["ià", "ie", "i", "áin", "ein", "ir"],
+          old: ["ià", "ie", "ir", "iáin", "iein", "iir"]},
+    "4": {cur: ["àx", "ox", "i", "áxi", "oxe", "ixr"],
+          old: ["àx", "ox", "ir", "áxi", "oxe", "ixir"]},
+    "5": {cur: ["à", "e", "i", "án", "en", "ir"],
+          old: ["à", "e", "ir", "áin", "ein", "iir"]},
+    "6": {cur: ["en", "àan", "yr", "etén", "ànt", "yrs"],
+          old: ["en", "ean", "yr", "enét", "eant", "esyr"]},
+    "7": {cur: ["m", "m", "mi", "mas", "mas", "ǹir"],
+          old: ["m", "m", "mer", "mas", "mas", "ǹir"]},
+    "8": {cur: ["el", "aln", "il", "iEk", "elk", "ilar"],
+          old: ["el", "aln", "eler", "eek", "alnek", "elsar"]},
+    "9": {cur: ["r", "ren", "ir", "àr", "rins", "rir"],
+          old: ["r", "rin", "ràr", "àr", "rinse", "riser"]},
   },
   [Part.Verb]: {
-    "1": ["élus", "érà", "<à", "eké", "éts", "án", "áig", "áste", "é", "élg", "ésa", "àmó", "ánà", "ánà", "í",
-          "élus", "érà", "<à", "eké", "ités", "amét", "anég", "anés", "ét", "ég", "ésa", "ámo", "ánà", "ánà", "í"],
-    "2": ["las", "lar", "lý", "laké", "láts", "lánt", "lànég", "láns", "ld", "leg", "lsa", "làmo", "lànà", "lànà", "li",
-          "las", "lar", "lý", "laké", "lités", "làté", "lànég", "láns", "ld", "leg", "lsa", "làmo", "lànà", "lànà", "li"],
-    "3n": ["lud", "rad", "d", "lék", "la", "deté", "dég", "dés", "lut", "lek", "lusa", "lumà", "lonà", "lonà", "",
-           "lud", "rad", "d", "lék", "ld", "deté", "dég", "dés", "lut", "lek", "lusa", "lomà", "lonà", "lonà", ""],
-    "3r": ["lud", "ad", "d", "lék", "la", "deté", "dég", "dés", "lut", "lek", "lusa", "lumà", "lonà", "lonà", "",
-           "lud", "rad", "d", "lék", "ld", "deté", "dég", "dés", "lut", "lek", "lusa", "lomà", "lonà", "lonà", ""],
-    "3": ["lud", "rad", "d", "lék", "ld", "deté", "dég", "dés", "lut", "lek", "lusa", "lumà", "lonà", "lonà", "",
-          "lud", "rad", "d", "lék", "ld", "deté", "dég", "dés", "lut", "lek", "lusa", "lomà", "lonà", "lonà", ""],
-    "4s": ["s@ú", "s@ár", "sǹý", "sǹék", ">ns", "sǹá@", "sǹál", "sǹást", "s@í", "s@ék", "s@úsa", "s@ámo", "s@ánà", "s@ánà", "@s",
-           "s@ú", "s@ár", "sǹý", "sǹék", ">sn", "sǹám", "sǹág", "sǹán", "s@út", "s@úek", "s@úsa", "s@ámo", "s@ánà", "s@ánà", "s@"],
-    "4": ["@ú", "@ár", "ǹý", "ǹék", ">n", "ǹá@", "ǹál", "ǹást", "@í", "@ék", "@úsa", "@ámo", "@ánà", "@ánà", "@",
-          "@ú", "@ár", "ǹý", "ǹék", ">n", "ǹám", "ǹág", "ǹán", "@út", "@úek", "@úsa", "@ámo", "@ánà", "@ánà", "@"],
-    "5t": ["@lus", "@là", "r@", "@lék", "@léts", "@lán", "@láig", "@lást", "@re", "@reg", "@ras", "@làmo", "@lànà", "@lànà", "@lí",
-           "@lus", "@là", "@r", "@lék", "@léts", "@lát", "@lág", "@lás", "@ret", "@reg", "@ras", "@làmo", "@lànà", "@lona", "@lí"],
-    "5r": ["lus", "là", "", "lék", "léts", "lán", "láig", "lást", "e", "eg", "as", "làmo", "lànà", "lànà", "lí",
-           "lus", "là", "r", "lék", "léts", "lát", "lág", "lás", "ret", "reg", "ras", "làmo", "lànà", "lona", "lí"],
-    "5": ["lus", "là", "r", "lék", "léts", "lán", "láig", "lást", "re", "reg", "ras", "làmo", "lànà", "lànà", "lí",
-          "lus", "là", "r", "lék", "léts", "lát", "lág", "lás", "ret", "reg", "ras", "làmo", "lànà", "lona", "lí"],
+    "1": {cur: ["élus", "érà", "<à", "eké", "éts", "án", "áig", "áste", "é", "élg", "ésa", "àmó", "ánà", "ánà", "í"],
+          old: ["élus", "érà", "<à", "eké", "ités", "amét", "anég", "anés", "ét", "ég", "ésa", "ámo", "ánà", "ánà", "í"]},
+    "2": {cur: ["las", "lar", "lý", "laké", "láts", "lánt", "lànég", "láns", "ld", "leg", "lsa", "làmo", "lànà", "lànà", "li"],
+          old: ["las", "lar", "lý", "laké", "lités", "làté", "lànég", "láns", "ld", "leg", "lsa", "làmo", "lànà", "lànà", "li"]},
+    "3n": {cur: ["lud", "rad", "d", "lék", "la", "deté", "dég", "dés", "lut", "lek", "lusa", "lumà", "lonà", "lonà", ""],
+           old: ["lud", "rad", "d", "lék", "ld", "deté", "dég", "dés", "lut", "lek", "lusa", "lomà", "lonà", "lonà", ""]},
+    "3r": {cur: ["lud", "ad", "d", "lék", "la", "deté", "dég", "dés", "lut", "lek", "lusa", "lumà", "lonà", "lonà", ""],
+           old: ["lud", "rad", "d", "lék", "ld", "deté", "dég", "dés", "lut", "lek", "lusa", "lomà", "lonà", "lonà", ""]},
+    "3": {cur: ["lud", "rad", "d", "lék", "ld", "deté", "dég", "dés", "lut", "lek", "lusa", "lumà", "lonà", "lonà", ""],
+          old: ["lud", "rad", "d", "lék", "ld", "deté", "dég", "dés", "lut", "lek", "lusa", "lomà", "lonà", "lonà", ""]},
+    "4s": {cur: ["s@ú", "s@ár", "sǹý", "sǹék", ">ns", "sǹá@", "sǹál", "sǹást", "s@í", "s@ék", "s@úsa", "s@ámo", "s@ánà", "s@ánà", "@s"],
+           old: ["s@ú", "s@ár", "sǹý", "sǹék", ">sn", "sǹám", "sǹág", "sǹán", "s@út", "s@úek", "s@úsa", "s@ámo", "s@ánà", "s@ánà", "s@"]},
+    "4": {cur: ["@ú", "@ár", "ǹý", "ǹék", ">n", "ǹá@", "ǹál", "ǹást", "@í", "@ék", "@úsa", "@ámo", "@ánà", "@ánà", "@"],
+          old: ["@ú", "@ár", "ǹý", "ǹék", ">n", "ǹám", "ǹág", "ǹán", "@út", "@úek", "@úsa", "@ámo", "@ánà", "@ánà", "@"]},
+    "5t": {cur: ["@lus", "@là", "r@", "@lék", "@léts", "@lán", "@láig", "@lást", "@re", "@reg", "@ras", "@làmo", "@lànà", "@lànà", "@lí"],
+           old: ["@lus", "@là", "@r", "@lék", "@léts", "@lát", "@lág", "@lás", "@ret", "@reg", "@ras", "@làmo", "@lànà", "@lona", "@lí"]},
+    "5r": {cur: ["lus", "là", "", "lék", "léts", "lán", "láig", "lást", "e", "eg", "as", "làmo", "lànà", "lànà", "lí"],
+           old: ["lus", "là", "r", "lék", "léts", "lát", "lág", "lás", "ret", "reg", "ras", "làmo", "lànà", "lona", "lí"]},
+    "5": {cur: ["lus", "là", "r", "lék", "léts", "lán", "láig", "lást", "re", "reg", "ras", "làmo", "lànà", "lànà", "lí"],
+          old: ["lus", "là", "r", "lék", "léts", "lát", "lág", "lás", "ret", "reg", "ras", "làmo", "lànà", "lona", "lí"]},
   }
 };
 
@@ -161,7 +134,7 @@ function applyFrom<P extends Part>(
 ): Forms[P][Types[P]] {
   const stressSuffix = isStressed(ending) || fullVowelCount(baseRoot) == 0;
   const suffixes = FORM_SUFFIXES[part][type];
-  return suffixes.map((suffix) => {
+  const mapSuffix = (suffix: string): string => {
     const stressFirst = suffix.startsWith("<");
     const stressLast = suffix.startsWith(">");
     const hasStressMarker = STRESS_MARKERS.some(([k, _]) => suffix.includes(k));
@@ -190,14 +163,19 @@ function applyFrom<P extends Part>(
     }
 
     return markStress ? applyNormalize(root + suffix) : applyDestress(root + suffix);
-  }) as unknown as Forms[P][Types[P]];
+  };
+
+  return {
+    cur: suffixes.cur.map(mapSuffix) as Forms[P][Types[P]]["cur"],
+    old: suffixes.old.map(mapSuffix) as Forms[P][Types[P]]["old"],
+  } as Forms[P][Types[P]];
 }
 
-export function applyFromSeparatedRoot([match, part, type]: SeparatedRoot, markStress = true): string[] {
+export function applyFromSeparatedRoot<P extends Part>([match, part, type]: SeparatedRoot<P>, markStress = true) {
   const word = match.input;
   const cutoff = match[1].length;
   const root = word.slice(0, -cutoff);
   const suffix = word.slice(-cutoff);
   const special = match[2] || "";
-  return applyFrom(root, suffix, special, part, type, markStress) as string[];
+  return applyFrom(root, suffix, special, part, type, markStress);
 }
