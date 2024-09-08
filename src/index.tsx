@@ -16,10 +16,6 @@ const router = createHashRouter([
     element: <HomePage />,
     errorElement: <ErrorPage />,
   },
-  {
-    path: "/noun/:noun",
-    element: <HomePage />,
-  },
 ]);
 
 export const ApiVersion = createContext<string | null>(null);

@@ -5,7 +5,7 @@ import { toastErrorHandler } from "./App";
 import { scriptMultiUnicode } from "./lang/script";
 import { soundChange } from "./lang/soundChange";
 
-interface FullEntry extends RawEntry {
+export interface FullEntry extends RawEntry {
   part: Part | null;
   script: string;
   ipa: string;

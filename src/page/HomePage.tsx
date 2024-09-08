@@ -7,22 +7,7 @@ import { scriptMultiUnicode } from "../lang/script";
 import { soundChange } from "../lang/soundChange";
 import { useNavigate, useParams } from "react-router";
 import { applyFromSeparatedRoot, FORM_NAMES, FormNames } from "../lang/inflection";
-import { Dictionary } from "../dictionary";
-
-interface FullEntry extends RawEntry {
-  part: Part | null;
-  script: string;
-  ipa: string;
-}
-
-const SLUGS: { [P in Part]: string } = {
-  [Part.Noun]: "noun",
-  [Part.Verb]: "verb",
-};
-
-function InflectionLink({ entry, children }: PropsWithChildren<{ entry: FullEntry }>) {
-  return entry.part === null ? children : <a href={`#/${SLUGS[entry.part]}/${entry.sol}`}>{children}</a>;
-}
+import { Dictionary, FullEntry } from "../dictionary";
 
 interface DualInfo {
   sol: string;
@@ -87,7 +72,7 @@ function NounTable({ forms }: { forms: readonly string[] }) {
   );
 }
 
-function NounDialog({ dictionary, noun }: { dictionary: FullEntry[] | null; noun: string }) {
+function NounDialog({ noun }: { noun: string }) {
   const navigate = useNavigate();
   const [isOpen, setOpen] = useState(true);
 
@@ -121,11 +106,9 @@ function NounDialog({ dictionary, noun }: { dictionary: FullEntry[] | null; noun
 
 export default function HomePage() {
   const { entries } = useContext(Dictionary);
-  const { noun, verb } = useParams() as { noun?: string; verb?: string };
   const navigate = useNavigate();
 
   let content = <NonIdealState icon={<Spinner size={SpinnerSize.LARGE} />} />;
-  let overlay = null;
 
   if (entries) {
     content = (
@@ -159,15 +142,5 @@ export default function HomePage() {
     );
   }
 
-  if (noun) {
-    overlay = <NounDialog dictionary={entries} noun={noun} />;
-  }
-
-  return App(
-    <>
-      {overlay}
-      {content}
-    </>,
-    "Home"
-  );
+  return App(<>{content}</>, "Home");
 }
