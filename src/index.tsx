@@ -10,6 +10,7 @@ import { OverlaysProvider } from "@blueprintjs/core";
 import ErrorPage from "./page/ErrorPage";
 import { DictionaryProvider } from "./dictionary";
 import WordPage from "./page/WordPage";
+import ReversePage from "./page/ReversePage";
 
 const router = createHashRouter([
   {
@@ -20,6 +21,14 @@ const router = createHashRouter([
   {
     path: "/w/:word",
     element: <WordPage />,
+  },
+  {
+    path: "/reverse",
+    element: <ReversePage />,
+  },
+  {
+    path: "/reverse/:query",
+    element: <ReversePage />,
   },
 ]);
 
