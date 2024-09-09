@@ -1,14 +1,15 @@
-import { RawEntry } from "../src/api";
-import { defaultEntrySort, partOfExtra, separateRoot, Part } from "../src/lang/extra";
+import { API, RawEntry } from "../src/api";
+import { rawEntrySort } from "../src/dictionary";
+import { partOfExtra, separateRoot, Part } from "../src/lang/extra";
 import { applyFromSeparatedRoot } from "../src/lang/inflection";
 import { scriptMultiUnicode } from "../src/lang/script";
 import { soundChange } from "../src/lang/soundChange";
 
-fetch("http://localhost:3000/api/temporary/v0/raw")
+fetch(`${API}/raw`)
   .then((i) => i.json())
   .then((i) => i as RawEntry[])
   .then((i) =>
-    i.sort(defaultEntrySort).map((i) => {
+    i.sort(rawEntrySort).map((i) => {
       const part = partOfExtra(i.extra);
       if (part !== null) {
         const s = separateRoot(i.sol, part);

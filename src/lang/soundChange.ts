@@ -1,3 +1,4 @@
+import { markStress } from "./extra";
 import { gsub, gsubBackreference, GSubMap } from "./util";
 
 const VOWEL = "əaeiouyáéíóúýæÆɐ";
@@ -131,14 +132,13 @@ function singleWordSoundChange(word: string, markStress: boolean = true): string
   return syllabify(word, markStress);
 }
 
-interface MinimalWord {
+export interface MinimalWord {
   sol: string;
   extra: string;
 }
 
 export function soundChange(word: MinimalWord): string {
-  const markStress = !word.extra.startsWith("NAME");
-  const words = word.sol.split(" ").map((i) => singleWordSoundChange(i, markStress));
+  const words = word.sol.split(" ").map((i) => singleWordSoundChange(i, markStress(word)));
 
   return `[${words.join(" ")}]`;
 }

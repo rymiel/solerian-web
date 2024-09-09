@@ -21,10 +21,11 @@ export class CustomApiError extends Error {
 }
 
 const API_SUFFIX = "/api/temporary/v0";
-export const API =
-  document.location.hostname === "localhost"
-    ? `http://localhost:3000${API_SUFFIX}`
-    : `https://solerian-api.rymiel.space${API_SUFFIX}`;
+// export const API =
+//   document.location.hostname === "localhost"
+//     ? `http://localhost:3000${API_SUFFIX}`
+//     : `https://solerian-api.rymiel.space${API_SUFFIX}`;
+export const API = `https://s.rymiel.space${API_SUFFIX}`;
 
 declare const WEB_VERSION: string;
 

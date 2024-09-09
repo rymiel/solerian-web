@@ -1,5 +1,3 @@
-import { RawEntry } from "../api";
-
 export enum Part {
   Noun,
   Verb,
@@ -65,10 +63,4 @@ export function separateRoot<P extends Part>(word: string, part: P): SeparatedRo
   return null;
 }
 
-const compare = (a: string, b: string): number => (((a as any) > b) as any) - (((a as any) < b) as any);
-
-export const defaultEntrySort = (a: RawEntry, b: RawEntry): number => {
-  const f = compare(a.extra, b.extra);
-  if (f === 0) return compare(a.eng, b.eng);
-  else return f;
-};
+export const markStress = (word: { extra: string }) => !word.extra.startsWith("NAME");
