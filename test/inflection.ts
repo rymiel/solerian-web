@@ -1,6 +1,6 @@
 import { API, RawEntry } from "../src/api";
 import { rawEntrySort } from "../src/dictionary";
-import { partOfExtra, separateRoot, Part } from "../src/lang/extra";
+import { partOfExtra, separateRoot, Part, markStress } from "../src/lang/extra";
 import { applyFromSeparatedRoot } from "../src/lang/inflection";
 import { scriptMultiUnicode } from "../src/lang/script";
 import { soundChange } from "../src/lang/soundChange";
@@ -14,12 +14,12 @@ fetch(`${API}/raw`)
       if (part !== null) {
         const s = separateRoot(i.sol, part);
         if (s !== null) {
-          const markStress = !i.extra.startsWith("NAME");
-          const forms = applyFromSeparatedRoot(s, markStress) as { cur: string[]; old: string[] };
+          const stress = markStress(i);
+          const forms = applyFromSeparatedRoot(s, stress);
           let fi = 0;
           const out = (f: string) => {
             const script = scriptMultiUnicode(f).replace(/[^ ]/g, (c) => "&#x" + c.charCodeAt(0).toString(16));
-            const ipa = soundChange({ sol: f, extra: i.extra });
+            const ipa = soundChange(f, stress);
             console.log(`${i.sol}|${part}|${fi}|${f}|${script}|${ipa}`);
             fi++;
           };

@@ -1,5 +1,5 @@
 import { scriptMultiUnicode } from "./script";
-import { MinimalWord, soundChange } from "./soundChange";
+import { soundChange } from "./soundChange";
 
 export interface DisplayWord {
   sol: string;
@@ -7,10 +7,10 @@ export interface DisplayWord {
   ipa: string;
 }
 
-export function populateDualInfo(word: MinimalWord): DisplayWord {
+export function populateDualInfo(word: string, markStress = true): DisplayWord {
   return {
-    sol: word.sol,
-    script: scriptMultiUnicode(word.sol),
-    ipa: soundChange(word),
+    sol: word,
+    script: scriptMultiUnicode(word),
+    ipa: soundChange(word, markStress),
   };
 }

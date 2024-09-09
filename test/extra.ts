@@ -1,6 +1,6 @@
 import { API, type RawEntry } from "../src/api";
 import { rawEntrySort } from "../src/dictionary";
-import { determineType, partOfExtra } from "../src/lang/extra";
+import { determineType, markStress, partOfExtra } from "../src/lang/extra";
 import { scriptMultiUnicode } from "../src/lang/script";
 import { soundChange } from "../src/lang/soundChange";
 
@@ -22,7 +22,7 @@ fetch(`${API}/raw`)
       return {
         ...i,
         script: scriptMultiUnicode(i.sol).replace(/[^ ]/g, (c) => "&#x" + c.charCodeAt(0).toString(16)),
-        ipa: soundChange(i)
+        ipa: soundChange(i.sol, markStress(i))
       };
     })
   )

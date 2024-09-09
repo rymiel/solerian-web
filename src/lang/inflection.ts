@@ -34,6 +34,7 @@ export type Forms = {
     };
   };
 };
+export type GenericForms = { cur: string[]; old: string[] };
 
 // prettier-ignore
 const FORM_SUFFIXES: Forms = {
@@ -171,11 +172,11 @@ function applyFrom<P extends Part>(
   } as Forms[P][Types[P]];
 }
 
-export function applyFromSeparatedRoot<P extends Part>([match, part, type]: SeparatedRoot<P>, markStress = true) {
+export function applyFromSeparatedRoot({ match, part, type }: SeparatedRoot, markStress = true): GenericForms {
   const word = match.input;
   const cutoff = match[1].length;
   const root = word.slice(0, -cutoff);
   const suffix = word.slice(-cutoff);
   const special = match[2] || "";
-  return applyFrom(root, suffix, special, part, type, markStress);
+  return applyFrom(root, suffix, special, part, type, markStress) as GenericForms;
 }

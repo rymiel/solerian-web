@@ -1,6 +1,6 @@
-import { createContext, PropsWithChildren, useContext, useEffect, useState } from "react";
+import { createContext, PropsWithChildren, useEffect, useState } from "react";
 import { apiFetch, RawEntry } from "./api";
-import { determineType, Part, partOfExtra } from "./lang/extra";
+import { determineType, markStress, Part, partOfExtra } from "./lang/extra";
 import { toastErrorHandler } from "./App";
 import { scriptMultiUnicode } from "./lang/script";
 import { soundChange } from "./lang/soundChange";
@@ -53,7 +53,7 @@ export function DictionaryProvider({ children }: PropsWithChildren) {
             }
             const [tag, eng] = splitTag(i.eng);
             const script = scriptMultiUnicode(i.sol);
-            const ipa = soundChange(i);
+            const ipa = soundChange(i.sol, markStress(i));
             return { ...i, extra, part, tag, eng, script, ipa };
           })
           .sort(fullEntrySort)

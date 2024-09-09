@@ -18,8 +18,8 @@ function NounTableEntry({ word }: { word: DisplayWord }) {
   );
 }
 
-export function NounTable({ forms, extra }: { forms: readonly string[]; extra: string }) {
-  const infos = forms.map((i) => populateDualInfo({ sol: i, extra }));
+export function NounTable({ forms, stress }: { forms: readonly string[]; stress: boolean }) {
+  const infos = forms.map((i) => populateDualInfo(i, stress));
   const map = Object.fromEntries(FORM_NAMES[Part.Noun].map((k, i) => [k, infos[i]])) as Record<
     FormNames<Part.Noun>,
     DisplayWord
@@ -64,14 +64,15 @@ export function NounInfo({ entry }: { entry: FullEntry }) {
     throw new Error("Noun failed to separate root");
   }
 
-  const forms = applyFromSeparatedRoot(s, markStress(entry));
+  const stress = markStress(entry)
+  const forms = applyFromSeparatedRoot(s, stress);
 
   return (
     <>
-      <NounTable forms={forms.cur} extra={entry.extra} />
+      <NounTable forms={forms.cur} stress={stress} />
       <details>
         <summary>Old forms for this noun</summary>
-        <NounTable forms={forms.old} extra={entry.extra} />
+        <NounTable forms={forms.old} stress={stress} />
       </details>
     </>
   );

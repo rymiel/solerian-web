@@ -51,13 +51,13 @@ export function determineType(word: string, part: Part): Types[Part] | null {
   return null;
 }
 
-export type SeparatedRoot<P extends Part> = [result: RegExpExecArray, part: P, type: Types[P]];
-export function separateRoot<P extends Part>(word: string, part: P): SeparatedRoot<P> | null {
+export type SeparatedRoot = { match: RegExpExecArray; part: Part; type: Types[Part] };
+export function separateRoot(word: string, part: Part): SeparatedRoot | null {
   const classes = SUFFIXES[part];
-  for (const [suffix, t] of classes) {
+  for (const [suffix, type] of classes) {
     const match = suffix.exec(word);
     if (match != null) {
-      return [match, part, t as Types[P]];
+      return { match, part, type };
     }
   }
   return null;

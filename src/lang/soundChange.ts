@@ -132,13 +132,8 @@ function singleWordSoundChange(word: string, markStress: boolean = true): string
   return syllabify(word, markStress);
 }
 
-export interface MinimalWord {
-  sol: string;
-  extra: string;
-}
-
-export function soundChange(word: MinimalWord): string {
-  const words = word.sol.split(" ").map((i) => singleWordSoundChange(i, markStress(word)));
+export function soundChange(word: string, markStress: boolean): string {
+  const words = word.split(" ").map((i) => singleWordSoundChange(i, markStress));
 
   return `[${words.join(" ")}]`;
 }

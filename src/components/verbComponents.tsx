@@ -17,7 +17,7 @@ function VerbTableEntry({ word }: { word: DisplayWord }) {
 }
 
 export function VerbTable({ forms }: { forms: readonly string[] }) {
-  const infos = forms.map((i) => populateDualInfo({ sol: i, extra: "V" })); // TODO (mark stress)
+  const infos = forms.map((i) => populateDualInfo(i));
   const map = Object.fromEntries(FORM_NAMES[Part.Verb].map((k, i) => [k, infos[i]])) as Record<
     FormNames<Part.Verb>,
     DisplayWord
@@ -101,7 +101,7 @@ export function VerbInfo({ entry }: { entry: FullEntry }) {
     throw new Error("Verb failed to separate root");
   }
 
-  const forms = applyFromSeparatedRoot(s, true);
+  const forms = applyFromSeparatedRoot(s);
 
   return (
     <>
