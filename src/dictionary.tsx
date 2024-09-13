@@ -59,7 +59,8 @@ export function DictionaryProvider({ children }: PropsWithChildren) {
 const compare = (a: string, b: string): number => (((a as any) > b) as any) - (((a as any) < b) as any);
 
 export const entrySort = (a: RawEntry, b: RawEntry): number => {
-  if (a.tag === null && b.tag !== null) return -1;
+  if (a.tag === undefined && b.tag !== undefined) return -1;
+  if (a.tag !== undefined && b.tag === undefined) return 1;
   let f = compare(a.extra, b.extra);
   if (f !== 0) return f;
   for (let i = 0; i < a.meanings.length && i < b.meanings.length; i++) {
