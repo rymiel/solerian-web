@@ -2,14 +2,28 @@ export interface ApiUser {
   name: string;
 }
 
-export interface RawEntry {
+interface Base {
   hash: string;
-  eng: string;
-  sol: string;
-  l: boolean;
-  extra: string;
   created_at: string;
   updated_at: string;
+}
+
+export interface RawEntry extends Base {
+  sol: string;
+  extra: string;
+  tag: string | undefined;
+  meanings: Meaning[];
+  sections: Section[];
+}
+
+export interface Meaning extends Base {
+  eng: string;
+  sections: Section[];
+}
+
+export interface Section extends Base {
+  title: string;
+  content: string;
 }
 
 export class CustomApiError extends Error {
@@ -20,12 +34,13 @@ export class CustomApiError extends Error {
   }
 }
 
-const API_SUFFIX = "/api/temporary/v0";
+const API_SUFFIX = "/api/v0";
 // export const API =
 //   document.location.hostname === "localhost"
 //     ? `http://localhost:3000${API_SUFFIX}`
 //     : `https://solerian-api.rymiel.space${API_SUFFIX}`;
-export const API = `https://s.rymiel.space${API_SUFFIX}`;
+// export const API = `https://s.rymiel.space${API_SUFFIX}`;
+export const API = `http://localhost:3000${API_SUFFIX}`;
 
 declare const WEB_VERSION: string;
 

@@ -14,18 +14,16 @@ interface InflEntry {
 }
 
 function terminal(entry: FullEntry) {
-  const meaning = entry.eng;
-  const parts = meaning.split(";");
-  let compactMeaning = parts[0];
-  if (parts.length > 1) {
-    compactMeaning += "; ...";
+  let meaning = entry.meanings[0].eng;
+  if (entry.meanings.length > 1) {
+    meaning += "; ...";
   }
   return (
     <>
       <a href={`#/w/${entry.sol}`}>
         <i>{entry.sol}</i>
       </a>
-      : ({entry.extra}) "{compactMeaning}"
+      : ({entry.extra}) "{meaning}"
     </>
   );
 }
@@ -33,12 +31,12 @@ function terminal(entry: FullEntry) {
 function inflNode(entry: InflEntry) {
   const formName = FORM_NAMES[entry.original.part!][entry.form].replaceAll("_", " ");
   const partName = Part[entry.original.part!].toLowerCase();
-  const type = entry.original.extra.split("-")[1];
-  const typeName = entry.old ? `old type ${type}` : `type ${type}`; // TODO: actual old names
+  const cls = entry.original.class;
+  const className = entry.old ? `old type ${cls}` : `type ${cls}`; // TODO: actual old names
 
   return (
     <>
-      <i>{entry.sol}</i>: {formName} of {typeName} {partName} <i>{entry.original.sol}</i>
+      <i>{entry.sol}</i>: {formName} of {className} {partName} <i>{entry.original.sol}</i>
       <ul>
         <li>{terminal(entry.original)}</li>
       </ul>

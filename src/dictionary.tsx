@@ -9,7 +9,7 @@ export interface FullEntry extends RawEntry {
   part: Part | null;
   script: string;
   ipa: string;
-  tag: string | null;
+  class: string | null;
 }
 
 interface DictionaryData {
@@ -24,18 +24,6 @@ export const Dictionary = createContext<DictionaryData>({
   },
 });
 
-function splitTag(eng: string): [tag: string | null, eng: string] {
-  const hasTag = eng.startsWith("{");
-  if (!hasTag) {
-    return [null, eng];
-  }
-
-  const close = eng.indexOf("}");
-  const tag = eng.slice(1, close);
-  const rest = eng.slice(close + 1);
-
-  return [tag, rest];
-}
 
 export function DictionaryProvider({ children }: PropsWithChildren) {
   const [entries, setEntries] = useState<FullEntry[] | null>(null);
@@ -43,20 +31,18 @@ export function DictionaryProvider({ children }: PropsWithChildren) {
   const refresh = async () => {
     try {
       setEntries(
-        (await apiFetch<RawEntry[]>("/raw"))
+        (await apiFetch<RawEntry[]>("/new"))
           .map((i) => {
-            let extra = i.extra;
             const part = partOfExtra(i.extra);
+            let cls = null;
             if (part !== null) {
-              const cls = determineType(i.sol, part) ?? "?";
-              extra = `${i.extra}-${cls}`;
+              cls = determineType(i.sol, part) ?? "?";
             }
-            const [tag, eng] = splitTag(i.eng);
             const script = scriptMultiUnicode(i.sol);
             const ipa = soundChange(i.sol, markStress(i));
-            return { ...i, extra, part, tag, eng, script, ipa };
+            return { ...i, class: cls, part, script, ipa };
           })
-          .sort(fullEntrySort)
+          .sort(entrySort)
       );
     } catch (error) {
       toastErrorHandler(error);
@@ -72,15 +58,13 @@ export function DictionaryProvider({ children }: PropsWithChildren) {
 
 const compare = (a: string, b: string): number => (((a as any) > b) as any) - (((a as any) < b) as any);
 
-export const rawEntrySort = (a: RawEntry, b: RawEntry): number => {
+export const entrySort = (a: RawEntry, b: RawEntry): number => {
+  if (a.tag === null && b.tag !== null) return -1;
   let f = compare(a.extra, b.extra);
   if (f !== 0) return f;
-  return compare(a.eng, b.eng);
-};
-
-export const fullEntrySort = (a: FullEntry, b: FullEntry): number => {
-  if (a.tag === null && b.tag !== null) return -1;
-  let f = compare(a.extra.split("-")[0], b.extra.split("-")[0]);
-  if (f !== 0) return f;
-  return compare(a.eng, b.eng);
+  for (let i = 0; i < a.meanings.length && i < b.meanings.length; i++) {
+    let f = compare(a.meanings[i].eng, b.meanings[i].eng);
+    if (f !== 0) return f;
+  }
+  return a.meanings.length - b.meanings.length;
 };

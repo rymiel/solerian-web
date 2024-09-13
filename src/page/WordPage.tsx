@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { Dictionary, FullEntry } from "../dictionary";
 import { useParams } from "react-router-dom";
 import { App } from "../App";
-import { H1, H2, H3, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
+import { H3, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
 import { Part } from "../lang/extra";
 import { NounInfo } from "../components/nounComponents";
 import { VerbInfo } from "../components/verbComponents";
@@ -15,9 +15,8 @@ const WORD_TYPES: Readonly<Record<string, string>> = {
 };
 
 function WordPageContent({ entry }: { entry: FullEntry }) {
-  const [extraPart, extraClass] = entry.extra.split("-") as [string] | [string, string];
-  const partName = WORD_TYPES[extraPart] ?? extraPart;
-  const partHeader = extraClass ? `${partName} (type ${extraClass})` : partName;
+  const partName = WORD_TYPES[entry.extra] ?? entry.extra;
+  const partHeader = entry.class ? `${partName} (type ${entry.class})` : partName;
   const part = entry.part;
   let table = null;
 
@@ -26,8 +25,6 @@ function WordPageContent({ entry }: { entry: FullEntry }) {
   } else if (part === Part.Verb) {
     table = <VerbInfo entry={entry} />;
   }
-
-  const meanings = entry.eng.split("; ");
 
   return (
     <>
@@ -40,9 +37,9 @@ function WordPageContent({ entry }: { entry: FullEntry }) {
         </Tag>
       )}
       <ul>
-        {meanings.map((m, mi) => (
+        {entry.meanings.map((m, mi) => (
           <li key={mi}>
-            <p>{m}</p>
+            <p>{m.eng}</p>
           </li>
         ))}
       </ul>

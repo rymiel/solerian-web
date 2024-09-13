@@ -27,7 +27,10 @@ export default function HomePage() {
             {entries.map((e, i) => (
               <tr key={e.hash} onClick={() => navigate(`/w/${e.sol}`)}>
                 <td>{i + 1}</td>
-                <td>{e.tag && <Tag intent="danger">{e.tag}</Tag>} {e.eng}</td>
+                <td>
+                  {e.tag && <Tag intent="danger">{e.tag}</Tag>}{" "}
+                  {e.meanings.map((m, mi) => (mi === 0 ? "" : "; ") + m.eng)}
+                </td>
                 <td className="dual">
                   <i>{e.sol}</i>
                   <span className="sol">{e.script}</span>
