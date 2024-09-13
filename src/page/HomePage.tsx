@@ -35,7 +35,7 @@ export default function HomePage() {
                   <i>{e.sol}</i>
                   <span className="sol">{e.script}</span>
                 </td>
-                <td>{e.extra}</td>
+                <td>{e.extra}{e.class && `-${e.class}`}</td>
                 <td>{e.ipa}</td>
               </tr>
             ))}
