@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Dictionary, FullEntry } from "../dictionary";
+import { Dictionary, FullEntry, FullSection } from "../dictionary";
 import { useNavigate, useParams } from "react-router-dom";
 import { App } from "../App";
 import { Button, H3, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
@@ -7,6 +7,7 @@ import { Part } from "../lang/extra";
 import { NounInfo } from "../components/nounComponents";
 import { VerbInfo } from "../components/verbComponents";
 import { User } from "../user";
+import { InterlinearData, InterlinearGloss } from "../components/interlinear";
 
 const WORD_TYPES: Readonly<Record<string, string>> = {
   N: "Noun",
@@ -14,6 +15,19 @@ const WORD_TYPES: Readonly<Record<string, string>> = {
   NAME: "Onomatonym",
   "N+NAME": "Name and onomatonym", // TODO: handle better
 };
+
+function SectionContent({ section }: { section: FullSection }) {
+  if (section.title === "translation") {
+    const data = JSON.parse(section.content) as InterlinearData;
+    return <InterlinearGloss data={data} />;
+  } else {
+    return (
+      <Tag large intent="danger">
+        Unknown section {section.title}.
+      </Tag>
+    );
+  }
+}
 
 function WordPageContent({ entry }: { entry: FullEntry }) {
   const { user } = useContext(User);
@@ -32,9 +46,7 @@ function WordPageContent({ entry }: { entry: FullEntry }) {
 
   return (
     <>
-      <p className="sol space-right">
-        {entry.script}
-      </p>
+      <p className="sol space-right">{entry.script}</p>
       <span className="space-right">{entry.ipa}</span>
       {user && <Button intent="primary" text="Edit" icon="edit" onClick={() => navigate(`/edit/${entry.sol}`)} />}
       <H3>{partHeader}</H3>
@@ -44,9 +56,18 @@ function WordPageContent({ entry }: { entry: FullEntry }) {
         </Tag>
       )}
       <ul>
-        {entry.meanings.map((m, mi) => (
-          <li key={mi}>
+        {entry.meanings.map((m) => (
+          <li key={m.hash}>
             <p>{m.eng}</p>
+            {m.sections.length > 0 && (
+              <dl>
+                {m.sections.map((s) => (
+                  <dd key={s.hash}>
+                    <SectionContent section={s} />
+                  </dd>
+                ))}
+              </dl>
+            )}
           </li>
         ))}
       </ul>
