@@ -2,13 +2,13 @@ export interface ApiUser {
   name: string;
 }
 
-interface Base {
+export interface ApiBase {
   hash: string;
   created_at: string;
   updated_at: string;
 }
 
-export interface RawEntry extends Base {
+export interface RawEntry extends ApiBase {
   sol: string;
   extra: string;
   tag: string | undefined;
@@ -16,12 +16,12 @@ export interface RawEntry extends Base {
   sections: Section[];
 }
 
-export interface Meaning extends Base {
+export interface Meaning extends ApiBase {
   eng: string;
   sections: Section[];
 }
 
-export interface Section extends Base {
+export interface Section extends ApiBase {
   title: string;
   content: string;
 }

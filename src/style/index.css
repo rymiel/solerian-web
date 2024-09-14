@@ -263,6 +263,17 @@ header .bp5-divider {
   margin-bottom: 2rem;
 }
 
+.bp5-callout.bp5-compact.edit-section {
+  width: fit-content;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.bp5-dark .bp5-callout.bp5-intent-primary:not(.bp5-minimal).edit-section {
+  background-color: rgba(45, 114, 210, 0.08);
+  border: 1px solid rgba(45, 114, 210);
+}
+
 .dragging {
   opacity: 0.4;
 }

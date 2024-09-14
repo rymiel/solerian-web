@@ -12,6 +12,7 @@ import { DictionaryProvider } from "./dictionary";
 import WordPage from "./page/WordPage";
 import ReversePage from "./page/ReversePage";
 import { UserProvider } from "./user";
+import EditWordPage from "./page/EditWordPage";
 
 const router = createHashRouter([
   {
@@ -22,6 +23,10 @@ const router = createHashRouter([
   {
     path: "/w/:word",
     element: <WordPage />,
+  },
+  {
+    path: "/edit/:word",
+    element: <EditWordPage />,
   },
   {
     path: "/reverse",
