@@ -11,6 +11,7 @@ import ErrorPage from "./page/ErrorPage";
 import { DictionaryProvider } from "./dictionary";
 import WordPage from "./page/WordPage";
 import ReversePage from "./page/ReversePage";
+import { UserProvider } from "./user";
 
 const router = createHashRouter([
   {
@@ -47,7 +48,9 @@ function Wrapper() {
       <ApiVersion.Provider value={version}>
         <OverlaysProvider>
           <DictionaryProvider>
-            <RouterProvider router={router} />
+            <UserProvider>
+              <RouterProvider router={router} />
+            </UserProvider>
           </DictionaryProvider>
         </OverlaysProvider>
       </ApiVersion.Provider>

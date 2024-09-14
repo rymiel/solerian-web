@@ -1,9 +1,19 @@
-import { Button, Classes, Divider, H1, H2, Intent, OverlayToaster, Position } from "@blueprintjs/core";
+import {
+  Button,
+  Classes,
+  Divider,
+  H1,
+  H2,
+  InputGroup,
+  Intent,
+  OverlayToaster,
+  Popover,
+  Position,
+} from "@blueprintjs/core";
 import { ApiVersion } from ".";
-import { useContext } from "react";
-import { CustomApiError } from "./api";
-import { useUser } from "./hooks";
-import { useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
+import { apiFetch, CustomApiError } from "./api";
+import { User } from "./user";
 
 export const AppToaster = OverlayToaster.createAsync({
   position: Position.TOP,
@@ -22,16 +32,49 @@ export const toastErrorHandler = async (error: unknown): Promise<string> => {
   }
 };
 
+function Login() {
+  const [username, setUsername] = useState("");
+  const [secret, setSecret] = useState("");
+  const user = useContext(User);
+  const login = () => {
+    apiFetch("/login", "POST", { username, secret }).then(() => user.update());
+  };
+
+  return (
+    <Popover
+      interactionKind="click"
+      popoverClassName={Classes.POPOVER_CONTENT_SIZING}
+      content={
+        <div>
+          <InputGroup onValueChange={(v) => setUsername(v)} placeholder="Username" />
+          <InputGroup onValueChange={(v) => setSecret(v)} placeholder="Password" type="password" />
+          <Button fill intent="success" text="Log in" onClick={login} />
+        </div>
+      }
+      renderTarget={({ isOpen, ...targetProps }) => <a {...targetProps}>Not logged in.</a>}
+    />
+  );
+}
+
+function Logout() {
+  const user = useContext(User);
+  const signout = () => {
+    apiFetch("/logout", "POST").then(() => user.update());
+  };
+
+  return (
+    <Popover
+      interactionKind="click"
+      popoverClassName={Classes.POPOVER_CONTENT_SIZING}
+      content={<Button intent={Intent.DANGER} text="Sign out" onClick={signout} />}
+      renderTarget={({ isOpen, ...targetProps }) => <a {...targetProps}>{user.user?.name}</a>}
+    />
+  );
+}
+
 export function App(body: JSX.Element, header?: string, headerElement?: JSX.Element) {
   const version = useContext(ApiVersion);
-  const loggedIn = window.localStorage.getItem("token") !== null;
-  const user = useUser();
-  const navigate = useNavigate();
-  const signout = () => {
-    window.localStorage.removeItem("token");
-    window.localStorage.removeItem("user");
-    navigate("/");
-  };
+  const user = useContext(User);
   if (!header) {
     document.title = "Solerian";
   } else {
@@ -50,11 +93,7 @@ export function App(body: JSX.Element, header?: string, headerElement?: JSX.Elem
             {headerElement && <div className="header-element">{headerElement}</div>}
           </>
         )}
-        <div id="usertext">
-          {loggedIn && <Button intent={Intent.DANGER} text="Sign out" onClick={signout} />}
-          {user && <span>{user.name}</span>}
-        </div>
-        {/* <p id="usertext">Not logged in.</p> */}
+        <div id="usertext">{user.user ? <Logout /> : <Login />}</div>
       </header>
       <div id="center">
         <main>{body}</main>

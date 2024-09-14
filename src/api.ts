@@ -66,7 +66,7 @@ export async function apiFetch<T>(endpoint: string, method?: HTTPMethod, body?: 
     }
   }
   method ??= "GET";
-  const response = await fetch(API + endpoint, { method, body: formBody, headers });
+  const response = await fetch(API + endpoint, { method, body: formBody, headers, credentials: "include" });
   const text = await response.text();
   try {
     return JSON.parse(text) as T;
