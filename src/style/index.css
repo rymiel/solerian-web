@@ -219,6 +219,11 @@ header h3.bp5-heading {
   margin-right: 1rem;
 }
 
+header .menu {
+  margin-right: 1rem;
+  cursor: pointer;
+}
+
 header .bp5-divider {
   display: inline-block;
   height: 2rem;

@@ -2,8 +2,11 @@ import {
   Button,
   Classes,
   Divider,
+  Drawer,
+  DrawerSize,
   H1,
   H2,
+  Icon,
   InputGroup,
   Intent,
   OverlayToaster,
@@ -14,6 +17,7 @@ import { ApiVersion } from ".";
 import { useContext, useState } from "react";
 import { apiFetch, CustomApiError } from "./api";
 import { User } from "./user";
+import { Link } from "react-router-dom";
 
 export const AppToaster = OverlayToaster.createAsync({
   position: Position.TOP,
@@ -72,6 +76,32 @@ function Logout() {
   );
 }
 
+function Menu() {
+  const [isOpen, setOpen] = useState(false);
+
+  return (
+    <>
+      <Icon className="menu" icon="menu" size={36} onClick={() => setOpen(true)} />
+      <Drawer isOpen={isOpen} onClose={() => setOpen(false)} position="left" size={DrawerSize.SMALL}>
+        <nav>
+          <ul>
+            <li>
+              <Link to="/" onClick={() => setOpen(false)}>
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link to="/reverse" onClick={() => setOpen(false)}>
+                Reverse
+              </Link>
+            </li>
+          </ul>
+        </nav>
+      </Drawer>
+    </>
+  );
+}
+
 export function App(body: JSX.Element, header?: string, headerElement?: JSX.Element) {
   const version = useContext(ApiVersion);
   const user = useContext(User);
@@ -83,6 +113,7 @@ export function App(body: JSX.Element, header?: string, headerElement?: JSX.Elem
   return (
     <>
       <header className={Classes.DARK}>
+        <Menu />
         <H1 className="sc">
           <a href={"#/"}>Solerian</a>
         </H1>
