@@ -164,11 +164,6 @@ function BaseData({ v }: { v: ApiBase }) {
   );
 }
 
-// renàan-Málin tirké sek lem tixáxel
-// ren-àan-Málin tirk-é sek lem tixáxel
-// city(NAME)-ACC-Malin live-1SG.PST when 1SG teacher
-// “When I lived in Malin, I was a teacher”
-
 function CreateTranslationSection({ to }: { to: string }) {
   const dict = useContext(Dictionary);
   const [sol, setSol] = useState("");
@@ -193,10 +188,10 @@ function CreateTranslationSection({ to }: { to: string }) {
       <p>
         Adding new translation section to <code>{to}</code>.
       </p>
-      <InputGroup onValueChange={(v) => setSol(v)} placeholder="Sentence" />
-      <InputGroup onValueChange={(v) => setSolSep(v)} placeholder="Interlinearised sentence" />
-      <InputGroup onValueChange={(v) => setEngSep(v)} placeholder="Interlinearised translation" />
-      <InputGroup onValueChange={(v) => setEng(v)} placeholder="Translation" />
+      <InputGroup onValueChange={setSol} placeholder="Sentence" />
+      <InputGroup onValueChange={setSolSep} placeholder="Interlinearised sentence" />
+      <InputGroup onValueChange={setEngSep} placeholder="Interlinearised translation" />
+      <InputGroup onValueChange={setEng} placeholder="Translation" />
       <Button fill intent="success" text="Submit" onClick={submit} />
       <Divider />
       <InterlinearGloss data={data} />
