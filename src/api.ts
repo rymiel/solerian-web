@@ -8,22 +8,28 @@ export interface ApiBase {
   updated_at: string;
 }
 
-export interface RawEntry extends ApiBase {
+export interface ApiWord extends ApiBase {
   sol: string;
   extra: string;
   tag: string | undefined;
-  meanings: Meaning[];
-  sections: Section[];
+  meanings: string[];
+  sections: string[];
 }
 
-export interface Meaning extends ApiBase {
+export interface ApiMeaning extends ApiBase {
   eng: string;
-  sections: Section[];
+  sections: string[];
 }
 
-export interface Section extends ApiBase {
+export interface ApiSection extends ApiBase {
   title: string;
   content: string;
+}
+
+export interface ApiDictionary {
+  words: ApiWord[];
+  meanings: ApiMeaning[];
+  sections: ApiSection[];
 }
 
 export class CustomApiError extends Error {

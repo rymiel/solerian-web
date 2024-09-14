@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { Dictionary, FullEntry } from "../dictionary";
+import { Dictionary, FullEntry, FullMeaning, FullSection } from "../dictionary";
 import { useNavigate, useParams } from "react-router-dom";
 import { App } from "../App";
 import {
@@ -20,7 +20,7 @@ import {
 } from "@blueprintjs/core";
 import { User } from "../user";
 import { Part } from "../lang/extra";
-import { ApiBase, apiFetch, Meaning, Section } from "../api";
+import { ApiBase, apiFetch, ApiMeaning, ApiSection } from "../api";
 import { InterlinearData, InterlinearGloss } from "../components/interlinear";
 
 function InfoTag({
@@ -100,7 +100,7 @@ function EntryData({ v }: { v: FullEntry }) {
   );
 }
 
-function MeaningData({ v }: { v: Meaning }) {
+function MeaningData({ v }: { v: FullMeaning }) {
   return (
     <>
       <BaseData v={v} />
@@ -110,7 +110,7 @@ function MeaningData({ v }: { v: Meaning }) {
   );
 }
 
-function SectionData({ v }: { v: Section }) {
+function SectionData({ v }: { v: FullSection }) {
   return (
     <>
       <BaseData v={v} />
@@ -121,7 +121,7 @@ function SectionData({ v }: { v: Section }) {
 }
 
 interface Sectionable extends ApiBase {
-  sections: Section[];
+  sections: ApiSection[];
 }
 function SectionableData({ v }: { v: Sectionable }) {
   const edit = useContext(EditContext);
