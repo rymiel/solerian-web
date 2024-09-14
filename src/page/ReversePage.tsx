@@ -101,7 +101,12 @@ export default function ReversePage() {
 
   return App(
     <div className="inter">
-      <form onSubmit={() => navigate(`/reverse/${search}`)}>
+      <form
+        onSubmit={(e) => {
+          navigate(`/reverse/${search}`);
+          e.preventDefault();
+        }}
+      >
         <ControlGroup fill>
           <InputGroup
             placeholder="Reverse search"
