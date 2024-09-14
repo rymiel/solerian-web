@@ -1,12 +1,14 @@
-import { HTMLTable, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
+import { Button, HTMLTable, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
 import { App } from "../App";
 import { useContext } from "react";
 import { useNavigate } from "react-router";
 import { Dictionary } from "../dictionary";
+import { User } from "../user";
 
 export default function HomePage() {
   const { entries } = useContext(Dictionary);
   const navigate = useNavigate();
+  const { user } = useContext(User);
 
   let content = <NonIdealState icon={<Spinner size={SpinnerSize.LARGE} />} />;
 
@@ -35,11 +37,24 @@ export default function HomePage() {
                   <i>{e.sol}</i>
                   <span className="sol">{e.script}</span>
                 </td>
-                <td>{e.extra}{e.class && `-${e.class}`}</td>
+                <td>
+                  {e.extra}
+                  {e.class && `-${e.class}`}
+                </td>
                 <td>{e.ipa}</td>
               </tr>
             ))}
           </tbody>
+
+          {user && (
+            <tfoot>
+              <tr>
+                <td colSpan={5}>
+                  <Button intent="success" text="Add new entry" icon="plus" fill onClick={() => navigate("/new")} />
+                </td>
+              </tr>
+            </tfoot>
+          )}
         </HTMLTable>
       </div>
     );

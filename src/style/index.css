@@ -341,3 +341,8 @@ footer p {
 .fill-width {
   width: 100%;
 }
+
+.space-right {
+  margin-right: 1rem;
+  display: inline;
+}

@@ -1,11 +1,12 @@
 import { useContext } from "react";
 import { Dictionary, FullEntry } from "../dictionary";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { App } from "../App";
-import { H3, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
+import { Button, H3, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
 import { Part } from "../lang/extra";
 import { NounInfo } from "../components/nounComponents";
 import { VerbInfo } from "../components/verbComponents";
+import { User } from "../user";
 
 const WORD_TYPES: Readonly<Record<string, string>> = {
   N: "Noun",
@@ -15,6 +16,9 @@ const WORD_TYPES: Readonly<Record<string, string>> = {
 };
 
 function WordPageContent({ entry }: { entry: FullEntry }) {
+  const { user } = useContext(User);
+  const navigate = useNavigate();
+
   const partName = WORD_TYPES[entry.extra] ?? entry.extra;
   const partHeader = entry.class ? `${partName} (type ${entry.class})` : partName;
   const part = entry.part;
@@ -28,8 +32,11 @@ function WordPageContent({ entry }: { entry: FullEntry }) {
 
   return (
     <>
-      <span className="sol">{entry.script}</span>
-      <p>{entry.ipa}</p>
+      <p className="sol space-right">
+        {entry.script}
+      </p>
+      <span className="space-right">{entry.ipa}</span>
+      {user && <Button intent="primary" text="Edit" icon="edit" onClick={() => navigate(`/edit/${entry.sol}`)} />}
       <H3>{partHeader}</H3>
       {entry.tag && (
         <Tag large intent="danger">
