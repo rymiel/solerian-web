@@ -351,3 +351,30 @@ footer p {
   margin-right: 1rem;
   display: inline;
 }
+
+.interlinear p.original {
+  font-style: italic;
+}
+
+.interlinear p.translation {
+  clear: left;
+}
+
+.interlinear div.box {
+  float: left;
+  margin-bottom: 0.3rem;
+  margin-right: 0.7em;
+}
+
+.interlinear div.box p {
+  margin: 0;
+}
+
+.interlinear div.box abbr {
+  font-variant: small-caps;
+  font-variant-numeric: lining-nums;
+  text-transform: lowercase;
+  border-bottom: 0;
+  text-decoration: underline dotted;
+  cursor: help;
+}
