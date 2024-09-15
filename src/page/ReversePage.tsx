@@ -5,6 +5,7 @@ import { App } from "../App";
 import { Dictionary, FullEntry } from "../dictionary";
 import { markStress, Part, separateRoot } from "../lang/extra";
 import { applyFromSeparatedRoot, FORM_NAMES } from "../lang/inflection";
+import { uri } from "..";
 
 interface InflEntry {
   sol: string;
@@ -20,7 +21,7 @@ function terminal(entry: FullEntry) {
   }
   return (
     <>
-      <a href={`#/w/${entry.sol}`}>
+      <a href={uri`#/w/${entry.sol}`}>
         <i>{entry.sol}</i>
       </a>
       : ({entry.extra}) "{meaning}"
@@ -48,7 +49,7 @@ export default function ReversePage() {
   const { entries } = useContext(Dictionary);
   const { query } = useParams();
   const navigate = useNavigate();
-  const [search, setSearch] = useState(query);
+  const [search, setSearch] = useState(query ?? "");
   const [includeOld, setIncludeOld] = useState(false);
   const [infl, setInfl] = useState<InflEntry[] | null>(null);
 
@@ -103,7 +104,7 @@ export default function ReversePage() {
     <div className="inter">
       <form
         onSubmit={(e) => {
-          navigate(`/reverse/${search}`);
+          navigate(uri`/reverse/${search}`);
           e.preventDefault();
         }}
       >

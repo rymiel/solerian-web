@@ -9,6 +9,7 @@ import { VerbInfo } from "../components/verbComponents";
 import { User } from "../user";
 import { InterlinearData, InterlinearGloss } from "../components/interlinear";
 import { SectionTitle } from "./EditWordPage";
+import { uri } from "..";
 
 const WORD_TYPES: Readonly<Record<string, string>> = {
   N: "Noun",
@@ -61,7 +62,7 @@ function WordPageContent({ entry }: { entry: FullEntry }) {
     <>
       <p className="sol space-right">{entry.script}</p>
       <span className="space-right">{entry.ipa}</span>
-      {user && <Button intent="primary" text="Edit" icon="edit" onClick={() => navigate(`/edit/${entry.sol}`)} />}
+      {user && <Button intent="primary" text="Edit" icon="edit" onClick={() => navigate(uri`/edit/${entry.sol}`)} />}
       <H3>{partHeader}</H3>
       {entry.tag && (
         <Tag large intent="danger">

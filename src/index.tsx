@@ -14,6 +14,9 @@ import ReversePage from "./page/ReversePage";
 import { UserProvider } from "./user";
 import EditWordPage from "./page/EditWordPage";
 
+export const uri = (strings: readonly string[], ...values: readonly string[]) =>
+  String.raw({ raw: strings }, ...values.map((i) => encodeURIComponent(i)));
+
 const router = createHashRouter([
   {
     path: "/",

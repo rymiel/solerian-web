@@ -5,6 +5,7 @@ import { useNavigate } from "react-router";
 import { Dictionary } from "../dictionary";
 import { User } from "../user";
 import { SectionTitle } from "./EditWordPage";
+import { uri } from "../index";
 
 export default function HomePage() {
   const { entries } = useContext(Dictionary);
@@ -28,7 +29,7 @@ export default function HomePage() {
           </thead>
           <tbody>
             {entries.map((e, i) => (
-              <tr key={e.hash} onClick={() => navigate(`/w/${e.sol}`)}>
+              <tr key={e.hash} onClick={() => navigate(uri`/w/${e.sol}`)}>
                 <td>{i + 1}</td>
                 <td>
                   {e.tag && <Tag intent="danger">{e.tag}</Tag>}{" "}

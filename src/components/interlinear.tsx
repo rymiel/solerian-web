@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { soundChangeSentence } from "../lang/soundChange";
+import { uri } from "..";
 
 export interface InterlinearData {
   sol: string;
@@ -59,7 +60,7 @@ const joinLinks = (w: ILWord[]): React.ReactNode =>
     SEP.test(i.text) ? (
       elem(i)
     ) : (
-      <Link key={i.index} to={`/reverse/${i.text}`}>
+      <Link key={i.index} to={uri`/reverse/${i.text}`}>
         {elem(i)}
       </Link>
     )
