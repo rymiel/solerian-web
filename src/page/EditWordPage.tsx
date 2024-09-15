@@ -111,11 +111,24 @@ function MeaningData({ v }: { v: FullMeaning }) {
 }
 
 function SectionData({ v }: { v: FullSection }) {
+  const edit = useContext(EditContext);
   return (
     <>
       <BaseData v={v} />
       <InfoTag left="title" right={v.title} fixed />
       <InfoTag left="content" right={v.content} />
+      {v.title === "translation" && (
+        <Button
+          intent="warning"
+          text="Edit translation section"
+          icon="arrow-right"
+          onClick={() =>
+            edit.openDrawer(
+              <TranslationSectionEditor as={v.hash} existing={JSON.parse(v.content) as InterlinearData} />
+            )
+          }
+        />
+      )}
     </>
   );
 }
@@ -141,7 +154,7 @@ function SectionableData({ v }: { v: Sectionable }) {
               <Button
                 intent="warning"
                 text="Translation section"
-                onClick={() => edit.openDrawer(<CreateTranslationSection to={v.hash} />)}
+                onClick={() => edit.openDrawer(<TranslationSectionEditor to={v.hash} />)}
               />
             </div>
           }
@@ -164,12 +177,13 @@ function BaseData({ v }: { v: ApiBase }) {
   );
 }
 
-function CreateTranslationSection({ to }: { to: string }) {
+function TranslationSectionEditor({ to, as, existing }: { to?: string; as?: string; existing?: InterlinearData }) {
+  const edit = useContext(EditContext);
   const dict = useContext(Dictionary);
-  const [sol, setSol] = useState("");
-  const [solSep, setSolSep] = useState("");
-  const [engSep, setEngSep] = useState("");
-  const [eng, setEng] = useState("");
+  const [sol, setSol] = useState(existing?.sol ?? "");
+  const [solSep, setSolSep] = useState(existing?.solSep ?? "");
+  const [engSep, setEngSep] = useState(existing?.engSep ?? "");
+  const [eng, setEng] = useState(existing?.eng ?? "");
   const data: InterlinearData = {
     sol,
     solSep,
@@ -177,10 +191,15 @@ function CreateTranslationSection({ to }: { to: string }) {
     eng,
   };
 
+  if (to === undefined && as === undefined) {
+    throw new Error("One of `as` or `to` must be provided");
+  }
+
   const submit = () => {
-    apiFetch("/section", "POST", { to, title: "translation", content: JSON.stringify(data) }).then(() =>
-      dict.refresh()
-    );
+    apiFetch("/section", "POST", { to, as, title: "translation", content: JSON.stringify(data) }).then(() => {
+      dict.refresh();
+      edit.closeDrawer();
+    });
   };
 
   return (
@@ -188,23 +207,27 @@ function CreateTranslationSection({ to }: { to: string }) {
       <p>
         Adding new translation section to <code>{to}</code>.
       </p>
-      <InputGroup onValueChange={setSol} placeholder="Sentence" />
-      <InputGroup onValueChange={setSolSep} placeholder="Interlinearised sentence" />
-      <InputGroup onValueChange={setEngSep} placeholder="Interlinearised translation" />
-      <InputGroup onValueChange={setEng} placeholder="Translation" />
+      <InputGroup onValueChange={setSol} defaultValue={sol} placeholder="Sentence" />
+      <InputGroup onValueChange={setSolSep} defaultValue={solSep} placeholder="Interlinearised sentence" />
+      <InputGroup onValueChange={setEngSep} defaultValue={engSep} placeholder="Interlinearised translation" />
+      <InputGroup onValueChange={setEng} defaultValue={eng} placeholder="Translation" />
       <Button fill intent="success" text="Submit" onClick={submit} />
       <Divider />
-      <InterlinearGloss data={data} />
+      <InterlinearGloss data={data} asterisk />
     </div>
   );
 }
 
 interface EditContextData {
   openDrawer: (element: React.ReactNode) => void;
+  closeDrawer: () => void;
 }
 
 const EditContext = createContext<EditContextData>({
   openDrawer: () => {
+    throw new Error("No edit drawer context provided");
+  },
+  closeDrawer: () => {
     throw new Error("No edit drawer context provided");
   },
 });
@@ -218,8 +241,10 @@ function EditWordPageContent({ entry }: { entry: FullEntry }) {
     setOpen(true);
   };
 
+  const closeDrawer = () => setOpen(false);
+
   return (
-    <EditContext.Provider value={{ openDrawer }}>
+    <EditContext.Provider value={{ openDrawer, closeDrawer }}>
       <EntryData v={entry} />
       <Drawer isOpen={isOpen} onClose={() => setOpen(false)}>
         {element}

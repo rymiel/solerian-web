@@ -51,7 +51,7 @@ export const API = `http://localhost:3000${API_SUFFIX}`;
 declare const WEB_VERSION: string;
 
 type HTTPMethod = "GET" | "POST";
-type Body = FormData | Record<string, string>;
+type Body = FormData | Record<string, string | undefined>;
 
 export async function apiFetch<T>(endpoint: string, method?: HTTPMethod, body?: Body): Promise<T> {
   const headers = new Headers();
@@ -67,7 +67,10 @@ export async function apiFetch<T>(endpoint: string, method?: HTTPMethod, body?: 
     formBody = new FormData();
     for (const key in body) {
       if (Object.prototype.hasOwnProperty.call(body, key)) {
-        formBody.set(key, body[key]);
+        const v = body[key];
+        if (v !== undefined) {
+          formBody.set(key, v);
+        }
       }
     }
   }
