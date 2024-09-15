@@ -146,7 +146,7 @@ function SectionableData({ v }: { v: Sectionable }) {
             </div>
           }
           renderTarget={({ isOpen, ...targetProps }) => (
-            <Button intent="warning" text="Create section" icon="add" fill {...targetProps} />
+            <Button intent="warning" text="Create section" icon="add" {...targetProps} />
           )}
         />
       </InfoSection>
