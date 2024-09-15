@@ -1,9 +1,10 @@
-import { Button, HTMLTable, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
+import { Button, HTMLTable, Icon, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
 import { App } from "../App";
 import { useContext } from "react";
 import { useNavigate } from "react-router";
 import { Dictionary } from "../dictionary";
 import { User } from "../user";
+import { SectionTitle } from "./EditWordPage";
 
 export default function HomePage() {
   const { entries } = useContext(Dictionary);
@@ -32,6 +33,9 @@ export default function HomePage() {
                 <td>
                   {e.tag && <Tag intent="danger">{e.tag}</Tag>}{" "}
                   {e.meanings.map((m, mi) => (mi === 0 ? "" : "; ") + m.eng)}
+                  {e.sections.some((s) => s.title === SectionTitle.USAGE) && (
+                    <Icon icon="info-sign" title="has usage notes" />
+                  )}
                 </td>
                 <td className="dual">
                   <i>{e.sol}</i>
