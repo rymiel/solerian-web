@@ -389,3 +389,10 @@ footer p {
   text-decoration: underline dotted;
   cursor: help;
 }
+
+h1 .bp5-icon,
+h2 .bp5-icon,
+h3 .bp5-icon,
+h4 .bp5-icon {
+  vertical-align: bottom;
+}

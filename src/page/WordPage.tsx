@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { Dictionary, FullEntry, FullSection } from "../dictionary";
 import { useNavigate, useParams } from "react-router-dom";
 import { App } from "../App";
-import { Button, H3, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
+import { Button, H3, H4, Icon, IconSize, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
 import { Part } from "../lang/extra";
 import { NounInfo } from "../components/nounComponents";
 import { VerbInfo } from "../components/verbComponents";
@@ -21,6 +21,14 @@ function SectionContent({ section }: { section: FullSection }) {
   if (section.title === SectionTitle.TRANSLATION) {
     const data = JSON.parse(section.content) as InterlinearData;
     return <InterlinearGloss data={data} asterisk link indent />;
+  } else if (section.title === SectionTitle.USAGE) {
+    return <>
+      <H4>Usage notes <Icon icon="info-sign" size={IconSize.LARGE} /></H4>
+      <p>
+        {/* TODO: links */}
+        {section.content}
+      </p>
+    </>
   } else {
     return (
       <Tag large intent="danger">
@@ -72,6 +80,10 @@ function WordPageContent({ entry }: { entry: FullEntry }) {
           </li>
         ))}
       </ul>
+      {entry.sections.map((s) => (
+        <SectionContent section={s} key={s.hash} />
+      ))}
+      <H4>Inflection tables</H4>
       {table}
     </>
   );
