@@ -8,6 +8,7 @@ import {
   Card,
   Classes,
   CompoundTag,
+  ControlGroup,
   Divider,
   Drawer,
   H3,
@@ -17,11 +18,17 @@ import {
   Spinner,
   SpinnerSize,
   Tag,
+  TextArea,
 } from "@blueprintjs/core";
 import { User } from "../user";
 import { Part } from "../lang/extra";
 import { ApiBase, apiFetch, ApiMeaning, ApiSection } from "../api";
 import { InterlinearData, InterlinearGloss } from "../components/interlinear";
+
+export enum SectionTitle {
+  TRANSLATION = "translation",
+  USAGE = "usage",
+}
 
 function InfoTag({
   left,
@@ -80,6 +87,7 @@ function InfoSection({
 }
 
 function EntryData({ v }: { v: FullEntry }) {
+  const edit = useContext(EditContext);
   return (
     <>
       <BaseData v={v} />
@@ -92,6 +100,13 @@ function EntryData({ v }: { v: FullEntry }) {
             <MeaningData v={m} />
           </InfoSection>
         ))}
+        <Divider />
+        <Button
+          intent="warning"
+          text="Add new meaning"
+          icon="add"
+          onClick={() => edit.openDrawer(<MeaningEditor to={v.hash} />)}
+        />
       </InfoSection>
       <SectionableData v={v} />
       <Divider />
@@ -110,13 +125,6 @@ function MeaningData({ v }: { v: FullMeaning }) {
       <BaseData v={v} />
       <InfoTag left="eng" right={v.eng} onClick={() => edit.openDrawer(<MeaningEditor existing={v} />)} />
       <SectionableData v={v} />
-      <Divider />
-      <Button
-        intent="warning"
-        text="Add new meaning"
-        icon="add"
-        onClick={() => edit.openDrawer(<MeaningEditor to={v.hash} />)}
-      />
     </>
   );
 }
@@ -128,7 +136,7 @@ function SectionData({ v }: { v: FullSection }) {
       <BaseData v={v} />
       <InfoTag left="title" right={v.title} fixed />
       <InfoTag left="content" right={v.content} />
-      {v.title === "translation" && (
+      {v.title === SectionTitle.TRANSLATION && (
         <Button
           intent="warning"
           text="Edit translation section"
@@ -138,6 +146,14 @@ function SectionData({ v }: { v: FullSection }) {
               <TranslationSectionEditor as={v.hash} existing={JSON.parse(v.content) as InterlinearData} />
             )
           }
+        />
+      )}
+      {v.title === SectionTitle.USAGE && (
+        <Button
+          intent="warning"
+          text="Edit usage note section"
+          icon="arrow-right"
+          onClick={() => edit.openDrawer(<TextSectionEditor as={v.hash} content={v.content} title={v.title} />)}
         />
       )}
     </>
@@ -162,11 +178,18 @@ function SectionableData({ v }: { v: Sectionable }) {
           popoverClassName={Classes.POPOVER_CONTENT_SIZING}
           content={
             <div>
-              <Button
-                intent="warning"
-                text="Translation section"
-                onClick={() => edit.openDrawer(<TranslationSectionEditor to={v.hash} />)}
-              />
+              <ControlGroup vertical>
+                <Button
+                  intent="warning"
+                  text="Translation section"
+                  onClick={() => edit.openDrawer(<TranslationSectionEditor to={v.hash} />)}
+                />
+                <Button
+                  intent="warning"
+                  text="Usage note section"
+                  onClick={() => edit.openDrawer(<TextSectionEditor to={v.hash} title={SectionTitle.USAGE} />)}
+                />
+              </ControlGroup>
             </div>
           }
           renderTarget={({ isOpen, ...targetProps }) => (
@@ -207,10 +230,12 @@ function TranslationSectionEditor({ to, as, existing }: { to?: string; as?: stri
   }
 
   const submit = () => {
-    apiFetch("/section", "POST", { to, as, title: "translation", content: JSON.stringify(data) }).then(() => {
-      dict.refresh();
-      edit.closeDrawer();
-    });
+    apiFetch("/section", "POST", { to, as, title: SectionTitle.TRANSLATION, content: JSON.stringify(data) }).then(
+      () => {
+        dict.refresh();
+        edit.closeDrawer();
+      }
+    );
   };
 
   return (
@@ -232,6 +257,54 @@ function TranslationSectionEditor({ to, as, existing }: { to?: string; as?: stri
       <Button fill intent="success" text="Submit" onClick={submit} />
       <Divider />
       <InterlinearGloss data={data} asterisk />
+    </div>
+  );
+}
+
+function TextSectionEditor({
+  to,
+  as,
+  title,
+  content: existingContent,
+}: {
+  to?: string;
+  as?: string;
+  title: string;
+  content?: string;
+}) {
+  const edit = useContext(EditContext);
+  const dict = useContext(Dictionary);
+  const [content, setContent] = useState(existingContent ?? "");
+
+  if (to === undefined && as === undefined) {
+    throw new Error("One of `as` or `to` must be provided");
+  }
+
+  const submit = () => {
+    apiFetch("/section", "POST", { to, as, title, content }).then(() => {
+      dict.refresh();
+      edit.closeDrawer();
+    });
+  };
+
+  return (
+    <div className="inter">
+      {to && (
+        <p>
+          Adding new {title} text section to <code>{to}</code>.
+        </p>
+      )}
+      {as && (
+        <p>
+          Editing {title} text section <code>{as}</code>.
+        </p>
+      )}
+      <TextArea
+        onChange={(e) => setContent(e.currentTarget.value)}
+        defaultValue={content}
+        placeholder={`Content for ${title}`}
+      />
+      <Button fill intent="success" text="Submit" onClick={submit} />
     </div>
   );
 }

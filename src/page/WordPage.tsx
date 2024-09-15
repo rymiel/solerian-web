@@ -8,6 +8,7 @@ import { NounInfo } from "../components/nounComponents";
 import { VerbInfo } from "../components/verbComponents";
 import { User } from "../user";
 import { InterlinearData, InterlinearGloss } from "../components/interlinear";
+import { SectionTitle } from "./EditWordPage";
 
 const WORD_TYPES: Readonly<Record<string, string>> = {
   N: "Noun",
@@ -17,7 +18,7 @@ const WORD_TYPES: Readonly<Record<string, string>> = {
 };
 
 function SectionContent({ section }: { section: FullSection }) {
-  if (section.title === "translation") {
+  if (section.title === SectionTitle.TRANSLATION) {
     const data = JSON.parse(section.content) as InterlinearData;
     return <InterlinearGloss data={data} asterisk link indent />;
   } else {
