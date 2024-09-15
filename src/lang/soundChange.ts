@@ -137,3 +137,15 @@ export function soundChange(word: string, markStress: boolean): string {
 
   return `[${words.join(" ")}]`;
 }
+
+export function soundChangeSentence(sentence: string): string {
+  const words = sentence.toLowerCase().split(" ").flatMap((i) => {
+    if (i.includes("-")) {
+      const [prefix, word] = i.split("-");
+      return [singleWordSoundChange(prefix, false), singleWordSoundChange(word, true)];
+    }
+    return singleWordSoundChange(i, true);
+  });
+
+  return `[${words.join(" ")}]`;
+}

@@ -19,7 +19,7 @@ const WORD_TYPES: Readonly<Record<string, string>> = {
 function SectionContent({ section }: { section: FullSection }) {
   if (section.title === "translation") {
     const data = JSON.parse(section.content) as InterlinearData;
-    return <InterlinearGloss data={data} />;
+    return <InterlinearGloss data={data} asterisk link indent />;
   } else {
     return (
       <Tag large intent="danger">

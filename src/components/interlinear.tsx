@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { soundChangeSentence } from "../lang/soundChange";
 
 export interface InterlinearData {
   sol: string;
@@ -29,7 +31,6 @@ const ABBREVIATIONS: Record<string, string> = {
 function convertAbbr(s: string): React.ReactNode[] {
   const parts = s.split(/([-.\(\)])/);
 
-  console.log(parts);
   return parts.map((i, j) => {
     const abbr = ABBREVIATIONS[i] as string | undefined;
     if (abbr === undefined) {
@@ -44,11 +45,54 @@ function convertAbbr(s: string): React.ReactNode[] {
   });
 }
 
-export function InterlinearGloss({ data }: { data: InterlinearData }) {
+const SEP = /([ -])/;
+interface ILWord {
+  text: string;
+  index: number;
+  bold: boolean;
+}
+const splitIntoWords = (s: string): ILWord[] => s.split(SEP).map((i, j) => ({ text: i, index: j, bold: false }));
+const elem = (w: ILWord): React.ReactNode => (w.bold ? <b key={w.index}>{w.text}</b> : w.text);
+const joinWords = (w: ILWord[]): React.ReactNode => w.map(elem);
+const joinLinks = (w: ILWord[]): React.ReactNode =>
+  w.map((i) =>
+    SEP.test(i.text) ? (
+      elem(i)
+    ) : (
+      <Link key={i.index} to={`/reverse/${i.text}`}>
+        {elem(i)}
+      </Link>
+    )
+  );
+
+const highlightAsterisk = (w: ILWord[]): ILWord[] =>
+  w.map((i) => (i.text.startsWith("*") ? { ...i, text: i.text.slice(1), bold: true } : i));
+
+export function InterlinearGloss({
+  data,
+  asterisk = false,
+  link = false,
+  indent = false,
+}: {
+  data: InterlinearData;
+  asterisk?: boolean;
+  link?: boolean;
+  indent?: boolean;
+}) {
   const solParts = data.solSep.split(" ");
   const engParts = data.engSep.split(" ");
   const numParts = Math.max(solParts.length, engParts.length);
   const parts = [];
+
+  let solWords = splitIntoWords(data.sol);
+  let engWords = splitIntoWords(data.eng);
+  if (asterisk) {
+    solWords = highlightAsterisk(solWords);
+    engWords = highlightAsterisk(engWords);
+  }
+  const sol = link ? joinLinks(solWords) : joinWords(solWords);
+  const eng = joinWords(engWords);
+  const solClean = data.sol.replaceAll("*", "");
 
   for (let i = 0; i < numParts; i++) {
     const eSol = solParts[i];
@@ -62,11 +106,24 @@ export function InterlinearGloss({ data }: { data: InterlinearData }) {
     );
   }
 
+  const body = (
+    <>
+      {...parts}
+      <p className="bottom">{soundChangeSentence(solClean)}</p>
+      <p className="bottom">{eng}</p>
+    </>
+  );
+
   return (
     <div className="interlinear">
-      <p className="original">{data.sol}</p>
-      {...parts}
-      <p className="translation">{data.eng}</p>
+      <p className="original">{sol}</p>
+      {indent ? (
+        <dl>
+          <dd>{body}</dd>
+        </dl>
+      ) : (
+        body
+      )}
     </div>
   );
 }
