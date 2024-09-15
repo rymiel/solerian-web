@@ -26,11 +26,13 @@ import { InterlinearData, InterlinearGloss } from "../components/interlinear";
 function InfoTag({
   left,
   right,
+  onClick,
   fixed = false,
   generated = false,
 }: {
   left: string;
   right: React.ReactNode;
+  onClick?: () => void;
   fixed?: boolean;
   generated?: boolean;
 }) {
@@ -42,6 +44,7 @@ function InfoTag({
         intent={fixed ? "danger" : generated ? "success" : "primary"}
         icon={fixed ? "anchor" : generated ? "generate" : "draw"}
         interactive={editable}
+        onClick={onClick}
         rightIcon={editable ? "edit" : undefined}
         large
       >
@@ -101,11 +104,19 @@ function EntryData({ v }: { v: FullEntry }) {
 }
 
 function MeaningData({ v }: { v: FullMeaning }) {
+  const edit = useContext(EditContext);
   return (
     <>
       <BaseData v={v} />
-      <InfoTag left="eng" right={v.eng} />
+      <InfoTag left="eng" right={v.eng} onClick={() => edit.openDrawer(<MeaningEditor existing={v} />)} />
       <SectionableData v={v} />
+      <Divider />
+      <Button
+        intent="warning"
+        text="Add new meaning"
+        icon="add"
+        onClick={() => edit.openDrawer(<MeaningEditor to={v.hash} />)}
+      />
     </>
   );
 }
@@ -204,9 +215,16 @@ function TranslationSectionEditor({ to, as, existing }: { to?: string; as?: stri
 
   return (
     <div className="inter">
-      <p>
-        Adding new translation section to <code>{to}</code>.
-      </p>
+      {to && (
+        <p>
+          Adding new translation section to <code>{to}</code>.
+        </p>
+      )}
+      {as && (
+        <p>
+          Editing translation section <code>{as}</code>.
+        </p>
+      )}
       <InputGroup onValueChange={setSol} defaultValue={sol} placeholder="Sentence" />
       <InputGroup onValueChange={setSolSep} defaultValue={solSep} placeholder="Interlinearised sentence" />
       <InputGroup onValueChange={setEngSep} defaultValue={engSep} placeholder="Interlinearised translation" />
@@ -214,6 +232,41 @@ function TranslationSectionEditor({ to, as, existing }: { to?: string; as?: stri
       <Button fill intent="success" text="Submit" onClick={submit} />
       <Divider />
       <InterlinearGloss data={data} asterisk />
+    </div>
+  );
+}
+
+function MeaningEditor({ to, existing }: { to?: string; existing?: FullMeaning }) {
+  const edit = useContext(EditContext);
+  const dict = useContext(Dictionary);
+  const [eng, setEng] = useState(existing?.eng ?? "");
+  const as = existing?.hash;
+
+  if (to === undefined && as === undefined) {
+    throw new Error("One of `as` or `to` must be provided");
+  }
+
+  const submit = () => {
+    apiFetch("/meaning", "POST", { to, as, eng }).then(() => {
+      dict.refresh();
+      edit.closeDrawer();
+    });
+  };
+
+  return (
+    <div className="inter">
+      {to && (
+        <p>
+          Adding new meaning to <code>{to}</code>.
+        </p>
+      )}
+      {as && (
+        <p>
+          Editing meaning <code>{as}</code>.
+        </p>
+      )}
+      <InputGroup onValueChange={setEng} defaultValue={eng} placeholder="English" />
+      <Button fill intent="success" text="Submit" onClick={submit} />
     </div>
   );
 }
