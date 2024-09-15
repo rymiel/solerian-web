@@ -22,13 +22,17 @@ function SectionContent({ section }: { section: FullSection }) {
     const data = JSON.parse(section.content) as InterlinearData;
     return <InterlinearGloss data={data} asterisk link indent />;
   } else if (section.title === SectionTitle.USAGE) {
-    return <>
-      <H4>Usage notes <Icon icon="info-sign" size={IconSize.LARGE} /></H4>
-      <p>
-        {/* TODO: links */}
-        {section.content}
-      </p>
-    </>
+    return (
+      <>
+        <H4>
+          Usage notes <Icon icon="info-sign" size={IconSize.LARGE} />
+        </H4>
+        <p>
+          {/* TODO: links */}
+          {section.content}
+        </p>
+      </>
+    );
   } else {
     return (
       <Tag large intent="danger">
@@ -83,7 +87,7 @@ function WordPageContent({ entry }: { entry: FullEntry }) {
       {entry.sections.map((s) => (
         <SectionContent section={s} key={s.hash} />
       ))}
-      <H4>Inflection tables</H4>
+      {table !== null && <H4>Inflection tables</H4>}
       {table}
     </>
   );
