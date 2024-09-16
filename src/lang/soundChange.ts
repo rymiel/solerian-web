@@ -1,4 +1,3 @@
-import { markStress } from "./extra";
 import { gsub, GSubMap } from "./util";
 
 const VOWEL = "əaeiouyáéíóúýæÆɐ";
@@ -16,6 +15,7 @@ const CHANGES: GSubMap = [
   [`(?<=[kg])ý`, "ʲí"],
   [`ox(?=${V}|r)`, "a"],
   [`óx(?=${V}|r)`, "á"],
+  [`(?<=x${V})x(?=${V})`, ""],
   [`(?<=${V})x(?=${V})`, "g"],
   [`^x`, "h"],
   [`[əa][əa]`, "ae"],
