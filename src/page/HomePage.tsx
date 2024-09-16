@@ -37,6 +37,9 @@ export default function HomePage() {
                   {e.sections.some((s) => s.title === SectionTitle.USAGE) && (
                     <Icon icon="info-sign" title="has usage notes" />
                   )}
+                  {e.sections.some((s) => s.title === SectionTitle.ETYMOLOGY) && (
+                    <Icon icon="fork" title="has etymology" />
+                  )}
                 </td>
                 <td className="dual">
                   <i>{e.sol}</i>

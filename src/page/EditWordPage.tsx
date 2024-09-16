@@ -1,28 +1,25 @@
 import { createContext, useContext, useState } from "react";
 import { Dictionary, FullEntry, FullMeaning, FullSection } from "../dictionary";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { App } from "../App";
 import {
   Button,
   Callout,
-  Card,
   Classes,
   CompoundTag,
   ControlGroup,
   Divider,
   Drawer,
-  H3,
   InputGroup,
   NonIdealState,
   Popover,
   Spinner,
   SpinnerSize,
-  Tag,
   TextArea,
 } from "@blueprintjs/core";
 import { User } from "../user";
 import { Part } from "../lang/extra";
-import { ApiBase, apiFetch, ApiMeaning, ApiSection } from "../api";
+import { ApiBase, apiFetch, ApiSection } from "../api";
 import { InterlinearData, InterlinearGloss } from "../components/interlinear";
 import { WordSelect } from "../components/wordSelect";
 import { RichText } from "../components/richText";
@@ -30,6 +27,7 @@ import { RichText } from "../components/richText";
 export enum SectionTitle {
   TRANSLATION = "translation",
   USAGE = "usage",
+  ETYMOLOGY = "etymology"
 }
 
 function InfoTag({
@@ -158,6 +156,14 @@ function SectionData({ v }: { v: FullSection }) {
           onClick={() => edit.openDrawer(<TextSectionEditor as={v.hash} content={v.content} title={v.title} />)}
         />
       )}
+      {v.title === SectionTitle.ETYMOLOGY && (
+        <Button
+          intent="warning"
+          text="Edit etymology section"
+          icon="arrow-right"
+          onClick={() => edit.openDrawer(<TextSectionEditor as={v.hash} content={v.content} title={v.title} />)}
+        />
+      )}
     </>
   );
 }
@@ -190,6 +196,11 @@ function SectionableData({ v }: { v: Sectionable }) {
                   intent="warning"
                   text="Usage note section"
                   onClick={() => edit.openDrawer(<TextSectionEditor to={v.hash} title={SectionTitle.USAGE} />)}
+                />
+                <Button
+                  intent="warning"
+                  text="Etymology section"
+                  onClick={() => edit.openDrawer(<TextSectionEditor to={v.hash} title={SectionTitle.ETYMOLOGY} />)}
                 />
               </ControlGroup>
             </div>
@@ -309,7 +320,7 @@ function TextSectionEditor({
           placeholder={`Content for ${title}`}
           fill
         />
-        <WordSelect onSelect={(t) => setContent((c) => `${c}[${t}]`)} />
+        <WordSelect onSelect={(t) => setContent((c) => `${c}[${t.hash}] (“${t.meanings[0].eng}”)`)} />
       </ControlGroup>
       <Button fill intent="success" text="Submit" onClick={submit} />
       <Divider />

@@ -36,7 +36,7 @@ const renderEntry: ItemRenderer<FullEntry> = (entry, { handleClick, handleFocus,
   );
 };
 
-export function WordSelect({ onSelect }: { onSelect: (id: string) => void }) {
+export function WordSelect({ onSelect }: { onSelect: (entry: FullEntry) => void }) {
   const { entries } = useContext(Dictionary);
   return (
     <Select<FullEntry>
@@ -44,7 +44,7 @@ export function WordSelect({ onSelect }: { onSelect: (id: string) => void }) {
       itemPredicate={filterEntry}
       itemRenderer={renderEntry}
       noResults={<MenuItem disabled={true} text="No results." roleStructure="listoption" />}
-      onItemSelect={(item) => onSelect(item.hash)}
+      onItemSelect={onSelect}
       disabled={entries === null}
     >
       <Button icon="add" intent="primary" fill className="fill-height" disabled={entries === null} />

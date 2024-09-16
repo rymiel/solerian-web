@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { Dictionary, FullEntry, FullSection } from "../dictionary";
 import { useNavigate, useParams } from "react-router-dom";
 import { App } from "../App";
-import { Button, H3, H4, Icon, IconSize, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
+import { Button, H2, H3, H4, Icon, IconSize, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
 import { Part } from "../lang/extra";
 import { NounInfo } from "../components/nounComponents";
 import { VerbInfo } from "../components/verbComponents";
@@ -10,6 +10,7 @@ import { User } from "../user";
 import { InterlinearData, InterlinearGloss } from "../components/interlinear";
 import { SectionTitle } from "./EditWordPage";
 import { uri } from "..";
+import { RichText } from "../components/richText";
 
 const WORD_TYPES: Readonly<Record<string, string>> = {
   N: "Noun",
@@ -28,10 +29,16 @@ function SectionContent({ section }: { section: FullSection }) {
         <H4>
           Usage notes <Icon icon="info-sign" size={IconSize.LARGE} />
         </H4>
-        <p>
-          {/* TODO: links */}
-          {section.content}
-        </p>
+        <RichText text={section.content} />
+      </>
+    );
+  } else if (section.title === SectionTitle.ETYMOLOGY) {
+    return (
+      <>
+        <H4>
+          Etymology <Icon icon="fork" size={IconSize.LARGE} />
+        </H4>
+        <RichText text={section.content} />
       </>
     );
   } else {
@@ -60,6 +67,7 @@ function WordPageContent({ entry }: { entry: FullEntry }) {
 
   return (
     <>
+      <H2>{entry.sol}</H2>
       <p className="sol space-right">{entry.script}</p>
       <span className="space-right">{entry.ipa}</span>
       {user && <Button intent="primary" text="Edit" icon="edit" onClick={() => navigate(uri`/edit/${entry.sol}`)} />}
