@@ -24,6 +24,8 @@ import { User } from "../user";
 import { Part } from "../lang/extra";
 import { ApiBase, apiFetch, ApiMeaning, ApiSection } from "../api";
 import { InterlinearData, InterlinearGloss } from "../components/interlinear";
+import { WordSelect } from "../components/wordSelect";
+import { RichText } from "../components/richText";
 
 export enum SectionTitle {
   TRANSLATION = "translation",
@@ -300,12 +302,18 @@ function TextSectionEditor({
         </p>
       )}
       {/* TODO: links */}
-      <TextArea
-        onChange={(e) => setContent(e.currentTarget.value)}
-        defaultValue={content}
-        placeholder={`Content for ${title}`}
-      />
+      <ControlGroup fill>
+        <TextArea
+          onChange={(e) => setContent(e.currentTarget.value)}
+          value={content}
+          placeholder={`Content for ${title}`}
+          fill
+        />
+        <WordSelect onSelect={(t) => setContent((c) => `${c}[${t}]`)} />
+      </ControlGroup>
       <Button fill intent="success" text="Submit" onClick={submit} />
+      <Divider />
+      <RichText text={content} />
     </div>
   );
 }

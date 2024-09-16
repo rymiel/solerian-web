@@ -358,6 +358,10 @@ footer p {
   width: 100%;
 }
 
+.fill-height {
+  height: 100%;
+}
+
 .space-right {
   margin-right: 1rem;
   display: inline;
@@ -400,4 +404,16 @@ h4 .bp5-icon {
 .dictionary tr td .bp5-icon {
   vertical-align: bottom;
   margin-left: 0.3rem;
+}
+
+.bp5-dark a.missing {
+  color: #ff4242;
+}
+
+.bp5-dark a.missing:hover {
+  color: #ef8174;
+}
+
+.bp5-dark a.missing:active {
+  color: #f8a397;
 }
