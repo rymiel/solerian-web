@@ -34,6 +34,9 @@ export default function DictionaryPage() {
                 <td>
                   {e.tag && <Tag intent="danger">{e.tag}</Tag>}{" "}
                   {e.meanings.map((m, mi) => (mi === 0 ? "" : "; ") + m.eng)}
+                  {e.meanings.some((m) => m.sections.some((s) => s.title === SectionTitle.TRANSLATION)) && (
+                    <Icon icon="label" title="has a translation" />
+                  )}
                   {e.sections.some((s) => s.title === SectionTitle.USAGE) && (
                     <Icon icon="info-sign" title="has usage notes" />
                   )}
