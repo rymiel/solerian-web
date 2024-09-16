@@ -13,6 +13,7 @@ import WordPage from "./page/WordPage";
 import ReversePage from "./page/ReversePage";
 import { UserProvider } from "./user";
 import EditWordPage from "./page/EditWordPage";
+import ValidatePage from "./page/ValidationPage";
 
 export const uri = (strings: readonly string[], ...values: readonly string[]) =>
   String.raw({ raw: strings }, ...values.map((i) => encodeURIComponent(i)));
@@ -38,6 +39,10 @@ const router = createHashRouter([
   {
     path: "/reverse/:query",
     element: <ReversePage />,
+  },
+  {
+    path: "/validate",
+    element: <ValidatePage />,
   },
 ]);
 

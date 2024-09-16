@@ -78,6 +78,7 @@ function Logout() {
 
 function Menu() {
   const [isOpen, setOpen] = useState(false);
+  const { user } = useContext(User);
 
   return (
     <>
@@ -95,6 +96,13 @@ function Menu() {
                 Reverse
               </Link>
             </li>
+            {user && (
+              <li>
+                <Link to="/validate" onClick={() => setOpen(false)}>
+                  Validate
+                </Link>
+              </li>
+            )}
           </ul>
         </nav>
       </Drawer>
