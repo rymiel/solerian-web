@@ -36,7 +36,7 @@ function SectionContent({ section }: { section: FullSection }) {
     return (
       <>
         <H4>
-          Etymology <Icon icon="fork" size={IconSize.LARGE} />
+          Etymology <Icon icon="book" size={IconSize.LARGE} />
         </H4>
         <RichText text={section.content} />
       </>

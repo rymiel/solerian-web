@@ -38,7 +38,7 @@ export default function HomePage() {
                     <Icon icon="info-sign" title="has usage notes" />
                   )}
                   {e.sections.some((s) => s.title === SectionTitle.ETYMOLOGY) && (
-                    <Icon icon="fork" title="has etymology" />
+                    <Icon icon="book" title="has etymology" />
                   )}
                 </td>
                 <td className="dual">
