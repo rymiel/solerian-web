@@ -7,7 +7,7 @@ import { User } from "../user";
 import { SectionTitle } from "./EditWordPage";
 import { uri } from "../index";
 
-export default function HomePage() {
+export default function DictionaryPage() {
   const { entries } = useContext(Dictionary);
   const navigate = useNavigate();
   const { user } = useContext(User);

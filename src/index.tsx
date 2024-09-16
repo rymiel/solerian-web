@@ -5,7 +5,7 @@ import "@blueprintjs/popover2/lib/css/blueprint-popover2.css";
 import { API } from "./api";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import { createContext, StrictMode, useState } from "react";
-import HomePage from "./page/HomePage";
+import DictionaryPage from "./page/DictionaryPage";
 import { OverlaysProvider } from "@blueprintjs/core";
 import ErrorPage from "./page/ErrorPage";
 import { DictionaryProvider } from "./dictionary";
@@ -21,7 +21,7 @@ export const uri = (strings: readonly string[], ...values: readonly string[]) =>
 const router = createHashRouter([
   {
     path: "/",
-    element: <HomePage />,
+    element: <DictionaryPage />,
     errorElement: <ErrorPage />,
   },
   {
