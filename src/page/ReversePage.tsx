@@ -67,7 +67,6 @@ export default function ReversePage() {
       forms.old.forEach((f, fi) => infls.push({ sol: f, form: fi, original: i, old: true }));
     }
     setInfl(infls);
-    console.log(infls);
   };
 
   useEffect(() => {
@@ -83,7 +82,6 @@ export default function ReversePage() {
     const lookup = (q: string) => {
       const inflMatches = infl.filter((i) => i.sol === q && (!i.old || includeOld) && i.form !== 0);
       const rawMatches = entries.filter((i) => i.sol === q);
-      console.log(q, rawMatches, inflMatches);
 
       return rawMatches.map(terminal).concat(inflMatches.map(inflNode));
     };
