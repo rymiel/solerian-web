@@ -17,6 +17,8 @@ const ABBREVIATIONS: Record<string, string> = {
   "1PL": "first person plural",
   "2PL": "second person plural",
   "3PL": "third person plural",
+  SG: "singular",
+  PL: "plural",
   PST: "past",
   PRS: "present",
   NOM: "nominative",
@@ -26,7 +28,7 @@ const ABBREVIATIONS: Record<string, string> = {
   IMP: "imperative",
   NEG: "negative",
   ADV: "adverb",
-  ECHO: "echo",
+  ECHO: "echo (marks that the subject of the sentence hasn't changed)",
 };
 
 function convertAbbr(s: string): React.ReactNode[] {
