@@ -51,7 +51,7 @@ export const API = `http://localhost:3000${API_SUFFIX}`;
 declare const WEB_VERSION: string;
 
 type HTTPMethod = "GET" | "POST";
-type Body = FormData | Record<string, string | undefined>;
+type Body = FormData | Record<string, string | undefined> | string;
 
 export async function apiFetch<T>(endpoint: string, method?: HTTPMethod, body?: Body): Promise<T> {
   const headers = new Headers();
@@ -62,6 +62,8 @@ export async function apiFetch<T>(endpoint: string, method?: HTTPMethod, body?: 
   }
   headers.set("X-Solerian-Client", `solerian web/${WEB_VERSION} rymiel`);
   if (body instanceof FormData) {
+    formBody = body;
+  } else if (typeof body === "string") {
     formBody = body;
   } else if (body !== undefined) {
     formBody = new FormData();

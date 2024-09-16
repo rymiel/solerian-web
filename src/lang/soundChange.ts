@@ -119,7 +119,7 @@ function syllabify(word: string, markStress: boolean = true): string {
   return gsub(word, POST_UNROMANIZE);
 }
 
-function ipaWithoutSoundChange(word: string): string {
+export function ipaWithoutSoundChange(word: string): string {
   return gsub(gsub(word, PRE_UNROMANIZE), POST_UNROMANIZE);
 }
 

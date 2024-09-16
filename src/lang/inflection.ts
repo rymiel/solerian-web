@@ -109,7 +109,7 @@ const applyStressLast = (word: string): string => reverse(applyStressFirst(rever
 const applyLaxStress = (word: string): string => sub(applyDestress(word), APPLY_LAX_STRESS);
 const applyMarkStress = (word: string): string => sub(applyDestress(word), STRESS_MARKERS);
 
-function applyNormalize(word: string): string {
+export function applyNormalize(word: string): string {
   if (isStressed(word)) {
     if (syllableCount(word) === 1 || fullVowelCount(word) === 1) {
       return applyDestress(word);
