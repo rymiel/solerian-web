@@ -1,18 +1,12 @@
 import { Button, ControlGroup, InputGroup, NonIdealState, Spinner, SpinnerSize } from "@blueprintjs/core";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { App } from "../App";
 import { Dictionary, FullEntry } from "../dictionary";
-import { markStress, Part, separateRoot } from "../lang/extra";
-import { applyFromSeparatedRoot, FORM_NAMES } from "../lang/inflection";
+import { Part } from "../lang/extra";
+import { FORM_NAMES } from "../lang/inflection";
 import { uri } from "..";
-
-interface InflEntry {
-  sol: string;
-  old: boolean;
-  form: number;
-  original: FullEntry;
-}
+import { InflEntry, useInflEntries } from "../lang/inflEntries";
 
 function terminal(entry: FullEntry) {
   let meaning = entry.meanings[0].eng;
@@ -51,27 +45,7 @@ export default function ReversePage() {
   const navigate = useNavigate();
   const [search, setSearch] = useState(query ?? "");
   const [includeOld, setIncludeOld] = useState(false);
-  const [infl, setInfl] = useState<InflEntry[] | null>(null);
-
-  const refresh = async () => {
-    if (!entries) return;
-    const infls: InflEntry[] = [];
-    for (const i of entries) {
-      if (i.part === null) continue;
-
-      const s = separateRoot(i.sol, i.part);
-      if (s === null) throw new Error("Failed to separate root");
-
-      const forms = applyFromSeparatedRoot(s, markStress(i));
-      forms.cur.forEach((f, fi) => infls.push({ sol: f, form: fi, original: i, old: false }));
-      forms.old.forEach((f, fi) => infls.push({ sol: f, form: fi, original: i, old: true }));
-    }
-    setInfl(infls);
-  };
-
-  useEffect(() => {
-    refresh();
-  }, [entries]);
+  const infl = useInflEntries();
 
   let content = <NonIdealState icon={<Spinner size={SpinnerSize.LARGE} />} />;
 
