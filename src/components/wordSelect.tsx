@@ -3,14 +3,16 @@ import { ItemPredicate, ItemRenderer, Select } from "@blueprintjs/select";
 import { Dictionary, FullEntry } from "../dictionary";
 import { useContext } from "react";
 
+const filterDiacritics = (str: string) => str.normalize("NFD").replace(/\p{Diacritic}/gu, "");
+
 const filterEntry: ItemPredicate<FullEntry> = (query: string, entry: FullEntry, _index, exactMatch) => {
   const normalizedEng = entry.meanings.map((i) => i.eng.toLowerCase());
-  const normalizedQuery = query.toLowerCase();
+  const normalizedQuery = filterDiacritics(query.toLowerCase());
 
   if (exactMatch) {
-    return entry.sol === normalizedQuery || normalizedEng.includes(normalizedQuery);
+    return filterDiacritics(entry.sol) === normalizedQuery || normalizedEng.includes(normalizedQuery);
   } else {
-    return `${entry.sol}: ${normalizedEng.join("; ")}`.indexOf(normalizedQuery) >= 0;
+    return `${filterDiacritics(entry.sol)} ${normalizedEng.join("; ")}`.indexOf(normalizedQuery) >= 0;
   }
 };
 
