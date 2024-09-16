@@ -27,7 +27,8 @@ import { RichText } from "../components/richText";
 export enum SectionTitle {
   TRANSLATION = "translation",
   USAGE = "usage",
-  ETYMOLOGY = "etymology"
+  ETYMOLOGY = "etymology",
+  INSTEAD = "instead",
 }
 
 function InfoTag({
@@ -164,6 +165,14 @@ function SectionData({ v }: { v: FullSection }) {
           onClick={() => edit.openDrawer(<TextSectionEditor as={v.hash} content={v.content} title={v.title} />)}
         />
       )}
+      {v.title === SectionTitle.INSTEAD && (
+        <Button
+          intent="warning"
+          text="Edit use instead section"
+          icon="arrow-right"
+          onClick={() => edit.openDrawer(<TextSectionEditor as={v.hash} content={v.content} title={v.title} />)}
+        />
+      )}
     </>
   );
 }
@@ -201,6 +210,11 @@ function SectionableData({ v }: { v: Sectionable }) {
                   intent="warning"
                   text="Etymology section"
                   onClick={() => edit.openDrawer(<TextSectionEditor to={v.hash} title={SectionTitle.ETYMOLOGY} />)}
+                />
+                <Button
+                  intent="warning"
+                  text="Use instead section"
+                  onClick={() => edit.openDrawer(<TextSectionEditor to={v.hash} title={SectionTitle.INSTEAD} />)}
                 />
               </ControlGroup>
             </div>

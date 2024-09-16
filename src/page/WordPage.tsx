@@ -41,6 +41,15 @@ function SectionContent({ section }: { section: FullSection }) {
         <RichText text={section.content} />
       </>
     );
+  } else if (section.title === SectionTitle.INSTEAD) {
+    return (
+      <>
+        <H4>
+          Use instead <Icon icon="flow-end" size={IconSize.LARGE} intent="danger" />
+        </H4>
+        <RichText text={section.content} />
+      </>
+    );
   } else {
     return (
       <Tag large intent="danger">

@@ -40,6 +40,9 @@ export default function HomePage() {
                   {e.sections.some((s) => s.title === SectionTitle.ETYMOLOGY) && (
                     <Icon icon="book" title="has etymology" />
                   )}
+                  {e.sections.some((s) => s.title === SectionTitle.INSTEAD) && (
+                    <Icon icon="flow-end" title="has another word that should be used instead" intent="danger" />
+                  )}
                 </td>
                 <td className="dual">
                   <i>{e.sol}</i>
