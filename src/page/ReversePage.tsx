@@ -89,13 +89,17 @@ export default function ReversePage() {
     // TODO: multiple words
     const r = lookup(query);
 
-    content = (
-      <ul>
-        {r.map((i, j) => (
-          <li key={j}>{i}</li>
-        ))}
-      </ul>
-    );
+    if (r.length === 0) {
+      content = <NonIdealState icon="cross-circle" title="No results" />;
+    } else {
+      content = (
+        <ul>
+          {r.map((i, j) => (
+            <li key={j}>{i}</li>
+          ))}
+        </ul>
+      );
+    }
   }
 
   return App(
@@ -108,10 +112,11 @@ export default function ReversePage() {
       >
         <ControlGroup fill>
           <InputGroup
-            placeholder="Reverse search"
+            placeholder={infl ? `Reverse search (${infl.length} forms)` : undefined}
             onValueChange={(s) => setSearch(s)}
             value={search}
             large
+            fill
             rightElement={
               <Button
                 icon={includeOld ? "eye-on" : "eye-off"}
