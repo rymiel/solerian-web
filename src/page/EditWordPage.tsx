@@ -5,6 +5,7 @@ import { App } from "../App";
 import {
   Button,
   Callout,
+  Checkbox,
   Classes,
   CompoundTag,
   ControlGroup,
@@ -92,9 +93,9 @@ function EntryData({ v }: { v: FullEntry }) {
   return (
     <>
       <BaseData v={v} />
-      <InfoTag left="sol" right={v.sol} />
-      <InfoTag left="extra" right={v.extra} />
-      <InfoTag left="tag" right={v.tag} />
+      <InfoTag left="sol" right={v.sol} onClick={() => edit.openDrawer(<EntryEditor existing={v} />)} />
+      <InfoTag left="extra" right={v.extra} onClick={() => edit.openDrawer(<EntryEditor existing={v} />)} />
+      <InfoTag left="tag" right={v.tag} onClick={() => edit.openDrawer(<EntryEditor existing={v} />)} />
       <InfoSection title="meanings">
         {v.meanings.map((m, mi) => (
           <InfoSection title={`[${mi}]`} key={m.hash}>
@@ -339,6 +340,38 @@ function TextSectionEditor({
       <Button fill intent="success" text="Submit" onClick={submit} />
       <Divider />
       <RichText text={content} />
+    </div>
+  );
+}
+
+function EntryEditor({ existing }: { existing?: FullEntry }) {
+  const edit = useContext(EditContext);
+  const dict = useContext(Dictionary);
+  const [sol, setSol] = useState(existing?.sol ?? "");
+  const [extra, setExtra] = useState(existing?.extra ?? "");
+  const [isObsolete, setObsolete] = useState(existing?.tag === "obsolete");
+  const as = existing?.hash;
+
+  const submit = () => {
+    apiFetch("/entry", "POST", { as, sol, extra, tag: isObsolete ? "obsolete" : undefined }).then(() => {
+      dict.refresh();
+      edit.closeDrawer();
+    });
+  };
+
+  return (
+    <div className="inter">
+      {as !== undefined ? (
+        <p>
+          Editing entry <code>{as}</code>.
+        </p>
+      ) : (
+        <p>Creating new entry.</p>
+      )}
+      <InputGroup onValueChange={setSol} defaultValue={sol} placeholder="Solerian" />
+      <InputGroup onValueChange={setExtra} defaultValue={extra} placeholder="Extra" />
+      <Checkbox onChange={(e) => setObsolete(e.currentTarget.checked)} defaultValue={extra} label="Obsolete" />
+      <Button fill intent="success" text="Submit" onClick={submit} />
     </div>
   );
 }

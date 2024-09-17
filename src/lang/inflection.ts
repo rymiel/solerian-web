@@ -102,7 +102,7 @@ const isStressed = (word: string): boolean => STRESSED.test(word);
 const syllableCount = (word: string): number => (word.match(ANY_VOWEL) ?? []).length;
 const fullVowelCount = (word: string): number => (word.match(FULL_VOWEL) ?? []).length;
 
-const applyDestress = (word: string): string => gsub(word, DESTRESS);
+export const applyDestress = (word: string): string => gsub(word, DESTRESS);
 const applyStressFirst = (word: string): string => sub(applyDestress(word), APPLY_STRESS);
 const reverse = (word: string): string => [...word].reverse().join("");
 const applyStressLast = (word: string): string => reverse(applyStressFirst(reverse(word)));
