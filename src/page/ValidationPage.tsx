@@ -4,7 +4,7 @@ import { App, toastErrorHandler } from "../App";
 import { User } from "../user";
 import { InflEntry, useInflEntries } from "../lang/inflEntries";
 import { Dictionary, FullEntry } from "../dictionary";
-import { applyNormalize } from "../lang/inflection";
+import { applyDestress, applyNormalize } from "../lang/inflection";
 import { Link } from "react-router-dom";
 import { ipaWithoutSoundChange } from "../lang/soundChange";
 import { apiFetch } from "../api";
@@ -52,9 +52,12 @@ async function validate(raw: FullEntry[], infl: InflEntry[]): Promise<Fail[]> {
     }
     const norm = applyNormalize(entry.sol);
     if (entry.extra === "conj." || entry.extra === "postpos.") {
+      // TODO(rymiel): special normalization for these words which are allowed to lack stress?
       if (norm.replaceAll("à", "a") === entry.sol) {
-        return; // Allow conjunctions and postpositions to have no stress
-        // TODO(rymiel): special normalization for these words which are allowed to lack stress?
+        return; // Allow conjunctions and postpositions to have no full vowels
+      }
+      if (applyDestress(norm) === entry.sol) {
+        return; // Allow conjunctions and postpositions to not mark stress on the first syllable
       }
     }
     if (norm === entry.sol) {
