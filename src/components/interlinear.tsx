@@ -48,7 +48,7 @@ function convertAbbr(s: string): React.ReactNode[] {
   });
 }
 
-const SEP = /([ -])/;
+const SEP = /([\u201c\u201d -])/;
 interface ILWord {
   text: string;
   index: number;
