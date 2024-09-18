@@ -2,7 +2,19 @@ import { useContext } from "react";
 import { Dictionary, FullEntry, FullSection } from "../dictionary";
 import { useNavigate, useParams } from "react-router-dom";
 import { App } from "../App";
-import { Button, H2, H3, H4, Icon, IconSize, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
+import {
+  AnchorButton,
+  Button,
+  H2,
+  H3,
+  H4,
+  Icon,
+  IconSize,
+  NonIdealState,
+  Spinner,
+  SpinnerSize,
+  Tag,
+} from "@blueprintjs/core";
 import { Part } from "../lang/extra";
 import { NounInfo } from "../components/nounComponents";
 import { VerbInfo } from "../components/verbComponents";
@@ -61,7 +73,6 @@ function SectionContent({ section }: { section: FullSection }) {
 
 function WordPageContent({ entry }: { entry: FullEntry }) {
   const { user } = useContext(User);
-  const navigate = useNavigate();
 
   const partName = WORD_TYPES[entry.extra] ?? entry.extra;
   const partHeader = entry.class ? `${partName} (type ${entry.class})` : partName;
@@ -79,7 +90,7 @@ function WordPageContent({ entry }: { entry: FullEntry }) {
       <H2>{entry.sol}</H2>
       <p className="sol space-right">{entry.script}</p>
       <span className="space-right">{entry.ipa}</span>
-      {user && <Button intent="primary" text="Edit" icon="edit" onClick={() => navigate(uri`/edit/${entry.sol}`)} />}
+      {user && <AnchorButton intent="primary" text="Edit" icon="edit" href={uri`#/edit/${entry.hash}`} />}
       <H3>{partHeader}</H3>
       {entry.tag && (
         <Tag large intent="danger">

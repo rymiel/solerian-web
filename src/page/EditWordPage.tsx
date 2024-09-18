@@ -448,7 +448,7 @@ function EditWordPageContent({ entry }: { entry: FullEntry }) {
 
 export default function EditWordPage() {
   const { entries } = useContext(Dictionary);
-  const { word } = useParams() as { word: string };
+  const { hash } = useParams() as { hash: string };
   const { user } = useContext(User);
 
   let content = <NonIdealState icon={<Spinner size={SpinnerSize.LARGE} />} />;
@@ -456,7 +456,7 @@ export default function EditWordPage() {
   if (!user) {
     content = <NonIdealState icon="error" title="You cannot access this page" />;
   } else if (entries) {
-    const entry = entries.find((e) => e.sol === word);
+    const entry = entries.find((e) => e.hash === hash);
 
     if (entry) {
       content = (
@@ -465,7 +465,7 @@ export default function EditWordPage() {
         </div>
       );
     } else {
-      content = <NonIdealState icon="error" title="Unknown word" description={word} />; // TODO
+      content = <NonIdealState icon="error" title="Unknown word" description={hash} />; // TODO
     }
   }
 
