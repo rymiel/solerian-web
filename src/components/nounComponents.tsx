@@ -1,6 +1,6 @@
 import { HTMLTable } from "@blueprintjs/core";
-import { markStress, Part, separateRoot } from "../lang/extra";
-import { FORM_NAMES, FormNames, applyFromSeparatedRoot } from "../lang/inflection";
+import { Part } from "../lang/extra";
+import { FORM_NAMES, FormNames, formsFromEntry } from "../lang/inflection";
 import { FullEntry } from "../dictionary";
 import { DisplayWord, populateDualInfo } from "../lang/display";
 
@@ -56,16 +56,7 @@ export function NounTable({ forms, stress }: { forms: readonly string[]; stress:
 }
 
 export function NounInfo({ entry }: { entry: FullEntry }) {
-  if (entry.part !== Part.Noun) {
-    throw new Error("Passed entry is not a noun");
-  }
-  const s = separateRoot(entry.sol, Part.Noun);
-  if (s === null) {
-    throw new Error("Noun failed to separate root");
-  }
-
-  const stress = markStress(entry)
-  const forms = applyFromSeparatedRoot(s, stress);
+  const [forms, stress] = formsFromEntry(entry, Part.Noun);
 
   return (
     <>

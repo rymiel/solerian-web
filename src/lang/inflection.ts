@@ -1,4 +1,5 @@
-import { Types, Part, SeparatedRoot } from "./extra";
+import { FullEntry } from "../dictionary";
+import { Types, Part, SeparatedRoot, markStress, separateRoot } from "./extra";
 import { gsub, sub, SubMap } from "./util";
 
 export const FORM_NAMES = {
@@ -179,4 +180,28 @@ export function applyFromSeparatedRoot({ match, part, type }: SeparatedRoot, mar
   const suffix = word.slice(-cutoff);
   const special = match[2] || "";
   return applyFrom(root, suffix, special, part, type, markStress) as GenericForms;
+}
+
+export function formsFromEntry(entry: FullEntry, part: Part): [forms: GenericForms, stress: boolean] {
+  if (entry.part !== part) {
+    throw new Error(`Passed entry is not a ${Part[part]}`);
+  }
+  let forms;
+  const stress = markStress(entry);
+  if (entry.ex === undefined) {
+    const s = separateRoot(entry.sol, part);
+    if (s === null) {
+      throw new Error(`${Part[part]} failed to separate root`);
+    }
+
+    forms = applyFromSeparatedRoot(s, stress);
+  } else {
+    const ex = entry.ex.split(",");
+    forms = {
+      cur: ex.slice(0, ex.length / 2),
+      old: ex.slice(ex.length / 2),
+    };
+  }
+
+  return [forms, stress];
 }

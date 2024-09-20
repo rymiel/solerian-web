@@ -48,7 +48,7 @@ export function DictionaryProvider({ children }: PropsWithChildren) {
           const part = partOfExtra(i.extra);
           let cls = null;
           if (part !== null) {
-            cls = determineType(i.sol, part) ?? "?";
+            cls = i.ex !== undefined ? "X" : determineType(i.sol, part) ?? "?";
           }
           const script = scriptMultiUnicode(i.sol);
           const ipa = soundChange(i.sol, markStress(i));

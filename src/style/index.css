@@ -435,3 +435,7 @@ h4 .bp5-icon {
 .bp5-dark a.missing:active {
   color: #f8a397;
 }
+
+.bp5-form-group.compact {
+  margin-bottom: 0;
+}

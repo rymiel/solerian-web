@@ -12,6 +12,7 @@ export interface ApiWord extends ApiBase {
   sol: string;
   extra: string;
   tag: string | undefined;
+  ex: string | undefined;
   meanings: string[];
   sections: string[];
 }

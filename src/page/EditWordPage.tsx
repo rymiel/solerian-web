@@ -98,6 +98,7 @@ function EntryData({ v }: { v: FullEntry }) {
       <InfoTag left="sol" right={v.sol} onClick={() => edit.openDrawer(<EntryEditor existing={v} />)} />
       <InfoTag left="extra" right={v.extra} onClick={() => edit.openDrawer(<EntryEditor existing={v} />)} />
       <InfoTag left="tag" right={v.tag} onClick={() => edit.openDrawer(<EntryEditor existing={v} />)} />
+      <InfoTag left="ex" right={v.ex} onClick={() => edit.openDrawer(<EntryEditor existing={v} />)} />
       <InfoSection title="meanings">
         {v.meanings.map((m, mi) => (
           <InfoSection title={`[${mi}]`} key={m.hash}>
