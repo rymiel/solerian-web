@@ -3,6 +3,7 @@ import { Dictionary, FullEntry, FullMeaning, FullSection } from "../dictionary";
 import { useParams } from "react-router-dom";
 import { App } from "../App";
 import {
+  AnchorButton,
   Button,
   Callout,
   Checkbox,
@@ -24,6 +25,7 @@ import { ApiBase, apiFetch, ApiSection } from "../api";
 import { InterlinearData, InterlinearGloss } from "../components/interlinear";
 import { WordSelect } from "../components/wordSelect";
 import { RichText } from "../components/richText";
+import { uri } from "..";
 
 export enum SectionTitle {
   TRANSLATION = "translation",
@@ -344,13 +346,13 @@ function TextSectionEditor({
   );
 }
 
-function EntryEditor({ existing }: { existing?: FullEntry }) {
+function EntryEditor({ existing }: { existing: FullEntry }) {
   const edit = useContext(EditContext);
   const dict = useContext(Dictionary);
-  const [sol, setSol] = useState(existing?.sol ?? "");
-  const [extra, setExtra] = useState(existing?.extra ?? "");
-  const [isObsolete, setObsolete] = useState(existing?.tag === "obsolete");
-  const as = existing?.hash;
+  const [sol, setSol] = useState(existing.sol);
+  const [extra, setExtra] = useState(existing.extra);
+  const [isObsolete, setObsolete] = useState(existing.tag === "obsolete");
+  const as = existing.hash;
 
   const submit = () => {
     apiFetch("/entry", "POST", { as, sol, extra, tag: isObsolete ? "obsolete" : undefined }).then(() => {
@@ -361,13 +363,9 @@ function EntryEditor({ existing }: { existing?: FullEntry }) {
 
   return (
     <div className="inter">
-      {as !== undefined ? (
-        <p>
-          Editing entry <code>{as}</code>.
-        </p>
-      ) : (
-        <p>Creating new entry.</p>
-      )}
+      <p>
+        Editing entry <code>{as}</code>.
+      </p>
       <InputGroup onValueChange={setSol} defaultValue={sol} placeholder="Solerian" />
       <InputGroup onValueChange={setExtra} defaultValue={extra} placeholder="Extra" />
       <Checkbox onChange={(e) => setObsolete(e.currentTarget.checked)} defaultValue={extra} label="Obsolete" />
@@ -438,6 +436,7 @@ function EditWordPageContent({ entry }: { entry: FullEntry }) {
 
   return (
     <EditContext.Provider value={{ openDrawer, closeDrawer }}>
+      <AnchorButton text="Back" icon="arrow-left" href={uri`#/w/${entry.sol}`} /> <br />
       <EntryData v={entry} />
       <Drawer isOpen={isOpen} onClose={() => setOpen(false)}>
         {element}
