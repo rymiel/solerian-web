@@ -1,4 +1,4 @@
-import { gsub, GSubMap } from "./util";
+import { gsub, GSubMap, sub, SubMap } from "./util";
 
 const VOWEL = "əaeiouyáéíóúýæÆɐ";
 const STRESS = "áéíóúýƆÆ";
@@ -72,7 +72,7 @@ const POST_UNROMANIZE: GSubMap = [
   ["ð", "ð̠"],
 ];
 
-const MAKE_STRESSED: GSubMap = [
+const MAKE_STRESSED: SubMap = [
   ["a", "á"],
   ["e", "é"],
   ["i", "í"],
@@ -80,7 +80,7 @@ const MAKE_STRESSED: GSubMap = [
   ["u", "ú"],
   ["y", "ý"],
 ];
-const makeStressed = (word: string): string => gsub(word, MAKE_STRESSED);
+const makeStressed = (word: string): string => sub(word, MAKE_STRESSED);
 const PRESERVE_CLUSTERS = ["ts", "tɕ", "kʲ"] as const;
 
 function setAtIndex(str: string, index: number, char: string): string {
@@ -89,8 +89,8 @@ function setAtIndex(str: string, index: number, char: string): string {
 
 function laxStress(word: string): string {
   const vowelCount = (word.match(Vg) ?? []).length;
-  const stressIndex = [...word].findIndex((i) => STRESS.includes(i));
-  if (stressIndex === -1 && vowelCount > 1) {
+  const hasStress = [...word].some((i) => STRESS.includes(i));
+  if (!hasStress && vowelCount > 1) {
     return makeStressed(word);
   } else {
     return word;
@@ -140,13 +140,16 @@ export function soundChange(word: string, markStress: boolean): string {
 }
 
 export function soundChangeSentence(sentence: string): string {
-  const words = sentence.toLowerCase().split(" ").flatMap((i) => {
-    if (i.includes("-")) {
-      const [prefix, word] = i.split("-");
-      return [singleWordSoundChange(prefix, false), singleWordSoundChange(word, true)];
-    }
-    return singleWordSoundChange(i, true);
-  });
+  const words = sentence
+    .toLowerCase()
+    .split(" ")
+    .flatMap((i) => {
+      if (i.includes("-")) {
+        const [prefix, word] = i.split("-");
+        return [singleWordSoundChange(prefix, false), singleWordSoundChange(word, true)];
+      }
+      return singleWordSoundChange(i, true);
+    });
 
   return `[${words.join(" ")}]`;
 }
