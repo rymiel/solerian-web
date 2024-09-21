@@ -26,13 +26,19 @@ const ABBREVIATIONS: Record<string, string> = {
   GEN: "genitive",
   NAME: "onomatonym",
   IMP: "imperative",
+  INF: "infinitive",
   NEG: "negative",
   ADV: "adverb",
   ECHO: "echo (marks that the subject of the sentence hasn't changed)",
+
+  // old stuff
+  M: "masculine",
+  F: "feminine",
+  N: "neuter"
 };
 
-function convertAbbr(s: string): React.ReactNode[] {
-  const parts = s.split(/([-.\(\)])/);
+export function convertAbbr(s: string): React.ReactNode[] {
+  const parts = s.split(/([-.\(\) ])/);
 
   return parts.map((i, j) => {
     const abbr = ABBREVIATIONS[i] as string | undefined;
@@ -40,7 +46,7 @@ function convertAbbr(s: string): React.ReactNode[] {
       return i;
     } else {
       return (
-        <abbr key={j} title={abbr}>
+        <abbr key={j} title={abbr} className="il">
           {i}
         </abbr>
       );

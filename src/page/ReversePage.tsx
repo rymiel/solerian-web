@@ -1,4 +1,4 @@
-import { Button, ControlGroup, InputGroup, NonIdealState, Spinner, SpinnerSize } from "@blueprintjs/core";
+import { Button, ControlGroup, InputGroup, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
 import { memo, useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { App } from "../App";
@@ -7,6 +7,7 @@ import { Part } from "../lang/extra";
 import { applyNormalize, FORM_NAMES } from "../lang/inflection";
 import { uri } from "..";
 import { InflEntry, useInflEntries } from "../lang/inflEntries";
+import { convertAbbr } from "../components/interlinear";
 
 function terminal(entry: FullEntry) {
   let meaning = entry.meanings[0].eng;
@@ -24,14 +25,15 @@ function terminal(entry: FullEntry) {
 }
 
 function inflNode(entry: InflEntry) {
-  const formName = FORM_NAMES[entry.original.part!][entry.form].replaceAll("_", " ");
+  const formName = convertAbbr(FORM_NAMES[entry.original.part!][entry.form].replaceAll("_", " ").toUpperCase());
   const partName = Part[entry.original.part!].toLowerCase();
   const cls = entry.original.class;
-  const className = entry.old ? `old type ${cls}` : `type ${cls}`; // TODO: actual old names
+  const className = entry.old ? `type ${cls}` : `type ${cls}`; // TODO: actual old names
 
   return (
     <>
-      <i>{entry.sol}</i>: {formName} of {className} {partName} <i>{entry.original.sol}</i>
+      <i>{entry.sol}</i>: {entry.old && <Tag intent="warning">old</Tag>} {formName} of {className} {partName}{" "}
+      <i>{entry.original.sol}</i>
       <ul>
         <li>{terminal(entry.original)}</li>
       </ul>
@@ -52,10 +54,10 @@ function echo(original: string, cut: string, children: React.ReactNode[]) {
   );
 }
 
-function poss(original: string, cut: string, form: string, children: React.ReactNode[]) {
+function poss(original: string, cut: string, form: string, old: boolean, children: React.ReactNode[]) {
   return (
     <>
-      <i>{original}</i>: {form} possessive of <i>{cut}</i>
+      <i>{original}</i>: {old && <Tag intent="warning">old</Tag>} {convertAbbr(form)} possessive of <i>{cut}</i>
       <ul>
         {children.map((i, j) => (
           <li key={j}>{i}</li>
@@ -70,8 +72,8 @@ const POSS_SUFFIXES = {
   old: ["elm", "etr", "usd", "usan", "ys", "elmes", "etres", "usdes"],
 } as const;
 const POSS_FORMS = {
-  cur: ["1sg", "2sg", "3sg", "1pl", "2pl", "3pl"],
-  old: ["1sg", "2sg", "3sg masculine", "3sg feminine", "3sg neuter", "1pl", "2pl", "3pl"].map((i) => `old ${i}`),
+  cur: ["1SG", "2SG", "3SG", "1PL", "2PL", "3PL"],
+  old: ["1SG", "2SG", "3SG M", "3SG F", "3SG N", "1PL", "2PL", "3PL"],
 } as const;
 
 const ReverseContent = memo(function ReverseContent({
@@ -85,16 +87,16 @@ const ReverseContent = memo(function ReverseContent({
   query: string;
   includeOld: boolean;
 }) {
-  const lookup = (q: string, { verbOnly = false, oldEquals }: { verbOnly?: boolean; oldEquals?: boolean } = {}) => {
+  const lookup = (q: string, { only, oldEquals }: { only?: Part; oldEquals?: boolean } = {}) => {
     let inflMatches = infl.filter(
       (i) =>
         i.sol === q &&
         (!i.old || includeOld) &&
         i.form !== 0 &&
-        (!verbOnly || i.original.part === Part.Verb) &&
+        (only === undefined || i.original.part === only) &&
         (oldEquals === undefined || oldEquals === i.old)
     );
-    let rawMatches = raw.filter((i) => i.sol === q && (!verbOnly || i.part === Part.Verb));
+    let rawMatches = raw.filter((i) => i.sol === q && (only === undefined || i.part === only));
 
     return rawMatches.map(terminal).concat(inflMatches.map(inflNode));
   };
@@ -104,7 +106,7 @@ const ReverseContent = memo(function ReverseContent({
   if (applyNormalize(query) === query) {
     if (query.startsWith("fy") && query.length > 2 && !"aeiouyàáéíóúý".includes(query[2])) {
       const cut = applyNormalize(query.slice(2));
-      const rc = lookup(cut, { verbOnly: true });
+      const rc = lookup(cut, { only: Part.Verb });
       if (rc.length > 0) {
         r.push(echo(query, cut, rc));
       }
@@ -112,7 +114,7 @@ const ReverseContent = memo(function ReverseContent({
 
     if (query.startsWith("fyn") && query.length > 3 && "aeiouyàáéíóúý".includes(query[3])) {
       const cut = applyNormalize(query.slice(3));
-      const rc = lookup(cut, { verbOnly: true });
+      const rc = lookup(cut, { only: Part.Verb });
       if (rc.length > 0) {
         r.push(echo(query, cut, rc));
       }
@@ -121,9 +123,9 @@ const ReverseContent = memo(function ReverseContent({
     POSS_SUFFIXES.cur.forEach((suffix, i) => {
       if (query.endsWith(suffix)) {
         const cut = applyNormalize(query.slice(0, -suffix.length));
-        const rc = lookup(cut, { oldEquals: false });
+        const rc = lookup(cut, { oldEquals: false, only: Part.Noun });
         if (rc.length > 0) {
-          r.push(poss(query, cut, POSS_FORMS.cur[i], rc));
+          r.push(poss(query, cut, POSS_FORMS.cur[i], false, rc));
         }
       }
     });
@@ -131,9 +133,9 @@ const ReverseContent = memo(function ReverseContent({
     POSS_SUFFIXES.old.forEach((suffix, i) => {
       if (query.endsWith(suffix)) {
         const cut = applyNormalize(query.slice(0, -suffix.length));
-        const rc = lookup(cut, { oldEquals: true });
+        const rc = lookup(cut, { oldEquals: true, only: Part.Noun });
         if (rc.length > 0) {
-          r.push(poss(query, cut, POSS_FORMS.old[i], rc));
+          r.push(poss(query, cut, POSS_FORMS.old[i], true, rc));
         }
       }
     });

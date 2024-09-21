@@ -385,7 +385,7 @@ footer p {
   margin: 0;
 }
 
-.interlinear div.box abbr {
+abbr.il {
   font-variant: small-caps;
   font-variant-numeric: lining-nums;
   text-transform: lowercase;
