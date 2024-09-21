@@ -6,6 +6,27 @@ import { Dictionary } from "../dictionary";
 import { User } from "../user";
 import { SectionTitle } from "./EditWordPage";
 import { uri } from "../index";
+import { PARTS_OF_SPEECH } from "../lang/extra";
+
+function ExtraCell({ extra, cls }: { extra: string; cls: string | null }) {
+  const abbr = PARTS_OF_SPEECH[extra] as string | undefined;
+
+  if (abbr) {
+    return (
+      <abbr title={abbr.replace("%", cls ?? "")}>
+        {extra}
+        {cls && `-${cls}`}
+      </abbr>
+    );
+  } else {
+    return (
+      <span>
+        {extra}
+        {cls && `-${cls}`}
+      </span>
+    );
+  }
+}
 
 export default function DictionaryPage() {
   const { entries } = useContext(Dictionary);
@@ -63,10 +84,7 @@ export default function DictionaryPage() {
                 </td>
                 <td>
                   <a href={uri`#/w/${e.sol}`} className="link-fill">
-                    <span>
-                      {e.extra}
-                      {e.class && `-${e.class}`}
-                    </span>
+                    <ExtraCell extra={e.extra} cls={e.class} />
                   </a>
                 </td>
                 <td>

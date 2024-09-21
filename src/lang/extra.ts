@@ -64,3 +64,16 @@ export function separateRoot(word: string, part: Part): SeparatedRoot | null {
 }
 
 export const markStress = (word: { extra: string }) => !word.extra.startsWith("NAME");
+
+export const PARTS_OF_SPEECH: Readonly<Record<string, string>> = {
+  N: "Noun (pattern %)",
+  "N+NAME": "Name and onomatonym (pattern %)",
+  NAME: "Onomatonym (pattern %)",
+  V: "Verb (pattern %)",
+  "adv.": "Adverb",
+  affix: "Affix",
+  "conj.": "Conjunction",
+  phrase: "Phrase",
+  "postpos.": "Postposition",
+  "pron.": "Pronoun (pattern %)",
+};

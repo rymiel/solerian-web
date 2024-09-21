@@ -389,7 +389,9 @@ footer p {
   font-variant: small-caps;
   font-variant-numeric: lining-nums;
   text-transform: lowercase;
-  border-bottom: 0;
+}
+
+abbr {
   text-decoration: underline dotted;
   cursor: help;
 }
