@@ -87,14 +87,14 @@ const ReverseContent = memo(function ReverseContent({
   query: string;
   includeOld: boolean;
 }) {
-  const lookup = (q: string, { only, oldEquals }: { only?: Part; oldEquals?: boolean } = {}) => {
+  const lookup = (q: string, { only, old }: { only?: Part; old?: boolean } = {}) => {
     let inflMatches = infl.filter(
       (i) =>
         i.sol === q &&
         (!i.old || includeOld) &&
         i.form !== 0 &&
         (only === undefined || i.original.part === only) &&
-        (oldEquals === undefined || oldEquals === i.old)
+        (old === undefined || old === i.old)
     );
     let rawMatches = raw.filter((i) => i.sol === q && (only === undefined || i.part === only));
 
@@ -123,7 +123,7 @@ const ReverseContent = memo(function ReverseContent({
     POSS_SUFFIXES.cur.forEach((suffix, i) => {
       if (query.endsWith(suffix)) {
         const cut = applyNormalize(query.slice(0, -suffix.length));
-        const rc = lookup(cut, { oldEquals: false, only: Part.Noun });
+        const rc = lookup(cut, { old: false, only: Part.Noun });
         if (rc.length > 0) {
           r.push(poss(query, cut, POSS_FORMS.cur[i], false, rc));
         }
@@ -134,7 +134,7 @@ const ReverseContent = memo(function ReverseContent({
       POSS_SUFFIXES.old.forEach((suffix, i) => {
         if (query.endsWith(suffix)) {
           const cut = applyNormalize(query.slice(0, -suffix.length));
-          const rc = lookup(cut, { oldEquals: true, only: Part.Noun });
+          const rc = lookup(cut, { old: true, only: Part.Noun });
           if (rc.length > 0) {
             r.push(poss(query, cut, POSS_FORMS.old[i], true, rc));
           }
