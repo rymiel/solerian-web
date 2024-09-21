@@ -56,10 +56,10 @@ export const ApiVersion = createContext<string | null>(null);
 function Wrapper() {
   const [version, setVersion] = useState<string | null>(null);
   if (version === null) {
-    // fetch(`${API}/version`)
-    //   .then((resp) => resp.text())
-    //   .then((text) => setVersion(text))
-    //   .catch((err) => console.error(err));
+    fetch(`${API}/version`)
+      .then((resp) => resp.text())
+      .then((text) => setVersion(text))
+      .catch((err) => console.error(err));
   }
   return (
     <StrictMode>
