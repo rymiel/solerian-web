@@ -318,7 +318,6 @@ function TextSectionEditor({
           Editing {title} text section <code>{as}</code>.
         </p>
       )}
-      {/* TODO: links */}
       <ControlGroup fill>
         <TextArea
           onChange={(e) => setContent(e.currentTarget.value)}
