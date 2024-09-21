@@ -236,7 +236,7 @@ function TranslationSectionEditor({ to, as, existing }: { to?: string; as?: stri
   const [sol, setSol] = useState(existing?.sol ?? "");
   const [solSep, setSolSep] = useState(existing?.solSep ?? "");
   const [engSep, setEngSep] = useState(existing?.engSep ?? "");
-  const [eng, setEng] = useState(existing?.eng ?? "");
+  const [eng, setEng] = useState(existing?.eng ?? "“”");
   const data: InterlinearData = {
     sol,
     solSep,
