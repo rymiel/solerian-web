@@ -62,6 +62,15 @@ function SectionContent({ section }: { section: FullSection }) {
         <RichText text={section.content} />
       </>
     );
+  } else if (section.title === SectionTitle.COORDINATE) {
+    return (
+      <>
+        <H4>
+          Coordinate terms <Icon icon="compass" size={IconSize.LARGE} />
+        </H4>
+        <RichText text={section.content} />
+      </>
+    );
   } else {
     return (
       <Tag large intent="danger">

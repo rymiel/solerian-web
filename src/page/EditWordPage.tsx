@@ -32,7 +32,15 @@ export enum SectionTitle {
   USAGE = "usage",
   ETYMOLOGY = "etymology",
   INSTEAD = "instead",
+  COORDINATE = "coordinate",
 }
+
+export const SIMPLE_SECTIONS = [
+  [SectionTitle.USAGE, "Usage"],
+  [SectionTitle.ETYMOLOGY, "Etymology"],
+  [SectionTitle.INSTEAD, "Use instead"],
+  [SectionTitle.COORDINATE, "Coordinate terms"],
+] as const;
 
 function InfoTag({
   left,
@@ -140,7 +148,7 @@ function SectionData({ v }: { v: FullSection }) {
     <>
       <BaseData v={v} />
       <InfoTag left="title" right={v.title} fixed />
-      <InfoTag left="content" right={v.content} />
+      <InfoTag left="content" right={v.content} fixed />
       {v.title === SectionTitle.TRANSLATION && (
         <Button
           intent="warning"
@@ -153,29 +161,16 @@ function SectionData({ v }: { v: FullSection }) {
           }
         />
       )}
-      {v.title === SectionTitle.USAGE && (
-        <Button
-          intent="warning"
-          text="Edit usage note section"
-          icon="arrow-right"
-          onClick={() => edit.openDrawer(<TextSectionEditor as={v.hash} content={v.content} title={v.title} />)}
-        />
-      )}
-      {v.title === SectionTitle.ETYMOLOGY && (
-        <Button
-          intent="warning"
-          text="Edit etymology section"
-          icon="arrow-right"
-          onClick={() => edit.openDrawer(<TextSectionEditor as={v.hash} content={v.content} title={v.title} />)}
-        />
-      )}
-      {v.title === SectionTitle.INSTEAD && (
-        <Button
-          intent="warning"
-          text="Edit use instead section"
-          icon="arrow-right"
-          onClick={() => edit.openDrawer(<TextSectionEditor as={v.hash} content={v.content} title={v.title} />)}
-        />
+      {SIMPLE_SECTIONS.map(([title, name]) =>
+        v.title === title ? (
+          <Button
+            intent="warning"
+            text={`Edit ${name.toLowerCase()} section`}
+            icon="arrow-right"
+            key={title}
+            onClick={() => edit.openDrawer(<TextSectionEditor as={v.hash} content={v.content} title={title} />)}
+          />
+        ) : undefined
       )}
     </>
   );
@@ -205,21 +200,14 @@ function SectionableData({ v }: { v: Sectionable }) {
                   text="Translation section"
                   onClick={() => edit.openDrawer(<TranslationSectionEditor to={v.hash} />)}
                 />
-                <Button
-                  intent="warning"
-                  text="Usage note section"
-                  onClick={() => edit.openDrawer(<TextSectionEditor to={v.hash} title={SectionTitle.USAGE} />)}
-                />
-                <Button
-                  intent="warning"
-                  text="Etymology section"
-                  onClick={() => edit.openDrawer(<TextSectionEditor to={v.hash} title={SectionTitle.ETYMOLOGY} />)}
-                />
-                <Button
-                  intent="warning"
-                  text="Use instead section"
-                  onClick={() => edit.openDrawer(<TextSectionEditor to={v.hash} title={SectionTitle.INSTEAD} />)}
-                />
+                {SIMPLE_SECTIONS.map(([title, name]) => (
+                  <Button
+                    intent="warning"
+                    text={`${name} section`}
+                    key={title}
+                    onClick={() => edit.openDrawer(<TextSectionEditor to={v.hash} title={title} />)}
+                  />
+                ))}
               </ControlGroup>
             </div>
           }
@@ -300,7 +288,7 @@ function TextSectionEditor({
 }: {
   to?: string;
   as?: string;
-  title: string;
+  title: SectionTitle;
   content?: string;
 }) {
   const edit = useContext(EditContext);
