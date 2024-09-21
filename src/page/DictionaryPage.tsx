@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { useNavigate } from "react-router";
 import { Dictionary } from "../dictionary";
 import { User } from "../user";
-import { SectionTitle } from "./EditWordPage";
+import { SectionTitle, SIMPLE_SECTIONS } from "./EditWordPage";
 import { uri } from "../index";
 import { PARTS_OF_SPEECH } from "../lang/extra";
 
@@ -64,14 +64,10 @@ export default function DictionaryPage() {
                       {e.meanings.some((m) => m.sections.some((s) => s.title === SectionTitle.TRANSLATION)) && (
                         <Icon icon="label" title="has a translation" />
                       )}
-                      {e.sections.some((s) => s.title === SectionTitle.USAGE) && (
-                        <Icon icon="info-sign" title="has usage notes" />
-                      )}
-                      {e.sections.some((s) => s.title === SectionTitle.ETYMOLOGY) && (
-                        <Icon icon="book" title="has etymology" />
-                      )}
-                      {e.sections.some((s) => s.title === SectionTitle.INSTEAD) && (
-                        <Icon icon="flow-end" title="has another word that should be used instead" intent="danger" />
+                      {SIMPLE_SECTIONS.map(([title, name, iconProps]) =>
+                        e.sections.some((s) => s.title === title) ? (
+                          <Icon {...iconProps} key={title} title={`has ${name.toLowerCase()}`} />
+                        ) : undefined
                       )}
                     </span>
                   </a>

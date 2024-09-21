@@ -20,7 +20,7 @@ import { NounInfo } from "../components/nounComponents";
 import { VerbInfo } from "../components/verbComponents";
 import { User } from "../user";
 import { InterlinearData, InterlinearGloss } from "../components/interlinear";
-import { SectionTitle } from "./EditWordPage";
+import { SectionTitle, SIMPLE_SECTIONS } from "./EditWordPage";
 import { uri } from "..";
 import { RichText } from "../components/richText";
 
@@ -31,42 +31,17 @@ const WORD_TYPES: Readonly<Record<string, string>> = {
   "N+NAME": "Name and onomatonym", // TODO: handle better
 };
 
-function SectionContent({ section, on }: { section: FullSection, on: string }) {
+function SectionContent({ section, on }: { section: FullSection; on: string }) {
+  const simple = SIMPLE_SECTIONS.find(([title]) => section.title === title);
   if (section.title === SectionTitle.TRANSLATION) {
     const data = JSON.parse(section.content) as InterlinearData;
     return <InterlinearGloss data={data} asterisk link indent />;
-  } else if (section.title === SectionTitle.USAGE) {
+  } else if (simple !== undefined) {
+    const [, name, iconProps] = simple;
     return (
       <>
         <H4>
-          Usage notes <Icon icon="info-sign" size={IconSize.LARGE} />
-        </H4>
-        <RichText text={section.content} on={on} />
-      </>
-    );
-  } else if (section.title === SectionTitle.ETYMOLOGY) {
-    return (
-      <>
-        <H4>
-          Etymology <Icon icon="book" size={IconSize.LARGE} />
-        </H4>
-        <RichText text={section.content} on={on} />
-      </>
-    );
-  } else if (section.title === SectionTitle.INSTEAD) {
-    return (
-      <>
-        <H4>
-          Use instead <Icon icon="flow-end" size={IconSize.LARGE} intent="danger" />
-        </H4>
-        <RichText text={section.content} on={on} />
-      </>
-    );
-  } else if (section.title === SectionTitle.COORDINATE) {
-    return (
-      <>
-        <H4>
-          Coordinate terms <Icon icon="compass" size={IconSize.LARGE} />
+          {name} <Icon {...iconProps} size={IconSize.LARGE} />
         </H4>
         <RichText text={section.content} on={on} />
       </>

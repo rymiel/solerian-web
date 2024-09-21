@@ -36,10 +36,10 @@ export enum SectionTitle {
 }
 
 export const SIMPLE_SECTIONS = [
-  [SectionTitle.USAGE, "Usage"],
-  [SectionTitle.ETYMOLOGY, "Etymology"],
-  [SectionTitle.INSTEAD, "Use instead"],
-  [SectionTitle.COORDINATE, "Coordinate terms"],
+  [SectionTitle.USAGE, "Usage note", { icon: "info-sign" }],
+  [SectionTitle.ETYMOLOGY, "Etymology", { icon: "book" }],
+  [SectionTitle.INSTEAD, "Use instead", { icon: "flow-end", intent: "danger" }],
+  [SectionTitle.COORDINATE, "Coordinate terms", { icon: "compass" }],
 ] as const;
 
 function InfoTag({
