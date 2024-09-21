@@ -130,15 +130,17 @@ const ReverseContent = memo(function ReverseContent({
       }
     });
 
-    POSS_SUFFIXES.old.forEach((suffix, i) => {
-      if (query.endsWith(suffix)) {
-        const cut = applyNormalize(query.slice(0, -suffix.length));
-        const rc = lookup(cut, { oldEquals: true, only: Part.Noun });
-        if (rc.length > 0) {
-          r.push(poss(query, cut, POSS_FORMS.old[i], true, rc));
+    if (includeOld) {
+      POSS_SUFFIXES.old.forEach((suffix, i) => {
+        if (query.endsWith(suffix)) {
+          const cut = applyNormalize(query.slice(0, -suffix.length));
+          const rc = lookup(cut, { oldEquals: true, only: Part.Noun });
+          if (rc.length > 0) {
+            r.push(poss(query, cut, POSS_FORMS.old[i], true, rc));
+          }
         }
-      }
-    });
+      });
+    }
   }
 
   if (r.length === 0) {
