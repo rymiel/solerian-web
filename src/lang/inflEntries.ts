@@ -20,12 +20,19 @@ export function useInflEntries() {
     for (const i of entries) {
       if (i.part === null) continue;
 
-      const s = separateRoot(i.sol, i.part);
-      if (s === null) throw new Error("Failed to separate root");
+      if (i.ex) {
+        const ex = i.ex.split(",");
+        const old = ex.length / 2;
 
-      const forms = applyFromSeparatedRoot(s, markStress(i));
-      forms.cur.forEach((f, fi) => infls.push({ sol: f, form: fi, original: i, old: false }));
-      forms.old.forEach((f, fi) => infls.push({ sol: f, form: fi, original: i, old: true }));
+        ex.forEach((f, fi) => infls.push({ sol: f, form: fi % old, original: i, old: fi >= old }));
+      } else {
+        const s = separateRoot(i.sol, i.part);
+        if (s === null) throw new Error("Failed to separate root");
+
+        const forms = applyFromSeparatedRoot(s, markStress(i));
+        forms.cur.forEach((f, fi) => infls.push({ sol: f, form: fi, original: i, old: false }));
+        forms.old.forEach((f, fi) => infls.push({ sol: f, form: fi, original: i, old: true }));
+      }
     }
     setInfl(infls);
   };
