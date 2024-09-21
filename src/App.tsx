@@ -135,7 +135,7 @@ export function App(body: JSX.Element, header?: string, headerElement?: JSX.Elem
         <div id="usertext">{user.user ? <Logout /> : <Login />}</div>
       </header>
       <div id="center">
-        <main>{body}</main>
+        <main id="main">{body}</main>
       </div>
       <footer className={Classes.DARK}>
         <small>

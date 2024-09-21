@@ -1,6 +1,6 @@
 import { Button, HTMLTable, Icon, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
 import { App } from "../App";
-import { useContext } from "react";
+import { useContext, useLayoutEffect } from "react";
 import { useNavigate } from "react-router";
 import { Dictionary } from "../dictionary";
 import { User } from "../user";
@@ -35,6 +35,22 @@ export default function DictionaryPage() {
 
   let content = <NonIdealState icon={<Spinner size={SpinnerSize.LARGE} />} />;
 
+  const clickPreserveScroll = (e: React.MouseEvent<HTMLTableRowElement>) => {
+    const target = e.currentTarget.dataset.name;
+    const top = document.getElementById("main")?.scrollTop;
+    console.log("click", history.state, top, target);
+    history.replaceState({ ...(history.state ?? {}), dictionaryScroll: top }, "");
+    document.location.hash = `/w/${target}`;
+    e.preventDefault();
+  };
+  useLayoutEffect(() => {
+    const main = document.getElementById("main");
+    const scroll = (history.state ?? {}).dictionaryScroll;
+    if (main && entries && scroll) {
+      main.scrollTop = scroll;
+    }
+  }, [entries]);
+
   if (entries) {
     content = (
       <div className="inter">
@@ -50,7 +66,7 @@ export default function DictionaryPage() {
           </thead>
           <tbody>
             {entries.map((e, i) => (
-              <tr key={e.hash}>
+              <tr key={e.hash} onClick={clickPreserveScroll} data-name={e.sol}>
                 <td>
                   <a href={uri`#/w/${e.sol}`} className="link-fill">
                     <span>{i + 1}</span>
