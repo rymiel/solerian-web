@@ -9,7 +9,7 @@ const SIMPLE_LINK = /\[([A-Za-z0-9_-]+)\]/;
 const COMPLEX_LINK = /\[([A-Za-z0-9_-]+)\(([^)]+)\)\]/;
 const NON_LINK = /\[\(([^)]+)\)\]/;
 
-export function RichText({ text }: { text: string }) {
+export function RichText({ text, on }: { text: string; on?: string }) {
   const { entries } = useContext(Dictionary);
   const highlighted = reactStringReplace(text, LINK_WRAPPER, (m) => {
     let id;
@@ -32,6 +32,14 @@ export function RichText({ text }: { text: string }) {
     const entry = entries?.find((i) => i.hash === id);
     if (entry === undefined) {
       return <a className="missing">{m}</a>;
+    }
+
+    if (id === on) {
+      return (
+        <b>
+          <i>{label ?? entry.sol}</i>
+        </b>
+      );
     }
 
     return (

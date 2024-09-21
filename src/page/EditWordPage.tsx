@@ -330,7 +330,7 @@ function TextSectionEditor({
       </ControlGroup>
       <Button fill intent="success" text="Submit" onClick={submit} />
       <Divider />
-      <RichText text={content} />
+      <RichText text={content} on={edit.page} />
     </div>
   );
 }
@@ -401,6 +401,7 @@ function MeaningEditor({ to, existing }: { to?: string; existing?: FullMeaning }
 interface EditContextData {
   openDrawer: (element: React.ReactNode) => void;
   closeDrawer: () => void;
+  page: string;
 }
 
 const EditContext = createContext<EditContextData>({
@@ -410,6 +411,7 @@ const EditContext = createContext<EditContextData>({
   closeDrawer: () => {
     throw new Error("No edit drawer context provided");
   },
+  page: "",
 });
 
 function EditWordPageContent({ entry }: { entry: FullEntry }) {
@@ -424,7 +426,7 @@ function EditWordPageContent({ entry }: { entry: FullEntry }) {
   const closeDrawer = () => setOpen(false);
 
   return (
-    <EditContext.Provider value={{ openDrawer, closeDrawer }}>
+    <EditContext.Provider value={{ openDrawer, closeDrawer, page: entry.hash }}>
       <AnchorButton text="Back" icon="arrow-left" href={uri`#/w/${entry.sol}`} /> <br />
       <EntryData v={entry} />
       <Drawer isOpen={isOpen} onClose={() => setOpen(false)}>

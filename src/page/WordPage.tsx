@@ -31,7 +31,7 @@ const WORD_TYPES: Readonly<Record<string, string>> = {
   "N+NAME": "Name and onomatonym", // TODO: handle better
 };
 
-function SectionContent({ section }: { section: FullSection }) {
+function SectionContent({ section, on }: { section: FullSection, on: string }) {
   if (section.title === SectionTitle.TRANSLATION) {
     const data = JSON.parse(section.content) as InterlinearData;
     return <InterlinearGloss data={data} asterisk link indent />;
@@ -41,7 +41,7 @@ function SectionContent({ section }: { section: FullSection }) {
         <H4>
           Usage notes <Icon icon="info-sign" size={IconSize.LARGE} />
         </H4>
-        <RichText text={section.content} />
+        <RichText text={section.content} on={on} />
       </>
     );
   } else if (section.title === SectionTitle.ETYMOLOGY) {
@@ -50,7 +50,7 @@ function SectionContent({ section }: { section: FullSection }) {
         <H4>
           Etymology <Icon icon="book" size={IconSize.LARGE} />
         </H4>
-        <RichText text={section.content} />
+        <RichText text={section.content} on={on} />
       </>
     );
   } else if (section.title === SectionTitle.INSTEAD) {
@@ -59,7 +59,7 @@ function SectionContent({ section }: { section: FullSection }) {
         <H4>
           Use instead <Icon icon="flow-end" size={IconSize.LARGE} intent="danger" />
         </H4>
-        <RichText text={section.content} />
+        <RichText text={section.content} on={on} />
       </>
     );
   } else if (section.title === SectionTitle.COORDINATE) {
@@ -68,7 +68,7 @@ function SectionContent({ section }: { section: FullSection }) {
         <H4>
           Coordinate terms <Icon icon="compass" size={IconSize.LARGE} />
         </H4>
-        <RichText text={section.content} />
+        <RichText text={section.content} on={on} />
       </>
     );
   } else {
@@ -114,7 +114,7 @@ function WordPageContent({ entry }: { entry: FullEntry }) {
               <dl>
                 {m.sections.map((s) => (
                   <dd key={s.hash}>
-                    <SectionContent section={s} />
+                    <SectionContent section={s} on={entry.hash} />
                   </dd>
                 ))}
               </dl>
@@ -123,7 +123,7 @@ function WordPageContent({ entry }: { entry: FullEntry }) {
         ))}
       </ul>
       {entry.sections.map((s) => (
-        <SectionContent section={s} key={s.hash} />
+        <SectionContent key={s.hash} section={s} on={entry.hash} />
       ))}
       {table !== null && <H4>Inflection tables</H4>}
       {table}
