@@ -39,5 +39,5 @@ export default function NumbersPage() {
     );
   }
 
-  return App(content, "Edit");
+  return App(content, "Numbers");
 }
