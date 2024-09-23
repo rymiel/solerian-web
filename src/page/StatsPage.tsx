@@ -59,8 +59,10 @@ function Content() {
     const nounGenderTally: Record<string, number> = {};
     const verbClassTally: Record<string, number> = {};
     const verbBaseTally: Record<string, number> = {};
+    const extraTally: Record<string, number> = {};
 
     for (const e of entries) {
+      increment(extraTally, e.extra);
       if (e.class === null) continue;
       if (e.part === Part.Noun) {
         increment(nounClassTally, e.class);
@@ -116,7 +118,7 @@ function Content() {
             ))}
           </tbody>
         </HTMLTable>
-        <Divider className="divider" />
+        <Divider className="divider-1" />
         <H4 className="v-header">Verb stats</H4>
         <HTMLTable className="v-left" compact striped>
           <thead>
@@ -151,6 +153,30 @@ function Content() {
               </tr>
             ))}
           </tbody>
+        </HTMLTable>
+        <Divider className="divider-2" />
+        <H4 className="g-header">General stats</H4>
+        <HTMLTable className="g-left" compact striped>
+          <thead>
+            <th>Extra</th>
+            <th>Count</th>
+          </thead>
+          <tbody>
+            {Object.keys(extraTally)
+              .sort()
+              .map((i) => (
+                <tr key={i}>
+                  <td>{i}</td>
+                  <td>{extraTally[i]}</td>
+                </tr>
+              ))}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td>Total</td>
+              <td>{entries.length}</td>
+            </tr>
+          </tfoot>
         </HTMLTable>
       </div>
     );

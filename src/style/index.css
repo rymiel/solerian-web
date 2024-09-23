@@ -455,8 +455,8 @@ h4 .bp5-icon {
 .stats {
   display: grid;
   grid-template-areas:
-    "nh nh d vh vh"
-    "nl nr d vl vr";
+    "nh nh d1 vh vh d2 gh"
+    "nl nr d1 vl vr d2 gl";
   grid-column-gap: 1rem;
   grid-row-gap: 0px;
   width: fit-content;
@@ -474,8 +474,8 @@ h4 .bp5-icon {
   grid-area: nr;
   height: fit-content;
 }
-.stats .divider {
-  grid-area: d;
+.stats .divider-1 {
+  grid-area: d1;
 }
 .stats .v-header {
   grid-area: vh;
@@ -487,5 +487,16 @@ h4 .bp5-icon {
 }
 .stats .v-right {
   grid-area: vr;
+  height: fit-content;
+}
+.stats .divider-2 {
+  grid-area: d2;
+}
+.stats .g-header {
+  grid-area: gh;
+  text-align: center;
+}
+.stats .g-left {
+  grid-area: gl;
   height: fit-content;
 }
