@@ -26,13 +26,8 @@ const NOUN_EXPLANATIONS: Record<string, string> = {
 const VERB_BASES: Record<string, string> = {
   "1": "IT",
   "2": "TF",
-  "3n": "OT",
-  "3r": "OT",
   "3": "OT",
-  "4s": "ADJ",
   "4": "ADJ",
-  "5t": "T",
-  "5r": "T",
   "5": "T",
 };
 
@@ -71,7 +66,7 @@ function Content() {
         increment(nounGenderTally, gender);
       } else if (e.part === Part.Verb) {
         increment(verbClassTally, e.class);
-        const base = VERB_BASES[e.class];
+        const base = VERB_BASES[e.class[0]];
         if (base === undefined) continue;
         increment(verbBaseTally, base);
       }

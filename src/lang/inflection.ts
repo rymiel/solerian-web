@@ -64,6 +64,8 @@ const FORM_SUFFIXES: Forms = {
           old: ["élus", "érà", "<à", "eké", "ités", "amét", "anég", "anés", "ét", "ég", "ésa", "ámo", "ánà", "ánà", "í"]},
     "2": {cur: ["las", "lar", "lý", "laké", "láts", "lánt", "lànég", "láns", "ld", "leg", "lsa", "làmo", "lànà", "lànà", "li"],
           old: ["las", "lar", "lý", "laké", "lités", "làté", "lànég", "láns", "ld", "leg", "lsa", "làmo", "lànà", "lànà", "li"]},
+    "2n": {cur: ["las", "lar", "lý", "laké", "láts", "lánt", "lànég", "láns", "d", "leg", "sla", "làmo", "lànà", "lànà", "li"],
+           old: ["las", "lar", "lý", "laké", "lités", "làté", "lànég", "láns", "ld", "leg", "lsa", "làmo", "lànà", "lànà", "li"]},
     "3n": {cur: ["lud", "ràd", "d", "lék", "la", "deté", "dég", "dés", "lut", "lek", "lusa", "lumà", "lonà", "lonà", ""],
            old: ["lud", "rad", "d", "lék", "ld", "deté", "dég", "dés", "lut", "lek", "lusa", "lomà", "lonà", "lonà", ""]},
     "3r": {cur: ["lud", "àd", "d", "lék", "la", "deté", "dég", "dés", "lut", "lek", "lusa", "lumà", "lonà", "lonà", ""],

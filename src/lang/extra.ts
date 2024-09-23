@@ -18,6 +18,7 @@ const SUFFIXES = {
   ],
   [Part.Verb]: [
     [/(élus)$/, "1"],
+    [/[n](las)$/, "2n"],
     [/[aeiouyàáéíóúý](las)$/, "2"],
     [/[nm](lud)$/, "3n"],
     [/[r](lud)$/, "3r"],
