@@ -5,15 +5,20 @@ import { useContext } from "react";
 
 const filterDiacritics = (str: string) => str.normalize("NFD").replace(/\p{Diacritic}/gu, "");
 
-const filterEntry: ItemPredicate<FullEntry> = (query: string, entry: FullEntry, _index, exactMatch) => {
+export function entryHasMatch(query: string, entry: FullEntry, { exact = false }: { exact?: boolean } = {}): boolean {
+  if (!exact && query === "") return true;
   const normalizedEng = entry.meanings.map((i) => i.eng.toLowerCase());
   const normalizedQuery = filterDiacritics(query.toLowerCase());
 
-  if (exactMatch) {
+  if (exact) {
     return filterDiacritics(entry.sol) === normalizedQuery || normalizedEng.includes(normalizedQuery);
   } else {
     return `${filterDiacritics(entry.sol)} ${normalizedEng.join("; ")}`.indexOf(normalizedQuery) >= 0;
   }
+}
+
+const filterEntry: ItemPredicate<FullEntry> = (query: string, entry: FullEntry, _index, exactMatch) => {
+  return entryHasMatch(query, entry, { exact: exactMatch });
 };
 
 const renderEntry: ItemRenderer<FullEntry> = (entry, { handleClick, handleFocus, modifiers, query }) => {
