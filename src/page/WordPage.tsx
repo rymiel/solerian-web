@@ -59,7 +59,7 @@ function WordPageContent({ entry }: { entry: FullEntry }) {
   const { user } = useContext(User);
 
   const partName = WORD_TYPES[entry.extra] ?? entry.extra;
-  const partHeader = entry.class ? `${partName} (type ${entry.class})` : partName;
+  const partHeader = entry.class ? `${partName} (pattern ${entry.class})` : partName;
   const part = entry.part;
   let table = null;
 
