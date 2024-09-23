@@ -451,3 +451,41 @@ h4 .bp5-icon {
 .bp5-form-group.compact {
   margin-bottom: 0;
 }
+
+.stats {
+  display: grid;
+  grid-template-areas:
+    "nh nh d vh vh"
+    "nl nr d vl vr";
+  grid-column-gap: 1rem;
+  grid-row-gap: 0px;
+  width: fit-content;
+}
+
+.stats .n-header {
+  grid-area: nh;
+  text-align: center;
+}
+.stats .n-left {
+  grid-area: nl;
+  height: fit-content;
+}
+.stats .n-right {
+  grid-area: nr;
+  height: fit-content;
+}
+.stats .divider {
+  grid-area: d;
+}
+.stats .v-header {
+  grid-area: vh;
+  text-align: center;
+}
+.stats .v-left {
+  grid-area: vl;
+  height: fit-content;
+}
+.stats .v-right {
+  grid-area: vr;
+  height: fit-content;
+}

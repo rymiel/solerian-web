@@ -96,6 +96,11 @@ function Menu() {
                 Reverse
               </Link>
             </li>
+            <li>
+              <Link to="/stats" onClick={() => setOpen(false)}>
+                Stats
+              </Link>
+            </li>
             {user && (
               <li>
                 <Link to="/validate" onClick={() => setOpen(false)}>
