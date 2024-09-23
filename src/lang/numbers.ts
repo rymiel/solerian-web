@@ -43,7 +43,7 @@ const teens: Readonly<Record<BijectNum, string>> = {
   T: "élàtser",
 } as const;
 
-const tens: Readonly<Record<string, [string, string]>> = {
+const tens: Readonly<Record<Exclude<BijectNum, "1">, [string, string]>> = {
   "2": ["skélaler", "éskelaler"],
   "3": ["járaler", "éjàraler"],
   "4": ["sífàler", "ésifàler"],
@@ -57,7 +57,7 @@ const tens: Readonly<Record<string, [string, string]>> = {
   T: ["léraler", "éleraler"],
 } as const;
 
-const hundreds: Readonly<Record<string, string>> = {
+const hundreds: Readonly<Record<BijectNum, string>> = {
   "1": "tírexar",
   "2": "skélexar",
   "3": "járexar",
