@@ -367,6 +367,10 @@ footer p {
   display: inline;
 }
 
+.word h4.bp5-heading {
+  margin-top: 1rem;
+}
+
 .interlinear p.original {
   font-style: italic;
 }

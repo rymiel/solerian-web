@@ -97,7 +97,7 @@ export default function WordPage() {
 
     if (entry) {
       content = (
-        <div className="inter">
+        <div className="inter word">
           <WordPageContent entry={entry} />
         </div>
       );
