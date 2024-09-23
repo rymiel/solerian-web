@@ -1,21 +1,9 @@
 import { useContext } from "react";
 import { Dictionary, FullEntry, FullSection } from "../dictionary";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { App } from "../App";
-import {
-  AnchorButton,
-  Button,
-  H2,
-  H3,
-  H4,
-  Icon,
-  IconSize,
-  NonIdealState,
-  Spinner,
-  SpinnerSize,
-  Tag,
-} from "@blueprintjs/core";
-import { Part } from "../lang/extra";
+import { AnchorButton, H2, H3, H4, Icon, IconSize, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
+import { Part, PARTS_OF_SPEECH } from "../lang/extra";
 import { NounInfo } from "../components/nounComponents";
 import { VerbInfo } from "../components/verbComponents";
 import { User } from "../user";
@@ -23,13 +11,6 @@ import { InterlinearData, InterlinearGloss } from "../components/interlinear";
 import { SectionTitle, SIMPLE_SECTIONS } from "./EditWordPage";
 import { uri } from "..";
 import { RichText } from "../components/richText";
-
-const WORD_TYPES: Readonly<Record<string, string>> = {
-  N: "Noun",
-  V: "Verb",
-  NAME: "Onomatonym",
-  "N+NAME": "Name and onomatonym", // TODO: handle better
-};
 
 function SectionContent({ section, on }: { section: FullSection; on: string }) {
   const simple = SIMPLE_SECTIONS.find(([title]) => section.title === title);
@@ -58,8 +39,7 @@ function SectionContent({ section, on }: { section: FullSection; on: string }) {
 function WordPageContent({ entry }: { entry: FullEntry }) {
   const { user } = useContext(User);
 
-  const partName = WORD_TYPES[entry.extra] ?? entry.extra;
-  const partHeader = entry.class ? `${partName} (pattern ${entry.class})` : partName;
+  const partHeader = (PARTS_OF_SPEECH[entry.extra] ?? entry.extra).replace("%", entry.class ?? "?");
   const part = entry.part;
   let table = null;
 
