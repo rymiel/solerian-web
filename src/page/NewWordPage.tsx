@@ -1,4 +1,4 @@
-import { InputGroup, Button, NonIdealState, Checkbox, Label, FormGroup, Classes } from "@blueprintjs/core";
+import { InputGroup, Button, NonIdealState, Checkbox, FormGroup, Classes, HTMLSelect } from "@blueprintjs/core";
 import { useContext, useEffect, useState } from "react";
 import { apiFetch } from "../api";
 import { Dictionary } from "../dictionary";
@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { uri } from "..";
 import { User } from "../user";
 import { App } from "../App";
-import { partOfExtra } from "../lang/extra";
+import { determineType, partOfExtra, PARTS_OF_SPEECH } from "../lang/extra";
 import { FORM_NAMES } from "../lang/inflection";
 
 function Editor() {
@@ -39,7 +39,18 @@ function Editor() {
     <div className="inter">
       <p>Creating new entry.</p>
       <InputGroup onValueChange={setSol} placeholder="Solerian" />
-      <InputGroup onValueChange={setExtra} placeholder="Extra" />
+      <HTMLSelect onChange={(e) => setExtra(e.currentTarget.value)} defaultValue={""}>
+        <option value="">Extra</option>
+        {Object.entries(PARTS_OF_SPEECH).map(([k, v]) => {
+          const p = partOfExtra(k);
+          const cls = p !== null ? determineType(sol, p) : null;
+          return (
+            <option key={k} value={k}>
+              {v.replace("%", cls ?? "?")}
+            </option>
+          );
+        })}
+      </HTMLSelect>
       <InputGroup onValueChange={setEng} placeholder="Translation" />
       <Checkbox onChange={(e) => setShowEx(e.currentTarget.checked)} label="Exceptional" />
       {showEx && part === null && (
