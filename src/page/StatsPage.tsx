@@ -18,9 +18,9 @@ const NOUN_GENDERS: Record<string, string> = {
 };
 
 const NOUN_EXPLANATIONS: Record<string, string> = {
-  F: "Formery feminine",
-  M: "Formery masculine",
-  N: "Formery neuter",
+  F: "Formerly feminine",
+  M: "Formerly masculine",
+  N: "Formerly neuter",
 };
 
 const VERB_BASES: Record<string, string> = {
