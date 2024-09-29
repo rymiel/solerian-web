@@ -40,7 +40,6 @@ export default function DictionaryPage() {
   const clickPreserveScroll = (e: React.MouseEvent<HTMLTableRowElement>) => {
     const target = e.currentTarget.dataset.name;
     const top = document.getElementById("main")?.scrollTop;
-    console.log("click", history.state, top, target);
     history.replaceState({ ...(history.state ?? {}), dictionaryScroll: top }, "");
     document.location.hash = `/w/${target}`;
     e.preventDefault();
