@@ -1,4 +1,5 @@
-import { gsub, GSubMap, sub, SubMap } from "./util";
+import { applyKnownStress } from "./inflection";
+import { gsub, GSubMap } from "./util";
 
 const VOWEL = "əaeiouyáéíóúýæÆɐ";
 const STRESS = "áéíóúýƆÆ";
@@ -72,32 +73,13 @@ const POST_UNROMANIZE: GSubMap = [
   ["ð", "ð̠"],
 ];
 
-const MAKE_STRESSED: SubMap = [
-  ["a", "á"],
-  ["e", "é"],
-  ["i", "í"],
-  ["o", "ó"],
-  ["u", "ú"],
-  ["y", "ý"],
-];
-const makeStressed = (word: string): string => sub(word, MAKE_STRESSED);
 const PRESERVE_CLUSTERS = ["ts", "tɕ", "kʲ"] as const;
+const SYLLABLE = new RegExp(`(${V}${C}*?)(?=${C}?${V})`, "g");
 
 function setAtIndex(str: string, index: number, char: string): string {
   return `${str.slice(0, index)}${char}${str.slice(index + 1)}`;
 }
 
-function laxStress(word: string): string {
-  const vowelCount = (word.match(Vg) ?? []).length;
-  const hasStress = [...word].some((i) => STRESS.includes(i));
-  if (!hasStress && vowelCount > 1) {
-    return makeStressed(word);
-  } else {
-    return word;
-  }
-}
-
-const SYLLABLE = new RegExp(`(${V}${C}*?)(?=${C}?${V})`, "g");
 function syllabify(word: string, markStress: boolean = true): string {
   word = word.replace(SYLLABLE, (_, $1) => `${$1}.`);
   PRESERVE_CLUSTERS.forEach((cluster) => {
@@ -124,10 +106,10 @@ export function ipaWithoutSoundChange(word: string): string {
 }
 
 function singleWordSoundChange(word: string, markStress: boolean = true): string {
-  word = gsub(word, PRE_UNROMANIZE);
   if (markStress) {
-    word = laxStress(word);
+    word = applyKnownStress(word);
   }
+  word = gsub(word, PRE_UNROMANIZE);
   word = gsub(word, CHANGES);
 
   return syllabify(word, markStress);

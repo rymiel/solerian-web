@@ -111,6 +111,7 @@ const reverse = (word: string): string => [...word].reverse().join("");
 const applyStressLast = (word: string): string => reverse(applyStressFirst(reverse(word)));
 const applyLaxStress = (word: string): string => sub(applyDestress(word), APPLY_LAX_STRESS);
 const applyMarkStress = (word: string): string => sub(applyDestress(word), STRESS_MARKERS);
+export const applyKnownStress = (word: string): string => (isStressed(word) ? word : applyLaxStress(word));
 
 export function applyNormalize(word: string): string {
   if (isStressed(word)) {
