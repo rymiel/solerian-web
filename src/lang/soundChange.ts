@@ -97,7 +97,7 @@ function laxStress(word: string): string {
   }
 }
 
-const SYLLABLE = new RegExp(`([${VOWEL}][^${VOWEL}]*?)(?=[^${VOWEL}]?[${VOWEL}])`, "g");
+const SYLLABLE = new RegExp(`(${V}${C}*?)(?=${C}?${V})`, "g");
 function syllabify(word: string, markStress: boolean = true): string {
   word = word.replace(SYLLABLE, (_, $1) => `${$1}.`);
   PRESERVE_CLUSTERS.forEach((cluster) => {
