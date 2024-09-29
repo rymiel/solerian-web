@@ -8,9 +8,9 @@ function NounTableEntry({ word }: { word: DisplayWord }) {
   return (
     <td>
       <span className="dual">
-        <a href={`#/poss/${word.sol}`}>
-          <i>{word.sol}</i>
-        </a>
+        {/* <a href={`#/poss/${word.sol}`}> */}
+        <i>{word.sol}</i>
+        {/* </a> */}
         <span className="sol">{word.script}</span>
       </span>
       <p>{word.ipa}</p>
