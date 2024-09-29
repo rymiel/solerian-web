@@ -28,14 +28,14 @@ export function VerbTable({ forms }: { forms: readonly string[] }) {
       <HTMLTable compact bordered className="inflection">
         <tbody>
           <tr>
-            <td>1st inf</td>
-            <VerbTableEntry word={map["1_inf"]} />
-            <td>2sg imp</td>
-            <VerbTableEntry word={map["2sg_imp"]} />
+            <td>infinitive</td>
+            <VerbTableEntry word={map["inf"]} />
+            <td>imperative</td>
+            <VerbTableEntry word={map["imp"]} />
           </tr>
           <tr>
-            <td>2nd inf</td>
-            <VerbTableEntry word={map["2_inf"]} />
+            <td>gerund</td>
+            <VerbTableEntry word={map["ger"]} />
             <td></td>
             <td></td>
           </tr>

@@ -27,6 +27,7 @@ const ABBREVIATIONS: Record<string, string> = {
   NAME: "onomatonym",
   IMP: "imperative",
   INF: "infinitive",
+  GER: "gerund",
   NEG: "negative",
   ADV: "adverb",
   ECHO: "echo (marks that the subject of the sentence hasn't changed)",

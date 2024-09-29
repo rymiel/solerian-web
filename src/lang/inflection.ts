@@ -5,8 +5,8 @@ import { gsub, sub, SubMap } from "./util";
 export const FORM_NAMES = {
   [Part.Noun]: ["nom_sg", "acc_sg", "gen_sg", "nom_pl", "acc_pl", "gen_pl"] as const,
   [Part.Verb]: [
-    "1_inf",
-    "2_inf",
+    "inf",
+    "ger",
     "1sg_prs",
     "2sg_prs",
     "3sg_prs",
@@ -19,7 +19,7 @@ export const FORM_NAMES = {
     "1pl_pst",
     "2pl_pst",
     "3pl_pst",
-    "2sg_imp",
+    "imp",
   ] as const,
 };
 export type FormNames<P extends Part> = (typeof FORM_NAMES)[P][number];
