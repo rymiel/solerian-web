@@ -118,7 +118,10 @@ export function applyNormalize(word: string): string {
       return applyDestress(word);
     }
   } else {
-    if (fullVowelCount(word) === 0) {
+    if (syllableCount(word) === 0) {
+      // There's literally nothing here to stress. This shouldn't *really* happen but it's fine
+      return word;
+    } else if (fullVowelCount(word) === 0) {
       return applyNormalize(applyStressFirst(word));
     } else if (fullVowelCount(word) > 1) {
       return applyLaxStress(word);
