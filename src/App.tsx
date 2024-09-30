@@ -115,6 +115,13 @@ function Menu() {
                 </Link>
               </li>
             )}
+            {user && (
+              <li>
+                <Link to="/sound_changes" onClick={() => setOpen(false)}>
+                  Sound Changes
+                </Link>
+              </li>
+            )}
           </ul>
         </nav>
       </Drawer>

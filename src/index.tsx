@@ -17,6 +17,7 @@ import ValidatePage from "./page/ValidationPage";
 import NewWordPage from "./page/NewWordPage";
 import NumbersPage from "./page/NumbersPage";
 import StatsPage from "./page/StatsPage";
+import SoundChangePage from "./page/SoundChangePage";
 
 export const uri = (strings: readonly string[], ...values: readonly string[]) =>
   String.raw({ raw: strings }, ...values.map((i) => encodeURIComponent(i)));
@@ -58,6 +59,10 @@ const router = createHashRouter([
   {
     path: "/stats",
     element: <StatsPage />,
+  },
+  {
+    path: "/sound_changes",
+    element: <SoundChangePage />,
   },
 ]);
 
