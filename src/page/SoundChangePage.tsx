@@ -20,8 +20,17 @@ function intersperse(arr: React.ReactNode[], w: React.ReactNode): React.ReactNod
 
 function tags(s: string | null): React.ReactNode {
   if (s === null) return null;
-  if (s === "") return <Tag intent="danger">∅</Tag>;
-  return reactStringReplace(s, /(\{\w\})/, (m, i) => <Tag key={i}>{m.slice(1, -1)}</Tag>);
+  if (s === "")
+    return (
+      <Tag intent="danger" minimal>
+        ∅
+      </Tag>
+    );
+  return reactStringReplace(s, /(\{\w\})/, (m, i) => (
+    <Tag key={i} intent="primary" minimal>
+      {m.slice(1, -1)}
+    </Tag>
+  ));
 }
 
 function SoundChange({ change }: { change: Change }) {
