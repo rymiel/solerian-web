@@ -2,7 +2,7 @@ import { applyKnownStress } from "./inflection";
 import { gsub, GSubMap } from "./util";
 
 type Unromanize = readonly (readonly [string, string])[];
-type Change = readonly [from: string, to: string];
+type Change = readonly [from: string, to: string, leftContext: string | null, rightContext: string | null];
 interface SoundChangeConfig {
   readonly vowel: string;
   readonly stress: string;
@@ -18,6 +18,20 @@ function setAtIndex(str: string, index: number, char: string): string {
   return `${str.slice(0, index)}${char}${str.slice(index + 1)}`;
 }
 
+function changeToRegex(change: Change, groups: GSubMap): readonly [RegExp, string] {
+  const [from, to, left, right] = change;
+
+  let k = from;
+  if (left !== null) {
+    k = `(?<=${left})${k}`;
+  }
+  if (right !== null) {
+    k = `${k}(?=${right})`;
+  }
+
+  return [new RegExp(gsub(k, groups), "g"), to];
+}
+
 class SoundChangeInstance {
   readonly #config: SoundChangeConfig;
   readonly #changes: GSubMap;
@@ -28,19 +42,11 @@ class SoundChangeInstance {
     this.#config = config;
     const vg = `[${config.vowel}]`;
     const cg = `[^${config.vowel}]`;
-    this.#changes = config.changes.map(
-      ([k, v]) =>
-        [
-          new RegExp(
-            gsub(k, [
-              ["{V}", vg],
-              ["{C}", cg],
-            ]),
-            "g"
-          ),
-          v,
-        ] as const
-    );
+    const groups: GSubMap = [
+      ["{V}", vg],
+      ["{C}", cg],
+    ];
+    this.#changes = config.changes.map((c) => changeToRegex(c, groups));
     this.#syllable = new RegExp(`(${vg}${cg}*?)(?=${cg}?${vg})`, "g");
     this.#vg = new RegExp(vg, "g");
   }
@@ -150,50 +156,50 @@ const CONFIG: SoundChangeConfig = {
   },
   clusters: ["ts", "tɕ", "kʲ"],
   changes: [
-    [`st(?=[eéií])`, "ɕ"],
-    [`(?<=[^s]?)t(?=[ií])`, "ts"],
-    [`t(?=[eéií])`, "ç"],
-    [`(?<=[kg])y`, "ʲi"],
-    [`(?<=[kg])ý`, "ʲí"],
-    [`ox(?={V}|r)`, "a"],
-    [`óx(?={V}|r)`, "á"],
-    [`(?<=x{V})x(?={V})`, ""],
-    [`(?<={V})x(?={V})`, "g"],
-    [`^x`, "h"],
-    [`[əa][əa]`, "ae"],
-    [`[əa]á`, "aé"],
-    [`á[əa]`, "áe"],
-    [`aj`, "ae"],
-    [`ae`, "je"],
-    [`áe`, "é"],
-    [`àé`, "Æ"],
-    [`(?<={C})e(?={V})`, "i"],
-    [`ki(?={V})`, "ɕ"],
-    [`(?<={V})ea`, "e"],
-    [`ry`, "ri"],
-    [`rý`, "rí"],
-    [`ra`, "ræ"],
-    [`rá`, "rÆ"],
-    [`(?<=ú|u)u`, "j"],
-    [`[əa](?={C}*[iyíý])`, "e"],
-    [`á(?={C}*[iyíý])`, "é"],
-    [`u(?={C}*[iyíý])`, "y"],
-    [`ú(?={C}*[iyíý])`, "ý"],
-    [`(?<=[^l])g$`, "ŋ"],
-    [`uú`, "ujú"],
-    [`(?<=ə|a|á)(?=ə|a|á)`, "j"],
-    [`(?<=é|e)(?=é|e)`, "j"],
-    [`(?<=í|i)(?=í|i)`, "j"],
-    [`(?<=ó|o)(?=ó|o)`, "j"],
-    [`(?<=ý|y)(?=ý|y)`, "j"],
-    [`j?i(?=e|é)`, "j"],
-    [`(?<=e|é)i`, "j"],
-    [`ɕj`, "ɕ"],
-    [`ld`, "ll"],
-    [`(?<={V}|\\b)d(?={V})`, "ð"],
-    [`[əea]r`, "ɐr"],
-    [`x`, ""],
-    [`nŋ`, "ŋ"],
+    [`st`, "ɕ", null, "[eéií]"],
+    [`t`, "ts", "[^s]?", "[ií]"],
+    [`t`, "ç", null, "[eéií]"],
+    [`y`, "ʲi", "[kg]", null],
+    [`ý`, "ʲí", "[kg]", null],
+    [`ox`, "a", null, "{V}|r"],
+    [`óx`, "á", null, "{V}|r"],
+    [`x`, "", "x{V}", "{V}"],
+    [`x`, "g", "{V}", "{V}"],
+    [`^x`, "h", null, null],
+    [`[əa][əa]`, "ae", null, null],
+    [`[əa]á`, "aé", null, null],
+    [`á[əa]`, "áe", null, null],
+    [`aj`, "ae", null, null],
+    [`ae`, "je", null, null],
+    [`áe`, "é", null, null],
+    [`àé`, "Æ", null, null],
+    [`e`, "i", "{C}", "{V}"],
+    [`ki`, "ɕ", null, "{V}"],
+    [`ea`, "e", "{V}", null],
+    [`ry`, "ri", null, null],
+    [`rý`, "rí", null, null],
+    [`ra`, "ræ", null, null],
+    [`rá`, "rÆ", null, null],
+    [`u`, "j", "ú|u", null],
+    [`[əa]`, "e", null, "{C}*[iyíý]"],
+    [`á`, "é", null, "{C}*[iyíý]"],
+    [`u`, "y", null, "{C}*[iyíý]"],
+    [`ú`, "ý", null, "{C}*[iyíý]"],
+    [`g$`, "ŋ", "[^l]", null],
+    [`uú`, "ujú", null, null],
+    [``, "j", "ə|a|á", "ə|a|á"],
+    [``, "j", "é|e", "é|e"],
+    [``, "j", "í|i", "í|i"],
+    [``, "j", "ó|o", "ó|o"],
+    ["", "j", "ý|y", "ý|y"],
+    [`j?i`, "j", null, "e|é"],
+    [`i`, "j", "e|é", null],
+    [`ɕj`, "ɕ", null, null],
+    [`ld`, "ll", null, null],
+    [`d`, "ð", "{V}|\\b", "{V}"],
+    [`[əea]r`, "ɐr", null, null],
+    [`x`, "", null, null],
+    [`nŋ`, "ŋ", null, null],
   ],
 };
 
