@@ -13,7 +13,7 @@ import {
   TextArea,
 } from "@blueprintjs/core";
 import React, { useContext, useState } from "react";
-import { App } from "../App";
+import { App, AppToaster } from "../App";
 import { User } from "../user";
 import { Dictionary, FullEntry } from "../dictionary";
 import { Change, CONFIG, singleWordSoundChangeSteps, soundChange, SoundChangeInstance } from "../lang/soundChange";
@@ -129,6 +129,12 @@ function Content({ rawEntries, inflEntries }: { rawEntries: FullEntry[]; inflEnt
     setChanges(CONFIG.changes);
   };
 
+  const copyRules = () => {
+    navigator.clipboard
+      .writeText(JSON.stringify(changes))
+      .then(() => AppToaster.then((toaster) => toaster.show({ intent: "success", message: "Copied to clipboard" })));
+  };
+
   const key = (e: FullEntry | InflEntry) => ("hash" in e ? e.hash : `"${e.original.hash}"-${e.form}`);
 
   return (
@@ -147,6 +153,7 @@ function Content({ rawEntries, inflEntries }: { rawEntries: FullEntry[]; inflEnt
         </div>
         <Button text="Test changes" intent="success" fill onClick={makeInstance} />
         <Button text="Forget changes" intent="danger" fill onClick={clearInstance} />
+        <Button text="Copy rules" intent="primary" fill onClick={copyRules} />
       </div>
       <div className="margin-auto">
         <FormGroup>
