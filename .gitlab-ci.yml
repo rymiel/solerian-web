@@ -27,7 +27,7 @@ pages:
   dependencies:
     - js react build
   script:
-    - echo nothing to do
+    - cp -r -v static/* public/
   artifacts:
     paths:
       - public
