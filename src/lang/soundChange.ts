@@ -32,7 +32,7 @@ function changeToRegex(change: Change, groups: GSubMap): readonly [RegExp, strin
   return [new RegExp(gsub(k, groups), "g"), to];
 }
 
-class SoundChangeInstance {
+export class SoundChangeInstance {
   readonly #config: SoundChangeConfig;
   readonly #changes: GSubMap;
   readonly #syllable: RegExp;

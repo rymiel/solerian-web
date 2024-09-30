@@ -1,11 +1,25 @@
-import { Code, HTMLTable, NonIdealState, Pre, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
-import React, { useContext } from "react";
+import {
+  Button,
+  Checkbox,
+  CheckboxCard,
+  Code,
+  FormGroup,
+  HTMLTable,
+  NonIdealState,
+  Pre,
+  Spinner,
+  SpinnerSize,
+  Tag,
+  TextArea,
+} from "@blueprintjs/core";
+import React, { useContext, useState } from "react";
 import { App } from "../App";
 import { User } from "../user";
 import { Dictionary, FullEntry } from "../dictionary";
-import { Change, CONFIG, singleWordSoundChangeSteps } from "../lang/soundChange";
+import { Change, CONFIG, singleWordSoundChangeSteps, soundChange, SoundChangeInstance } from "../lang/soundChange";
 import { markStress } from "../lang/extra";
 import reactStringReplace from "react-string-replace";
+import { InflEntry, useInflEntries } from "../lang/inflEntries";
 
 function intersperse(arr: React.ReactNode[], w: React.ReactNode): React.ReactNode[] {
   const out: React.ReactNode[] = [];
@@ -34,7 +48,7 @@ function tags(s: string | null): React.ReactNode {
 }
 
 function SoundChange({ change }: { change: Change }) {
-  let [from, to, left, right] = change.map(tags);
+  const [from, to, left, right] = change.map(tags);
   if (left === null && right === null) {
     return (
       <>
@@ -50,43 +64,147 @@ function SoundChange({ change }: { change: Change }) {
   }
 }
 
-function Content({ entries }: { entries: FullEntry[] }) {
+function soundChangeToString(change: Change): string {
+  let [from, to, left, right] = change;
+  from = from === "" ? "∅" : from;
+  to = to === "" ? "∅" : to;
+  if (left === null && right === null) {
+    return `${from} → ${to}`;
+  } else {
+    left = left === null ? "" : ` ${left}`;
+    right = right === null ? "" : ` ${right}`;
+    return `${from} → ${to} /${left} _${right}`;
+  }
+}
+
+function soundChangeFromString(s: string): Change {
+  const [action, context] = s.split("/").map((i) => i.trim()) as [string, string?];
+  const [from, to] = action
+    .split("→")
+    .map((i) => i.trim())
+    .map((i) => (i === "∅" ? "" : i));
+  let left = null;
+  let right = null;
+  if (context !== undefined) {
+    [left, right] = context
+      .split("_")
+      .map((i) => i.trim())
+      .map((i) => (i === "" ? null : i));
+  }
+  return [from, to, left, right];
+}
+
+function StepList({ steps }: { steps: string[] }) {
+  return steps.length > 1 ? (
+    intersperse(
+      steps.map((v, i) => <span key={i}>{v}</span>),
+      " → "
+    )
+  ) : (
+    <i className="center">no changes</i>
+  );
+}
+
+function Content({ rawEntries, inflEntries }: { rawEntries: FullEntry[]; inflEntries: InflEntry[] }) {
+  const [rules, setRules] = useState(CONFIG.changes.map(soundChangeToString).join("\n"));
+  const [changes, setChanges] = useState(CONFIG.changes);
+  const [localInstance, setLocalInstance] = useState<SoundChangeInstance | null>(null);
+  const [ignoreNoChanges, setIgnoreNoChanges] = useState(false);
+  const [useInfl, setUseInfl] = useState(false);
+
+  const entries = useInfl ? inflEntries : rawEntries;
+
+  const onChange = (text: string) => {
+    setRules(text);
+    setChanges(text.trim().split("\n").map(soundChangeFromString));
+  };
+
+  const makeInstance = () => {
+    setLocalInstance(new SoundChangeInstance({ ...CONFIG, changes: changes }));
+  };
+
+  const clearInstance = () => {
+    setLocalInstance(null);
+    setRules(CONFIG.changes.map(soundChangeToString).join("\n"));
+    setChanges(CONFIG.changes);
+  };
+
+  const key = (e: FullEntry | InflEntry) => ("hash" in e ? e.hash : `"${e.original.hash}"-${e.form}`);
+
   return (
-    <div className="margin-auto flex-row">
-      <HTMLTable className="margin-auto" compact striped>
-        <tbody>
-          {CONFIG.changes.map((c, i) => (
-            <tr key={i}>
-              <td>
+    <div className="flex-row">
+      <div>
+        <div className="flex-row">
+          <div>
+            {changes.map((c, i) => (
+              <span key={i}>
                 <SoundChange change={c} />
-              </td>
+                <br />
+              </span>
+            ))}
+          </div>
+          <TextArea style={{ minWidth: "300px" }} onChange={(e) => onChange(e.currentTarget.value)} value={rules} />
+        </div>
+        <Button text="Test changes" intent="success" fill onClick={makeInstance} />
+        <Button text="Forget changes" intent="danger" fill onClick={clearInstance} />
+      </div>
+      <div className="margin-auto">
+        <FormGroup>
+          <CheckboxCard compact onChange={(e) => setIgnoreNoChanges(e.currentTarget.checked)}>
+            Ignore <i>no changes</i>
+          </CheckboxCard>
+          <CheckboxCard compact onChange={(e) => setUseInfl(e.currentTarget.checked)}>
+            Use inflected entries
+          </CheckboxCard>
+        </FormGroup>
+        <HTMLTable compact striped>
+          <thead>
+            <tr>
+              <th>Word</th>
+              <th>Changes</th>
+              <th>Result</th>
             </tr>
-          ))}
-        </tbody>
-      </HTMLTable>
-      <HTMLTable className="margin-auto" compact striped>
-        <tbody>
-          {entries.map((e) => {
-            const steps = singleWordSoundChangeSteps(e.sol, markStress(e));
-            return (
-              <tr key={e.hash}>
-                <td>{e.sol}</td>
-                <td style={{ display: "flex", justifyContent: "space-between" }}>
-                  {steps.length > 1 ? (
-                    intersperse(
-                      steps.map((v, i) => <span key={i}>{v}</span>),
-                      " → "
-                    )
-                  ) : (
-                    <i style={{ margin: "auto" }}>no changes</i>
-                  )}
-                </td>
-                <td>{e.ipa}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </HTMLTable>
+          </thead>
+          <tbody>
+            {localInstance === null
+              ? entries.map((e) => {
+                  const steps = singleWordSoundChangeSteps(e.sol, markStress(e));
+                  if (ignoreNoChanges && steps.length <= 1) return undefined;
+                  return (
+                    <tr key={key(e)}>
+                      <td>{e.sol}</td>
+                      <td className="space-between">
+                        <StepList steps={steps} />
+                      </td>
+                      <td>{soundChange(e.sol, markStress(e))}</td>
+                    </tr>
+                  );
+                })
+              : entries.map((e) => {
+                  const oldSteps = singleWordSoundChangeSteps(e.sol, markStress(e));
+                  const newSteps = localInstance.singleWordSoundChangeSteps(e.sol, markStress(e));
+                  if (oldSteps.toString() === newSteps.toString()) return undefined;
+                  return (
+                    <tr key={key(e)}>
+                      <td>{e.sol}</td>
+                      <td>
+                        <p className="space-between">
+                          <StepList steps={oldSteps} />
+                        </p>
+                        <p className="space-between">
+                          <StepList steps={newSteps} />
+                        </p>
+                      </td>
+                      <td>
+                        <p>{soundChange(e.sol, markStress(e))}</p>
+                        <p>{localInstance.soundChange(e.sol, markStress(e))}</p>
+                      </td>
+                    </tr>
+                  );
+                })}
+          </tbody>
+        </HTMLTable>
+      </div>
     </div>
   );
 }
@@ -94,20 +212,21 @@ function Content({ entries }: { entries: FullEntry[] }) {
 export default function SoundChangePage() {
   const { user } = useContext(User);
   const { entries } = useContext(Dictionary);
+  const infl = useInflEntries()?.filter((i) => i.old === false);
 
   let content;
 
   if (!user) {
     content = <NonIdealState icon="error" title="You cannot access this page" />;
-  } else if (entries === null) {
+  } else if (entries === null || infl === undefined) {
     content = <NonIdealState icon={<Spinner size={SpinnerSize.LARGE} />} />;
   } else {
     content = (
       <div className="inter">
-        <Content entries={entries} />
+        <Content rawEntries={entries} inflEntries={infl} />
       </div>
     );
   }
 
-  return App(content, "Numbers");
+  return App(content, "Sound changes");
 }
