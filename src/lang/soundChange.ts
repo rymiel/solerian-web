@@ -2,7 +2,7 @@ import { applyKnownStress } from "./inflection";
 import { gsub, GSubMap } from "./util";
 
 type Unromanize = readonly (readonly [string, string])[];
-type Change = readonly [from: string, to: string, leftContext: string | null, rightContext: string | null];
+export type Change = readonly [from: string, to: string, leftContext: string | null, rightContext: string | null];
 interface SoundChangeConfig {
   readonly vowel: string;
   readonly stress: string;
@@ -133,7 +133,7 @@ class SoundChangeInstance {
   }
 }
 
-const CONFIG: SoundChangeConfig = {
+export const CONFIG: SoundChangeConfig = {
   vowel: "əaeiouyáéíóúýæÆɐ",
   stress: "áéíóúýƆÆ",
   unromanize: {

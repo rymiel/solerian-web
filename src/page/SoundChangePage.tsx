@@ -1,10 +1,11 @@
-import { HTMLTable, NonIdealState, Spinner, SpinnerSize } from "@blueprintjs/core";
-import { useContext } from "react";
+import { Code, HTMLTable, NonIdealState, Pre, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
+import React, { useContext } from "react";
 import { App } from "../App";
 import { User } from "../user";
 import { Dictionary, FullEntry } from "../dictionary";
-import { singleWordSoundChangeSteps } from "../lang/soundChange";
+import { Change, CONFIG, singleWordSoundChangeSteps } from "../lang/soundChange";
 import { markStress } from "../lang/extra";
+import reactStringReplace from "react-string-replace";
 
 function intersperse(arr: React.ReactNode[], w: React.ReactNode): React.ReactNode[] {
   const out: React.ReactNode[] = [];
@@ -17,31 +18,67 @@ function intersperse(arr: React.ReactNode[], w: React.ReactNode): React.ReactNod
   return out;
 }
 
+function tags(s: string | null): React.ReactNode {
+  if (s === null) return null;
+  if (s === "") return <Tag intent="danger">∅</Tag>;
+  return reactStringReplace(s, /(\{\w\})/, (m, i) => <Tag key={i}>{m.slice(1, -1)}</Tag>);
+}
+
+function SoundChange({ change }: { change: Change }) {
+  let [from, to, left, right] = change.map(tags);
+  if (left === null && right === null) {
+    return (
+      <>
+        <Code>{from}</Code> → <Code>{to}</Code>
+      </>
+    );
+  } else {
+    return (
+      <>
+        <Code>{from}</Code> → <Code>{to}</Code> / {left && <Code>{left}</Code>} _ {right && <Code>{right}</Code>}
+      </>
+    );
+  }
+}
+
 function Content({ entries }: { entries: FullEntry[] }) {
   return (
-    <HTMLTable className="margin-auto" compact striped>
-      <tbody>
-        {entries.map((e) => {
-          const steps = singleWordSoundChangeSteps(e.sol, markStress(e));
-          return (
-            <tr key={e.hash}>
-              <td>{e.sol}</td>
-              <td style={{ display: "flex", justifyContent: "space-between" }}>
-                {steps.length > 1 ? (
-                  intersperse(
-                    steps.map((v, i) => <span key={i}>{v}</span>),
-                    " → "
-                  )
-                ) : (
-                  <i style={{ margin: "auto" }}>no changes</i>
-                )}
+    <div className="margin-auto flex-row">
+      <HTMLTable className="margin-auto" compact striped>
+        <tbody>
+          {CONFIG.changes.map((c, i) => (
+            <tr key={i}>
+              <td>
+                <SoundChange change={c} />
               </td>
-              <td>{e.ipa}</td>
             </tr>
-          );
-        })}
-      </tbody>
-    </HTMLTable>
+          ))}
+        </tbody>
+      </HTMLTable>
+      <HTMLTable className="margin-auto" compact striped>
+        <tbody>
+          {entries.map((e) => {
+            const steps = singleWordSoundChangeSteps(e.sol, markStress(e));
+            return (
+              <tr key={e.hash}>
+                <td>{e.sol}</td>
+                <td style={{ display: "flex", justifyContent: "space-between" }}>
+                  {steps.length > 1 ? (
+                    intersperse(
+                      steps.map((v, i) => <span key={i}>{v}</span>),
+                      " → "
+                    )
+                  ) : (
+                    <i style={{ margin: "auto" }}>no changes</i>
+                  )}
+                </td>
+                <td>{e.ipa}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </HTMLTable>
+    </div>
   );
 }
 
