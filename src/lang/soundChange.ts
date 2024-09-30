@@ -165,6 +165,7 @@ export const CONFIG: SoundChangeConfig = {
     [`óx`, "á", null, "{V}|r"],
     [`x`, "", "x{V}", "{V}"],
     [`x`, "g", "{V}", "{V}"],
+    [`x`, "k", null, "s"],
     [`^x`, "h", null, null],
     [`[əa][əa]`, "ae", null, null],
     [`[əa]á`, "aé", null, null],
