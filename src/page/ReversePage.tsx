@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { App } from "../App";
 import { Dictionary, FullEntry } from "../dictionary";
 import { Part } from "../lang/extra";
-import { applyNormalize, FORM_NAMES } from "../lang/inflection";
+import { applyNormalize, FORM_NAMES, POSS_FORMS, POSS_SUFFIXES } from "../lang/inflection";
 import { uri } from "..";
 import { InflEntry, useInflEntries } from "../lang/inflEntries";
 import { convertAbbr } from "../components/interlinear";
@@ -66,15 +66,6 @@ function poss(original: string, cut: string, form: string, old: boolean, childre
     </>
   );
 }
-
-const POSS_SUFFIXES = {
-  cur: ["àl", "it", "ys", "erd", "itar", "usd"],
-  old: ["elm", "etr", "usd", "usan", "ys", "elmes", "etres", "usdes"],
-} as const;
-const POSS_FORMS = {
-  cur: ["1SG", "2SG", "3SG", "1PL", "2PL", "3PL"],
-  old: ["1SG", "2SG", "3SG M", "3SG F", "3SG N", "1PL", "2PL", "3PL"],
-} as const;
 
 const ReverseContent = memo(function ReverseContent({
   infl,

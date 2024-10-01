@@ -85,6 +85,15 @@ const FORM_SUFFIXES: Forms = {
   }
 };
 
+export const POSS_SUFFIXES = {
+  cur: ["àl", "it", "ys", "erd", "itar", "usd"],
+  old: ["elm", "etr", "usd", "usan", "ys", "elmes", "etres", "usdes"],
+} as const;
+export const POSS_FORMS = {
+  cur: ["1SG", "2SG", "3SG", "1PL", "2PL", "3PL"],
+  old: ["1SG", "2SG", "3SG M", "3SG F", "3SG N", "1PL", "2PL", "3PL"],
+} as const;
+
 const STRESSED = /[áéíóúý]/;
 const ANY_VOWEL = /[aeiouyàáéíóúý]/g;
 const FULL_VOWEL = /[eiouyàáéíóúý]/g;
@@ -193,6 +202,7 @@ export function formsFromEntry(entry: FullEntry, part: Part): [forms: GenericFor
     throw new Error(`Passed entry is not a ${Part[part]}`);
   }
   let forms;
+  // TODO: this is complicated for N+NOUN entries.
   const stress = markStress(entry);
   if (entry.ex === undefined) {
     const s = separateRoot(entry.sol, part);
