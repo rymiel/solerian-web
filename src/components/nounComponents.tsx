@@ -20,7 +20,6 @@ function PossTableEntry({ word }: { word: DisplayWord }) {
 
 function NounTableEntry({ word, stress }: { word: DisplayWord; stress: boolean }) {
   const [isOpen, setOpen] = useState(false);
-  // TODO: old
   const buildMap = <T extends "cur" | "old">(kind: T) =>
     zip(
       POSS_FORMS[kind],
