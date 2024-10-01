@@ -44,31 +44,31 @@ export function VerbTable({ forms }: { forms: readonly string[] }) {
         <thead>
           <tr>
             <th colSpan={2} className="rb db"></th>
-            <th className="hl db">non-past</th>
-            <th className="hl db">past</th>
+            <th className="db">non-past</th>
+            <th className="db">past</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <th rowSpan={3} className="hl">
-              {convertAbbr("SG")}
-            </th>
+            <th>{convertAbbr("SG")}</th>
             <td className="rb">{convertAbbr("1")}</td>
             <VerbTableEntry word={map["1sg_prs"]} />
             <VerbTableEntry word={map["1sg_pst"]} />
           </tr>
           <tr>
+            <th></th>
             <td className="rb">{convertAbbr("2")}</td>
             <VerbTableEntry word={map["2sg_prs"]} />
             <VerbTableEntry word={map["2sg_pst"]} />
           </tr>
           <tr>
+            <th></th>
             <td className="rb">{convertAbbr("3")}</td>
             <VerbTableEntry word={map["3sg_prs"]} />
             <VerbTableEntry word={map["3sg_pst"]} />
           </tr>
           <tr>
-            <th className="hl">{convertAbbr("PL")}</th>
+            <th>{convertAbbr("PL")}</th>
             <td className="rb">{convertAbbr("1")}</td>
             <VerbTableEntry word={map["1pl_prs"]} />
             <VerbTableEntry word={map["1pl_pst"]} />
