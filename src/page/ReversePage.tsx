@@ -5,7 +5,7 @@ import { App } from "../App";
 import { Dictionary, FullEntry } from "../providers/dictionary";
 import { Part } from "../lang/extra";
 import { applyNormalize, FORM_NAMES, POSS_FORMS, POSS_SUFFIXES } from "../lang/inflection";
-import { uri } from "..";
+import { uri } from "../lang/util";
 import { InflEntry, useInflEntries } from "../lang/inflEntries";
 import { convertAbbr } from "../components/interlinear";
 

@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { soundChangeSentence } from "../lang/soundChange";
-import { uri } from "..";
+import { uri } from "../lang/util";
 
 export interface InterlinearData {
   sol: string;

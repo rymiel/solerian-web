@@ -19,9 +19,6 @@ import StatsPage from "./page/StatsPage";
 import SoundChangePage from "./page/SoundChangePage";
 import { ApiVersionProvider } from "./providers/apiVersion";
 
-export const uri = (strings: readonly string[], ...values: readonly string[]) =>
-  String.raw({ raw: strings }, ...values.map((i) => encodeURIComponent(i)));
-
 const router = createHashRouter([
   {
     path: "/",

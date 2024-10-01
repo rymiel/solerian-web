@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 import { Dictionary } from "../providers/dictionary";
 import { User } from "../providers/user";
 import { SectionTitle, SIMPLE_SECTIONS } from "./EditWordPage";
-import { uri } from "../index";
+import { uri } from "../lang/util";
 import { PARTS_OF_SPEECH } from "../lang/extra";
 import { entryHasMatch } from "../components/wordSelect";
 

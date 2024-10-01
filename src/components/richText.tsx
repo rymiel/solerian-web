@@ -2,7 +2,7 @@ import reactStringReplace from "react-string-replace";
 import { Dictionary } from "../providers/dictionary";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { uri } from "..";
+import { uri } from "../lang/util";
 
 const LINK_WRAPPER = /(\[[^\]]+\])/g;
 const SIMPLE_LINK = /\[([A-Za-z0-9_-]+)\]/;

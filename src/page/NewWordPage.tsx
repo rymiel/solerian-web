@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { apiFetch } from "../api";
 import { Dictionary } from "../providers/dictionary";
 import { useNavigate } from "react-router-dom";
-import { uri } from "..";
+import { uri } from "../lang/util";
 import { User } from "../providers/user";
 import { App } from "../App";
 import { determineType, partOfExtra, PARTS_OF_SPEECH } from "../lang/extra";

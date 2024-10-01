@@ -9,7 +9,7 @@ import { VerbInfo } from "../components/verbComponents";
 import { User } from "../providers/user";
 import { InterlinearData, InterlinearGloss } from "../components/interlinear";
 import { SectionTitle, SIMPLE_SECTIONS } from "./EditWordPage";
-import { uri } from "..";
+import { uri } from "../lang/util";
 import { RichText } from "../components/richText";
 
 function SectionContent({ section, on }: { section: FullSection; on: string }) {

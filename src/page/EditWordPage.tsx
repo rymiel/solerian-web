@@ -25,7 +25,7 @@ import { ApiBase, apiFetch, ApiSection } from "../api";
 import { InterlinearData, InterlinearGloss } from "../components/interlinear";
 import { WordSelect } from "../components/wordSelect";
 import { RichText } from "../components/richText";
-import { uri } from "..";
+import { uri } from "../lang/util";
 
 export enum SectionTitle {
   TRANSLATION = "translation",

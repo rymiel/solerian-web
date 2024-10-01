@@ -23,3 +23,6 @@ export function zip<K extends readonly any[], V extends readonly any[]>(ks: K, v
     throw new Error(`Mismatched zip array lengths: ${ks.length} vs ${vs.length} (${ks}) (${vs})`);
   return Object.fromEntries(ks.map((k, i) => [k, vs[i]]));
 }
+
+export const uri = (strings: readonly string[], ...values: readonly string[]) =>
+  String.raw({ raw: strings }, ...values.map((i) => encodeURIComponent(i)));
