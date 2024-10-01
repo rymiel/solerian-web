@@ -5,6 +5,7 @@ import { FullEntry } from "../dictionary";
 import { DisplayWord, populateDualInfo } from "../lang/display";
 import { useState } from "react";
 import { zip } from "../lang/util";
+import { convertAbbr } from "./interlinear";
 
 function PossTableEntry({ word }: { word: DisplayWord }) {
   return (
@@ -53,7 +54,7 @@ function NounTableEntry({ word, stress }: { word: DisplayWord; stress: boolean }
                 <tbody>
                   {POSS_FORMS.cur.map((form) => (
                     <tr key={form}>
-                      <td>{form}</td>
+                      <td>{convertAbbr(form)}</td>
                       <PossTableEntry word={curMap[form]} />
                     </tr>
                   ))}
@@ -65,7 +66,7 @@ function NounTableEntry({ word, stress }: { word: DisplayWord; stress: boolean }
                   <tbody>
                     {POSS_FORMS.old.map((form) => (
                       <tr key={form}>
-                        <td>{form}</td>
+                        <td>{convertAbbr(form)}</td>
                         <PossTableEntry word={oldMap[form]} />
                       </tr>
                     ))}
@@ -89,23 +90,23 @@ export function NounTable({ forms, stress }: { forms: readonly string[]; stress:
       <thead>
         <tr>
           <th className="rb"></th>
-          <th className="hl db">sg</th>
-          <th className="hl db">pl</th>
+          <th className="hl db">{convertAbbr("SG")}</th>
+          <th className="hl db">{convertAbbr("PL")}</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td className="hl rb">nom</td>
+          <td className="hl rb">{convertAbbr("NOM")}</td>
           <NounTableEntry word={map.nom_sg} stress={stress} />
           <NounTableEntry word={map.nom_pl} stress={stress} />
         </tr>
         <tr>
-          <td className="hl rb">acc</td>
+          <td className="hl rb">{convertAbbr("ACC")}</td>
           <NounTableEntry word={map.acc_sg} stress={stress} />
           <NounTableEntry word={map.acc_pl} stress={stress} />
         </tr>
         <tr>
-          <td className="hl rb">gen</td>
+          <td className="hl rb">{convertAbbr("GEN")}</td>
           <NounTableEntry word={map.gen_sg} stress={stress} />
           <NounTableEntry word={map.gen_pl} stress={stress} />
         </tr>

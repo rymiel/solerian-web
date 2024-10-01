@@ -4,6 +4,7 @@ import { FORM_NAMES, formsFromEntry } from "../lang/inflection";
 import { FullEntry } from "../dictionary";
 import { DisplayWord, populateDualInfo } from "../lang/display";
 import { zip } from "../lang/util";
+import { convertAbbr } from "./interlinear";
 
 function VerbTableEntry({ word }: { word: DisplayWord }) {
   return (
@@ -50,37 +51,37 @@ export function VerbTable({ forms }: { forms: readonly string[] }) {
         <tbody>
           <tr>
             <th rowSpan={3} className="hl">
-              sg
+              {convertAbbr("SG")}
             </th>
-            <td className="rb">1</td>
+            <td className="rb">{convertAbbr("1")}</td>
             <VerbTableEntry word={map["1sg_prs"]} />
             <VerbTableEntry word={map["1sg_pst"]} />
           </tr>
           <tr>
-            <td className="rb">2</td>
+            <td className="rb">{convertAbbr("2")}</td>
             <VerbTableEntry word={map["2sg_prs"]} />
             <VerbTableEntry word={map["2sg_pst"]} />
           </tr>
           <tr>
-            <td className="rb">3</td>
+            <td className="rb">{convertAbbr("3")}</td>
             <VerbTableEntry word={map["3sg_prs"]} />
             <VerbTableEntry word={map["3sg_pst"]} />
           </tr>
           <tr>
-            <th className="hl">pl</th>
-            <td className="rb">1</td>
+            <th className="hl">{convertAbbr("PL")}</th>
+            <td className="rb">{convertAbbr("1")}</td>
             <VerbTableEntry word={map["1pl_prs"]} />
             <VerbTableEntry word={map["1pl_pst"]} />
           </tr>
           <tr>
             <th></th>
-            <td className="rb">2</td>
+            <td className="rb">{convertAbbr("2")}</td>
             <VerbTableEntry word={map["2pl_prs"]} />
             <VerbTableEntry word={map["2pl_pst"]} />
           </tr>
           <tr>
             <th></th>
-            <td className="rb">3</td>
+            <td className="rb">{convertAbbr("3")}</td>
             <VerbTableEntry word={map["3pl_prs"]} />
             <VerbTableEntry word={map["3pl_pst"]} />
           </tr>
