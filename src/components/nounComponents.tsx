@@ -1,4 +1,4 @@
-import { Dialog, DialogBody, HTMLTable } from "@blueprintjs/core";
+import { Dialog, DialogBody, HTMLTable, Tag } from "@blueprintjs/core";
 import { Part } from "../lang/extra";
 import { applyNormalize, FORM_NAMES, formsFromEntry, POSS_FORMS, POSS_SUFFIXES } from "../lang/inflection";
 import { FullEntry } from "../dictionary";
@@ -19,22 +19,28 @@ function PossTableEntry({ word }: { word: DisplayWord }) {
   );
 }
 
-function NounTableEntry({ word, stress }: { word: DisplayWord; stress: boolean }) {
+// note: only stressable nouns can have possessive suffixes
+const buildInflMap = (key: "old" | "cur", sol: string) =>
+  zip(
+    POSS_FORMS[key],
+    POSS_SUFFIXES[key].map((suffix) => populateDualInfo(applyNormalize(`${sol}${suffix}`), true))
+  );
+
+function NounTableEntry({ word, stress, old }: { word: DisplayWord; stress: boolean; old: boolean }) {
   const [isOpen, setOpen] = useState(false);
-  const buildMap = <T extends "cur" | "old">(kind: T) =>
-    zip(
-      POSS_FORMS[kind],
-      POSS_SUFFIXES[kind].map((suffix) => populateDualInfo(applyNormalize(`${word.sol}${suffix}`), stress))
-    );
-  const curMap = buildMap("cur");
-  const oldMap = buildMap("old");
+
+  const map = buildInflMap(old ? "old" : "cur", word.sol);
 
   return (
     <td>
       <span className="dual">
-        <a onClick={() => setOpen(true)}>
+        {stress ? (
+          <a onClick={() => setOpen(true)}>
+            <i>{word.sol}</i>
+          </a>
+        ) : (
           <i>{word.sol}</i>
-        </a>
+        )}
         <span className="sol">{word.script}</span>
       </span>
       <p>{word.ipa}</p>
@@ -44,36 +50,21 @@ function NounTableEntry({ word, stress }: { word: DisplayWord; stress: boolean }
           onClose={() => setOpen(false)}
           title={
             <>
-              Possessive forms of <i>{word.sol}</i>
+              Possessive forms of <i>{word.sol}</i> {old && <Tag intent="warning">old forms</Tag>}
             </>
           }
         >
           <DialogBody>
-            <div className="flex-row">
-              <HTMLTable compact striped className="inflection fit-h margin-2-right">
-                <tbody>
-                  {POSS_FORMS.cur.map((form) => (
-                    <tr key={form}>
-                      <td>{convertAbbr(form)}</td>
-                      <PossTableEntry word={curMap[form]} />
-                    </tr>
-                  ))}
-                </tbody>
-              </HTMLTable>
-              <details>
-                <summary>Old forms for this possessive</summary>
-                <HTMLTable compact striped className="inflection">
-                  <tbody>
-                    {POSS_FORMS.old.map((form) => (
-                      <tr key={form}>
-                        <td>{convertAbbr(form)}</td>
-                        <PossTableEntry word={oldMap[form]} />
-                      </tr>
-                    ))}
-                  </tbody>
-                </HTMLTable>
-              </details>
-            </div>
+            <HTMLTable compact striped className="inflection fit-h margin-2-right">
+              <tbody>
+                {Object.entries(map).map(([name, form]) => (
+                  <tr key={name}>
+                    <td>{convertAbbr(name)}</td>
+                    <PossTableEntry word={form} />
+                  </tr>
+                ))}
+              </tbody>
+            </HTMLTable>
           </DialogBody>
         </Dialog>
       )}
@@ -81,7 +72,7 @@ function NounTableEntry({ word, stress }: { word: DisplayWord; stress: boolean }
   );
 }
 
-export function NounTable({ forms, stress }: { forms: readonly string[]; stress: boolean }) {
+export function NounTable({ forms, stress, old }: { forms: readonly string[]; stress: boolean; old: boolean }) {
   const infos = forms.map((i) => populateDualInfo(i, stress));
   const map = zip(FORM_NAMES[Part.Noun], infos);
 
@@ -97,18 +88,18 @@ export function NounTable({ forms, stress }: { forms: readonly string[]; stress:
       <tbody>
         <tr>
           <td className="hl rb">{convertAbbr("NOM")}</td>
-          <NounTableEntry word={map.nom_sg} stress={stress} />
-          <NounTableEntry word={map.nom_pl} stress={stress} />
+          <NounTableEntry word={map.nom_sg} stress={stress} old={old} />
+          <NounTableEntry word={map.nom_pl} stress={stress} old={old} />
         </tr>
         <tr>
           <td className="hl rb">{convertAbbr("ACC")}</td>
-          <NounTableEntry word={map.acc_sg} stress={stress} />
-          <NounTableEntry word={map.acc_pl} stress={stress} />
+          <NounTableEntry word={map.acc_sg} stress={stress} old={old} />
+          <NounTableEntry word={map.acc_pl} stress={stress} old={old} />
         </tr>
         <tr>
           <td className="hl rb">{convertAbbr("GEN")}</td>
-          <NounTableEntry word={map.gen_sg} stress={stress} />
-          <NounTableEntry word={map.gen_pl} stress={stress} />
+          <NounTableEntry word={map.gen_sg} stress={stress} old={old} />
+          <NounTableEntry word={map.gen_pl} stress={stress} old={old} />
         </tr>
       </tbody>
     </HTMLTable>
@@ -120,10 +111,10 @@ export function NounInfo({ entry }: { entry: FullEntry }) {
 
   return (
     <>
-      <NounTable forms={forms.cur} stress={stress} />
+      <NounTable forms={forms.cur} stress={stress} old={false} />
       <details>
         <summary>Old forms for this noun</summary>
-        <NounTable forms={forms.old} stress={stress} />
+        <NounTable forms={forms.old} stress={stress} old={true} />
       </details>
     </>
   );
