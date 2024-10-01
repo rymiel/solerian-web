@@ -55,7 +55,7 @@ function NounTableEntry({ word, stress, old }: { word: DisplayWord; stress: bool
           }
         >
           <DialogBody>
-            <HTMLTable compact striped className="inflection fit-h margin-2-right">
+            <HTMLTable compact striped className="inflection">
               <tbody>
                 {Object.entries(map).map(([name, form]) => (
                   <tr key={name}>
