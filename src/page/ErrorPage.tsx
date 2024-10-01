@@ -1,6 +1,6 @@
+import { NonIdealState } from "@blueprintjs/core";
 import { isRouteErrorResponse, useRouteError } from "react-router-dom";
 import { App } from "../App";
-import { NonIdealState } from "@blueprintjs/core";
 
 export default function ErrorPage() {
   const error = useRouteError();

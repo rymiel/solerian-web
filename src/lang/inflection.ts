@@ -1,5 +1,5 @@
 import { FullEntry } from "../providers/dictionary";
-import { Types, Part, SeparatedRoot, markStress, separateRoot } from "./extra";
+import { markStress, Part, SeparatedRoot, separateRoot, Types } from "./extra";
 import { gsub, sub, SubMap } from "./util";
 
 export const FORM_NAMES = {
@@ -147,7 +147,7 @@ function applyFrom<P extends Part>(
   special: string,
   part: P,
   type: Types[P],
-  markStress = true
+  markStress = true,
 ): Forms[P][Types[P]] {
   const stressSuffix = isStressed(ending) || fullVowelCount(baseRoot) == 0;
   const suffixes = FORM_SUFFIXES[part][type];

@@ -112,7 +112,7 @@ export function InterlinearGloss({
       <div className="box" key={i}>
         {eSol && <p className="original">{eSol}</p>}
         {eEng && <p>{convertAbbr(eEng)}</p>}
-      </div>
+      </div>,
     );
   }
 

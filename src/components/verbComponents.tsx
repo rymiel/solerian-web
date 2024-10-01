@@ -1,9 +1,9 @@
 import { HTMLTable } from "@blueprintjs/core";
+import { DisplayWord, populateDualInfo } from "../lang/display";
 import { Part } from "../lang/extra";
 import { FORM_NAMES, formsFromEntry } from "../lang/inflection";
-import { FullEntry } from "../providers/dictionary";
-import { DisplayWord, populateDualInfo } from "../lang/display";
 import { zip } from "../lang/util";
+import { FullEntry } from "../providers/dictionary";
 import { convertAbbr } from "./interlinear";
 
 function VerbTableEntry({ word }: { word: DisplayWord }) {

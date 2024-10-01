@@ -14,10 +14,10 @@ import {
   Position,
 } from "@blueprintjs/core";
 import { useContext, useState } from "react";
-import { apiFetch, CustomApiError } from "./api";
-import { User } from "./providers/user";
 import { Link } from "react-router-dom";
+import { apiFetch, CustomApiError } from "./api";
 import { ApiVersion } from "./providers/apiVersion";
+import { User } from "./providers/user";
 
 export const AppToaster = OverlayToaster.createAsync({
   position: Position.TOP,

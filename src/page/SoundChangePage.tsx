@@ -1,25 +1,23 @@
 import {
   Button,
-  Checkbox,
   CheckboxCard,
   Code,
   FormGroup,
   HTMLTable,
   NonIdealState,
-  Pre,
   Spinner,
   SpinnerSize,
   Tag,
   TextArea,
 } from "@blueprintjs/core";
 import React, { useContext, useState } from "react";
-import { App, AppToaster } from "../App";
-import { User } from "../providers/user";
-import { Dictionary, FullEntry } from "../providers/dictionary";
-import { Change, CONFIG, singleWordSoundChangeSteps, soundChange, SoundChangeInstance } from "../lang/soundChange";
-import { markStress } from "../lang/extra";
 import reactStringReplace from "react-string-replace";
+import { App, AppToaster } from "../App";
+import { markStress } from "../lang/extra";
 import { InflEntry, useInflEntries } from "../lang/inflEntries";
+import { Change, CONFIG, singleWordSoundChangeSteps, soundChange, SoundChangeInstance } from "../lang/soundChange";
+import { Dictionary, FullEntry } from "../providers/dictionary";
+import { User } from "../providers/user";
 
 function intersperse(arr: React.ReactNode[], w: React.ReactNode): React.ReactNode[] {
   const out: React.ReactNode[] = [];
@@ -98,7 +96,7 @@ function StepList({ steps }: { steps: string[] }) {
   return steps.length > 1 ? (
     intersperse(
       steps.map((v, i) => <span key={i}>{v}</span>),
-      " → "
+      " → ",
     )
   ) : (
     <i className="center">no changes</i>

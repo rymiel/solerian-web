@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@blueprintjs/eslint-plugin": "^6.1.2",
+    "@ianvs/prettier-plugin-sort-imports": "^4.3.1",
     "@typescript-eslint/eslint-plugin": "^7.8.0",
     "@typescript-eslint/parser": "^7.8.0",
     "css-loader": "^7.1.1",

@@ -1,13 +1,13 @@
 import { Button, HTMLTable, Icon, InputGroup, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
-import { App } from "../App";
 import { useContext, useLayoutEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { App } from "../App";
+import { entryHasMatch } from "../components/wordSelect";
+import { PARTS_OF_SPEECH } from "../lang/extra";
+import { uri } from "../lang/util";
 import { Dictionary } from "../providers/dictionary";
 import { User } from "../providers/user";
 import { SectionTitle, SIMPLE_SECTIONS } from "./EditWordPage";
-import { uri } from "../lang/util";
-import { PARTS_OF_SPEECH } from "../lang/extra";
-import { entryHasMatch } from "../components/wordSelect";
 
 function ExtraCell({ extra, cls }: { extra: string; cls: string | null }) {
   const abbr = PARTS_OF_SPEECH[extra] as string | undefined;
@@ -90,7 +90,7 @@ export default function DictionaryPage() {
                         {SIMPLE_SECTIONS.map(([title, name, iconProps]) =>
                           e.sections.some((s) => s.title === title) ? (
                             <Icon {...iconProps} key={title} title={`has ${name.toLowerCase()}`} />
-                          ) : undefined
+                          ) : undefined,
                         )}
                       </span>
                     </a>
@@ -112,7 +112,7 @@ export default function DictionaryPage() {
                     </a>
                   </td>
                 </tr>
-              ) : undefined
+              ) : undefined,
             )}
           </tbody>
 

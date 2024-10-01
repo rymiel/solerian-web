@@ -2,12 +2,12 @@ import { Button, ControlGroup, InputGroup, NonIdealState, Spinner, SpinnerSize, 
 import { memo, useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { App } from "../App";
-import { Dictionary, FullEntry } from "../providers/dictionary";
+import { convertAbbr } from "../components/interlinear";
 import { Part } from "../lang/extra";
 import { applyNormalize, FORM_NAMES, POSS_FORMS, POSS_SUFFIXES } from "../lang/inflection";
-import { uri } from "../lang/util";
 import { InflEntry, useInflEntries } from "../lang/inflEntries";
-import { convertAbbr } from "../components/interlinear";
+import { uri } from "../lang/util";
+import { Dictionary, FullEntry } from "../providers/dictionary";
 
 function terminal(entry: FullEntry) {
   let meaning = entry.meanings[0].eng;
@@ -85,7 +85,7 @@ const ReverseContent = memo(function ReverseContent({
         (!i.old || includeOld) &&
         i.form !== 0 &&
         (only === undefined || i.original.part === only) &&
-        (old === undefined || old === i.old)
+        (old === undefined || old === i.old),
     );
     let rawMatches = raw.filter((i) => i.sol === q && (only === undefined || i.part === only));
 
@@ -194,6 +194,6 @@ export default function ReversePage() {
       </form>
       {content}
     </div>,
-    "Reverse"
+    "Reverse",
   );
 }

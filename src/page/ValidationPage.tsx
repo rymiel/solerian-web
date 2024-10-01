@@ -1,13 +1,13 @@
 import { Button, NonIdealState, Spinner, SpinnerSize } from "@blueprintjs/core";
 import { useContext, useState } from "react";
-import { App, toastErrorHandler } from "../App";
-import { User } from "../providers/user";
-import { InflEntry, useInflEntries } from "../lang/inflEntries";
-import { Dictionary, FullEntry } from "../providers/dictionary";
-import { applyDestress, applyNormalize } from "../lang/inflection";
 import { Link } from "react-router-dom";
-import { ipaWithoutSoundChange } from "../lang/soundChange";
 import { apiFetch } from "../api";
+import { App, toastErrorHandler } from "../App";
+import { applyDestress, applyNormalize } from "../lang/inflection";
+import { InflEntry, useInflEntries } from "../lang/inflEntries";
+import { ipaWithoutSoundChange } from "../lang/soundChange";
+import { Dictionary, FullEntry } from "../providers/dictionary";
+import { User } from "../providers/user";
 
 type Fail = [entry: FullEntry | InflEntry, reason: string];
 type Lookup = [word: string, ipa: string];
@@ -134,6 +134,6 @@ export default function ValidatePage() {
       {header}
       {footer}
     </div>,
-    "Validate"
+    "Validate",
   );
 }

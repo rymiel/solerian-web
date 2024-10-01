@@ -1,7 +1,7 @@
 import { Button, MenuItem } from "@blueprintjs/core";
 import { ItemPredicate, ItemRenderer, Select } from "@blueprintjs/select";
-import { Dictionary, FullEntry } from "../providers/dictionary";
 import { useContext } from "react";
+import { Dictionary, FullEntry } from "../providers/dictionary";
 
 const filterDiacritics = (str: string) => str.normalize("NFD").replace(/\p{Diacritic}/gu, "");
 

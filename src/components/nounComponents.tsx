@@ -1,10 +1,10 @@
 import { Dialog, DialogBody, HTMLTable, Tag } from "@blueprintjs/core";
+import { useState } from "react";
+import { DisplayWord, populateDualInfo } from "../lang/display";
 import { Part } from "../lang/extra";
 import { applyNormalize, FORM_NAMES, formsFromEntry, POSS_FORMS, POSS_SUFFIXES } from "../lang/inflection";
-import { FullEntry } from "../providers/dictionary";
-import { DisplayWord, populateDualInfo } from "../lang/display";
-import { useState } from "react";
 import { zip } from "../lang/util";
+import { FullEntry } from "../providers/dictionary";
 import { convertAbbr } from "./interlinear";
 
 function PossTableEntry({ word }: { word: DisplayWord }) {
@@ -23,7 +23,7 @@ function PossTableEntry({ word }: { word: DisplayWord }) {
 const buildInflMap = (key: "old" | "cur", sol: string) =>
   zip(
     POSS_FORMS[key],
-    POSS_SUFFIXES[key].map((suffix) => populateDualInfo(applyNormalize(`${sol}${suffix}`), true))
+    POSS_SUFFIXES[key].map((suffix) => populateDualInfo(applyNormalize(`${sol}${suffix}`), true)),
   );
 
 function NounTableEntry({ word, stress, old }: { word: DisplayWord; stress: boolean; old: boolean }) {

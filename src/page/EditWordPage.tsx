@@ -1,7 +1,3 @@
-import { createContext, useContext, useState } from "react";
-import { Dictionary, FullEntry, FullMeaning, FullSection } from "../providers/dictionary";
-import { useParams } from "react-router-dom";
-import { App } from "../App";
 import {
   AnchorButton,
   Button,
@@ -19,13 +15,17 @@ import {
   SpinnerSize,
   TextArea,
 } from "@blueprintjs/core";
-import { User } from "../providers/user";
-import { Part } from "../lang/extra";
+import { createContext, useContext, useState } from "react";
+import { useParams } from "react-router-dom";
 import { ApiBase, apiFetch, ApiSection } from "../api";
+import { App } from "../App";
 import { InterlinearData, InterlinearGloss } from "../components/interlinear";
-import { WordSelect } from "../components/wordSelect";
 import { RichText } from "../components/richText";
+import { WordSelect } from "../components/wordSelect";
+import { Part } from "../lang/extra";
 import { uri } from "../lang/util";
+import { Dictionary, FullEntry, FullMeaning, FullSection } from "../providers/dictionary";
+import { User } from "../providers/user";
 
 export enum SectionTitle {
   TRANSLATION = "translation",
@@ -156,7 +156,7 @@ function SectionData({ v }: { v: FullSection }) {
           icon="arrow-right"
           onClick={() =>
             edit.openDrawer(
-              <TranslationSectionEditor as={v.hash} existing={JSON.parse(v.content) as InterlinearData} />
+              <TranslationSectionEditor as={v.hash} existing={JSON.parse(v.content) as InterlinearData} />,
             )
           }
         />
@@ -170,7 +170,7 @@ function SectionData({ v }: { v: FullSection }) {
             key={title}
             onClick={() => edit.openDrawer(<TextSectionEditor as={v.hash} content={v.content} title={title} />)}
           />
-        ) : undefined
+        ) : undefined,
       )}
     </>
   );
@@ -253,7 +253,7 @@ function TranslationSectionEditor({ to, as, existing }: { to?: string; as?: stri
       () => {
         dict.refresh();
         edit.closeDrawer();
-      }
+      },
     );
   };
 

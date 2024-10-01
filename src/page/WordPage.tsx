@@ -1,16 +1,16 @@
+import { AnchorButton, H2, H3, H4, Icon, IconSize, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
 import { useContext } from "react";
-import { Dictionary, FullEntry, FullSection } from "../providers/dictionary";
 import { useParams } from "react-router-dom";
 import { App } from "../App";
-import { AnchorButton, H2, H3, H4, Icon, IconSize, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
-import { Part, PARTS_OF_SPEECH } from "../lang/extra";
-import { NounInfo } from "../components/nounComponents";
-import { VerbInfo } from "../components/verbComponents";
-import { User } from "../providers/user";
 import { InterlinearData, InterlinearGloss } from "../components/interlinear";
-import { SectionTitle, SIMPLE_SECTIONS } from "./EditWordPage";
-import { uri } from "../lang/util";
+import { NounInfo } from "../components/nounComponents";
 import { RichText } from "../components/richText";
+import { VerbInfo } from "../components/verbComponents";
+import { Part, PARTS_OF_SPEECH } from "../lang/extra";
+import { uri } from "../lang/util";
+import { Dictionary, FullEntry, FullSection } from "../providers/dictionary";
+import { User } from "../providers/user";
+import { SectionTitle, SIMPLE_SECTIONS } from "./EditWordPage";
 
 function SectionContent({ section, on }: { section: FullSection; on: string }) {
   const simple = SIMPLE_SECTIONS.find(([title]) => section.title === title);
