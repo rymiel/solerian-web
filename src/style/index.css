@@ -32,18 +32,6 @@
   font-display: swap;
 }
 
-@font-face {
-  font-family: "Fira Sans";
-  src: url("./FiraSans.ttf") format("truetype");
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Fira Sans Extra Condensed";
-  src: url("./FiraSansCondensed.ttf") format("truetype");
-  font-display: swap;
-}
-
 #root {
   display: flex;
   flex-direction: column;
