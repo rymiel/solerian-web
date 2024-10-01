@@ -1,8 +1,9 @@
 import { HTMLTable } from "@blueprintjs/core";
 import { Part } from "../lang/extra";
-import { FORM_NAMES, FormNames, formsFromEntry } from "../lang/inflection";
+import { FORM_NAMES, formsFromEntry } from "../lang/inflection";
 import { FullEntry } from "../dictionary";
 import { DisplayWord, populateDualInfo } from "../lang/display";
+import { zip } from "../lang/util";
 
 function VerbTableEntry({ word }: { word: DisplayWord }) {
   return (
@@ -18,10 +19,7 @@ function VerbTableEntry({ word }: { word: DisplayWord }) {
 
 export function VerbTable({ forms }: { forms: readonly string[] }) {
   const infos = forms.map((i) => populateDualInfo(i));
-  const map = Object.fromEntries(FORM_NAMES[Part.Verb].map((k, i) => [k, infos[i]])) as Record<
-    FormNames<Part.Verb>,
-    DisplayWord
-  >;
+  const map = zip(FORM_NAMES[Part.Verb], infos);
 
   return (
     <>

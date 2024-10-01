@@ -3,6 +3,7 @@ import { Part } from "../lang/extra";
 import { FORM_NAMES, FormNames, formsFromEntry } from "../lang/inflection";
 import { FullEntry } from "../dictionary";
 import { DisplayWord, populateDualInfo } from "../lang/display";
+import { zip } from "../lang/util";
 
 function NounTableEntry({ word }: { word: DisplayWord }) {
   return (
@@ -20,10 +21,7 @@ function NounTableEntry({ word }: { word: DisplayWord }) {
 
 export function NounTable({ forms, stress }: { forms: readonly string[]; stress: boolean }) {
   const infos = forms.map((i) => populateDualInfo(i, stress));
-  const map = Object.fromEntries(FORM_NAMES[Part.Noun].map((k, i) => [k, infos[i]])) as Record<
-    FormNames<Part.Noun>,
-    DisplayWord
-  >;
+  const map = zip(FORM_NAMES[Part.Noun], infos);
 
   return (
     <HTMLTable compact bordered className="inflection">
