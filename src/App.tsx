@@ -13,11 +13,11 @@ import {
   Popover,
   Position,
 } from "@blueprintjs/core";
-import { ApiVersion } from ".";
 import { useContext, useState } from "react";
 import { apiFetch, CustomApiError } from "./api";
 import { User } from "./providers/user";
 import { Link } from "react-router-dom";
+import { ApiVersion } from "./providers/apiVersion";
 
 export const AppToaster = OverlayToaster.createAsync({
   position: Position.TOP,

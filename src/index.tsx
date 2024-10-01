@@ -2,10 +2,9 @@ import { createRoot } from "react-dom/client";
 import "./style/index.css";
 import "@blueprintjs/core/lib/css/blueprint.css";
 import "@blueprintjs/popover2/lib/css/blueprint-popover2.css";
-import { API } from "./api";
 import { createHashRouter, RouterProvider } from "react-router-dom";
-import { createContext, StrictMode, useState } from "react";
-import { OverlaysProvider } from "@blueprintjs/core";
+import { StrictMode } from "react";
+import { BlueprintProvider } from "@blueprintjs/core";
 import { DictionaryProvider } from "./providers/dictionary";
 import { UserProvider } from "./providers/user";
 import DictionaryPage from "./page/DictionaryPage";
@@ -18,6 +17,7 @@ import NewWordPage from "./page/NewWordPage";
 import NumbersPage from "./page/NumbersPage";
 import StatsPage from "./page/StatsPage";
 import SoundChangePage from "./page/SoundChangePage";
+import { ApiVersionProvider } from "./providers/apiVersion";
 
 export const uri = (strings: readonly string[], ...values: readonly string[]) =>
   String.raw({ raw: strings }, ...values.map((i) => encodeURIComponent(i)));
@@ -66,27 +66,18 @@ const router = createHashRouter([
   },
 ]);
 
-export const ApiVersion = createContext<string | null>(null);
-
 function Wrapper() {
-  const [version, setVersion] = useState<string | null>(null);
-  if (version === null) {
-    fetch(`${API}/version`)
-      .then((resp) => resp.text())
-      .then((text) => setVersion(text))
-      .catch((err) => console.error(err));
-  }
   return (
     <StrictMode>
-      <ApiVersion.Provider value={version}>
-        <OverlaysProvider>
+      <ApiVersionProvider>
+        <BlueprintProvider>
           <DictionaryProvider>
             <UserProvider>
               <RouterProvider router={router} />
             </UserProvider>
           </DictionaryProvider>
-        </OverlaysProvider>
-      </ApiVersion.Provider>
+        </BlueprintProvider>
+      </ApiVersionProvider>
     </StrictMode>
   );
 }
