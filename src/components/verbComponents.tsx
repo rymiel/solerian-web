@@ -43,7 +43,7 @@ export function VerbTable({ forms }: { forms: readonly string[] }) {
         <thead>
           <tr>
             <th colSpan={2} className="rb db"></th>
-            <th className="hl db">present</th>
+            <th className="hl db">non-past</th>
             <th className="hl db">past</th>
           </tr>
         </thead>
