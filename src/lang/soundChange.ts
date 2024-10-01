@@ -158,7 +158,6 @@ export const CONFIG: SoundChangeConfig = {
   changes: [
     ["st", "ɕ", null, "[eéií]"],
     ["t", "ts", "[^s]|\\b", "[ií]"],
-    ["t", "ç", null, "[eéií]"],
     ["y", "ʲi", "[kg]", null],
     ["ý", "ʲí", "[kg]", null],
     ["ox", "a", null, "{V}|r"],
