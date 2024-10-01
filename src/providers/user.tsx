@@ -1,6 +1,6 @@
 import { createContext, PropsWithChildren, useEffect, useState } from "react";
-import { apiFetch, ApiUser } from "./api";
-import { toastErrorHandler } from "./App";
+import { apiFetch, ApiUser } from "../api";
+import { toastErrorHandler } from "../App";
 
 interface UserData {
   user: ApiUser | null;

@@ -1,7 +1,7 @@
 import { ControlGroup, InputGroup, NonIdealState, NumericInput } from "@blueprintjs/core";
 import { useContext, useState } from "react";
 import { App } from "../App";
-import { User } from "../user";
+import { User } from "../providers/user";
 import { b10Split, b10ToB12, b12toBijective, constructNumber } from "../lang/numbers";
 
 function Content() {

@@ -1,4 +1,4 @@
-import { FullEntry } from "../dictionary";
+import { FullEntry } from "../providers/dictionary";
 import { Types, Part, SeparatedRoot, markStress, separateRoot } from "./extra";
 import { gsub, sub, SubMap } from "./util";
 

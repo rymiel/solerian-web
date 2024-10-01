@@ -1,8 +1,8 @@
 import { Divider, H4, HTMLTable, NonIdealState, Spinner, SpinnerSize } from "@blueprintjs/core";
 import { useContext } from "react";
 import { App } from "../App";
-import { User } from "../user";
-import { Dictionary } from "../dictionary";
+import { User } from "../providers/user";
+import { Dictionary } from "../providers/dictionary";
 import { Part } from "../lang/extra";
 
 const NOUN_GENDERS: Record<string, string> = {

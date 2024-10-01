@@ -16,7 +16,7 @@ import {
 import { ApiVersion } from ".";
 import { useContext, useState } from "react";
 import { apiFetch, CustomApiError } from "./api";
-import { User } from "./user";
+import { User } from "./providers/user";
 import { Link } from "react-router-dom";
 
 export const AppToaster = OverlayToaster.createAsync({

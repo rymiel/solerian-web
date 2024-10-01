@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { Dictionary, FullEntry, FullMeaning, FullSection } from "../dictionary";
+import { Dictionary, FullEntry, FullMeaning, FullSection } from "../providers/dictionary";
 import { useParams } from "react-router-dom";
 import { App } from "../App";
 import {
@@ -19,7 +19,7 @@ import {
   SpinnerSize,
   TextArea,
 } from "@blueprintjs/core";
-import { User } from "../user";
+import { User } from "../providers/user";
 import { Part } from "../lang/extra";
 import { ApiBase, apiFetch, ApiSection } from "../api";
 import { InterlinearData, InterlinearGloss } from "../components/interlinear";

@@ -14,8 +14,8 @@ import {
 } from "@blueprintjs/core";
 import React, { useContext, useState } from "react";
 import { App, AppToaster } from "../App";
-import { User } from "../user";
-import { Dictionary, FullEntry } from "../dictionary";
+import { User } from "../providers/user";
+import { Dictionary, FullEntry } from "../providers/dictionary";
 import { Change, CONFIG, singleWordSoundChangeSteps, soundChange, SoundChangeInstance } from "../lang/soundChange";
 import { markStress } from "../lang/extra";
 import reactStringReplace from "react-string-replace";

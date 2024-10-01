@@ -2,8 +2,8 @@ import { Button, HTMLTable, Icon, InputGroup, NonIdealState, Spinner, SpinnerSiz
 import { App } from "../App";
 import { useContext, useLayoutEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { Dictionary } from "../dictionary";
-import { User } from "../user";
+import { Dictionary } from "../providers/dictionary";
+import { User } from "../providers/user";
 import { SectionTitle, SIMPLE_SECTIONS } from "./EditWordPage";
 import { uri } from "../index";
 import { PARTS_OF_SPEECH } from "../lang/extra";

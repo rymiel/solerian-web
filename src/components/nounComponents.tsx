@@ -1,7 +1,7 @@
 import { Dialog, DialogBody, HTMLTable, Tag } from "@blueprintjs/core";
 import { Part } from "../lang/extra";
 import { applyNormalize, FORM_NAMES, formsFromEntry, POSS_FORMS, POSS_SUFFIXES } from "../lang/inflection";
-import { FullEntry } from "../dictionary";
+import { FullEntry } from "../providers/dictionary";
 import { DisplayWord, populateDualInfo } from "../lang/display";
 import { useState } from "react";
 import { zip } from "../lang/util";

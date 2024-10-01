@@ -2,7 +2,7 @@ import { Button, ControlGroup, InputGroup, NonIdealState, Spinner, SpinnerSize, 
 import { memo, useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { App } from "../App";
-import { Dictionary, FullEntry } from "../dictionary";
+import { Dictionary, FullEntry } from "../providers/dictionary";
 import { Part } from "../lang/extra";
 import { applyNormalize, FORM_NAMES, POSS_FORMS, POSS_SUFFIXES } from "../lang/inflection";
 import { uri } from "..";

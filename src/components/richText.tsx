@@ -1,5 +1,5 @@
 import reactStringReplace from "react-string-replace";
-import { Dictionary } from "../dictionary";
+import { Dictionary } from "../providers/dictionary";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { uri } from "..";

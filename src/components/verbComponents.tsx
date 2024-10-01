@@ -1,7 +1,7 @@
 import { HTMLTable } from "@blueprintjs/core";
 import { Part } from "../lang/extra";
 import { FORM_NAMES, formsFromEntry } from "../lang/inflection";
-import { FullEntry } from "../dictionary";
+import { FullEntry } from "../providers/dictionary";
 import { DisplayWord, populateDualInfo } from "../lang/display";
 import { zip } from "../lang/util";
 import { convertAbbr } from "./interlinear";
