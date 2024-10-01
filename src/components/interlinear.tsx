@@ -17,6 +17,9 @@ const ABBREVIATIONS: Record<string, string> = {
   "1PL": "first person plural",
   "2PL": "second person plural",
   "3PL": "third person plural",
+  "1": "first person",
+  "2": "second person",
+  "3": "third person",
   SG: "singular",
   PL: "plural",
   PST: "past",
@@ -35,7 +38,7 @@ const ABBREVIATIONS: Record<string, string> = {
   // old stuff
   M: "masculine",
   F: "feminine",
-  N: "neuter"
+  N: "neuter",
 };
 
 export function convertAbbr(s: string): React.ReactNode[] {
