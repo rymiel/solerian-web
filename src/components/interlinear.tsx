@@ -1,4 +1,4 @@
-import React from "react";
+import { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { soundChangeSentence } from "../lang/soundChange";
 import { uri } from "..";
@@ -41,7 +41,7 @@ const ABBREVIATIONS: Record<string, string> = {
   N: "neuter",
 };
 
-export function convertAbbr(s: string): React.ReactNode[] {
+export function convertAbbr(s: string): ReactNode[] {
   const parts = s.split(/([-.\(\) ])/);
 
   return parts.map((i, j) => {
@@ -65,17 +65,14 @@ interface ILWord {
   bold: boolean;
 }
 const splitIntoWords = (s: string): ILWord[] => s.split(SEP).map((i, j) => ({ text: i, index: j, bold: false }));
-const elem = (w: ILWord): React.ReactNode => (w.bold ? <b key={w.index}>{w.text}</b> : w.text);
-const joinWords = (w: ILWord[]): React.ReactNode => w.map(elem);
-const joinLinks = (w: ILWord[]): React.ReactNode =>
-  w.map((i) =>
-    SEP.test(i.text) ? (
-      elem(i)
-    ) : (
-      <Link key={i.index} to={uri`/reverse/${i.text}`}>
-        {elem(i)}
-      </Link>
-    )
+const elem = (w: ILWord): ReactNode => (w.bold ? <b key={w.index}>{w.text}</b> : w.text);
+const links = (w: ILWord): ReactNode =>
+  SEP.test(w.text) ? (
+    elem(w)
+  ) : (
+    <Link key={w.index} to={uri`/reverse/${w.text}`}>
+      {elem(w)}
+    </Link>
   );
 
 const highlightAsterisk = (w: ILWord[]): ILWord[] =>
@@ -103,8 +100,8 @@ export function InterlinearGloss({
     solWords = highlightAsterisk(solWords);
     engWords = highlightAsterisk(engWords);
   }
-  const sol = link ? joinLinks(solWords) : joinWords(solWords);
-  const eng = joinWords(engWords);
+  const sol = solWords.map(link ? links : elem);
+  const eng = engWords.map(elem);
   const solClean = data.sol.replaceAll("*", "");
 
   for (let i = 0; i < numParts; i++) {
