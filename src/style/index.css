@@ -236,8 +236,13 @@ header .bp5-divider {
   font-variant-caps: small-caps;
 }
 
-.fit {
+.fit,
+.fit-w {
   width: fit-content;
+}
+
+.fit-h {
+  height: fit-content;
 }
 
 .flex-center {
@@ -261,6 +266,10 @@ header .bp5-divider {
 
 .margin-2-bottom {
   margin-bottom: 2rem;
+}
+
+.margin-2-right {
+  margin-right: 2rem;
 }
 
 .bp5-callout.bp5-compact.edit-section {
