@@ -81,8 +81,8 @@ export function NounTable({ forms, stress, old }: { forms: readonly string[]; st
       <thead>
         <tr>
           <th className="rb"></th>
-          <th className="hl db">{convertAbbr("SG")}</th>
-          <th className="hl db">{convertAbbr("PL")}</th>
+          <th className="db">{convertAbbr("SG")}</th>
+          <th className="db">{convertAbbr("PL")}</th>
         </tr>
       </thead>
       <tbody>

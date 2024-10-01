@@ -50,7 +50,7 @@ export function VerbTable({ forms }: { forms: readonly string[] }) {
         </thead>
         <tbody>
           <tr>
-            <th>{convertAbbr("SG")}</th>
+            <td className="hl">{convertAbbr("SG")}</td>
             <td className="rb">{convertAbbr("1")}</td>
             <VerbTableEntry word={map["1sg_prs"]} />
             <VerbTableEntry word={map["1sg_pst"]} />
@@ -68,7 +68,7 @@ export function VerbTable({ forms }: { forms: readonly string[] }) {
             <VerbTableEntry word={map["3sg_pst"]} />
           </tr>
           <tr>
-            <th>{convertAbbr("PL")}</th>
+            <td className="hl">{convertAbbr("PL")}</td>
             <td className="rb">{convertAbbr("1")}</td>
             <VerbTableEntry word={map["1pl_prs"]} />
             <VerbTableEntry word={map["1pl_pst"]} />
