@@ -42,7 +42,7 @@ const ABBREVIATIONS: Record<string, string> = {
 };
 
 export function convertAbbr(s: string): ReactNode[] {
-  const parts = s.split(/([-.\(\) ])/);
+  const parts = s.split(/([-.() ])/);
 
   return parts.map((i, j) => {
     const abbr = ABBREVIATIONS[i] as string | undefined;

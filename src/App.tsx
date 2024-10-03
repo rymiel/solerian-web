@@ -13,7 +13,7 @@ import {
   Popover,
   Position,
 } from "@blueprintjs/core";
-import { useContext, useState } from "react";
+import { JSX, useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { apiFetch, CustomApiError } from "./api";
 import { ApiVersion } from "./providers/apiVersion";

@@ -18,10 +18,10 @@ export function sub(str: string, map: SubMap): string {
   return str;
 }
 
-export function zip<K extends readonly any[], V extends readonly any[]>(ks: K, vs: V): Record<K[number], V[number]> {
+export function zip<K extends string, V>(ks: readonly K[], vs: readonly V[]): Record<K, V> {
   if (ks.length !== vs.length)
     throw new Error(`Mismatched zip array lengths: ${ks.length} vs ${vs.length} (${ks}) (${vs})`);
-  return Object.fromEntries(ks.map((k, i) => [k, vs[i]]));
+  return Object.fromEntries(ks.map((k, i) => [k, vs[i]])) as Record<K, V>;
 }
 
 export const uri = (strings: readonly string[], ...values: readonly string[]) =>

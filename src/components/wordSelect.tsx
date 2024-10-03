@@ -21,7 +21,7 @@ const filterEntry: ItemPredicate<FullEntry> = (query: string, entry: FullEntry, 
   return entryHasMatch(query, entry, { exact: exactMatch });
 };
 
-const renderEntry: ItemRenderer<FullEntry> = (entry, { handleClick, handleFocus, modifiers, query }) => {
+const renderEntry: ItemRenderer<FullEntry> = (entry, { handleClick, handleFocus, modifiers }) => {
   if (!modifiers.matchesPredicate) {
     return null;
   }

@@ -4,6 +4,7 @@ import {
   Callout,
   Checkbox,
   Classes,
+  Code,
   CompoundTag,
   ControlGroup,
   Divider,
@@ -261,12 +262,12 @@ function TranslationSectionEditor({ to, as, existing }: { to?: string; as?: stri
     <div className="inter">
       {to && (
         <p>
-          Adding new translation section to <code>{to}</code>.
+          Adding new translation section to <Code>{to}</Code>.
         </p>
       )}
       {as && (
         <p>
-          Editing translation section <code>{as}</code>.
+          Editing translation section <Code>{as}</Code>.
         </p>
       )}
       <InputGroup onValueChange={setSol} defaultValue={sol} placeholder="Sentence" />
@@ -310,12 +311,12 @@ function TextSectionEditor({
     <div className="inter">
       {to && (
         <p>
-          Adding new {title} text section to <code>{to}</code>.
+          Adding new {title} text section to <Code>{to}</Code>.
         </p>
       )}
       {as && (
         <p>
-          Editing {title} text section <code>{as}</code>.
+          Editing {title} text section <Code>{as}</Code>.
         </p>
       )}
       <ControlGroup fill>
@@ -352,7 +353,7 @@ function EntryEditor({ existing }: { existing: FullEntry }) {
   return (
     <div className="inter">
       <p>
-        Editing entry <code>{as}</code>.
+        Editing entry <Code>{as}</Code>.
       </p>
       <InputGroup onValueChange={setSol} defaultValue={sol} placeholder="Solerian" />
       <InputGroup onValueChange={setExtra} defaultValue={extra} placeholder="Extra" />
@@ -383,12 +384,12 @@ function MeaningEditor({ to, existing }: { to?: string; existing?: FullMeaning }
     <div className="inter">
       {to && (
         <p>
-          Adding new meaning to <code>{to}</code>.
+          Adding new meaning to <Code>{to}</Code>.
         </p>
       )}
       {as && (
         <p>
-          Editing meaning <code>{as}</code>.
+          Editing meaning <Code>{as}</Code>.
         </p>
       )}
       <InputGroup onValueChange={setEng} defaultValue={eng} placeholder="English" />

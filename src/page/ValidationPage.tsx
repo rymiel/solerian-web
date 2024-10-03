@@ -114,8 +114,8 @@ export default function ValidatePage() {
             const [e, reason] = f;
             const key = "hash" in e ? e.hash : `"${e.original.hash}"-${e.form}`;
             return (
-              <li>
-                <Link to={`/reverse/${e.sol}`} key={key}>
+              <li key={key}>
+                <Link to={`/reverse/${e.sol}`}>
                   {"hash" in e ? `"${e.sol}"` : `"${e.sol}" (${e.form} of ${e.original.sol})`}
                 </Link>
                 : {reason}

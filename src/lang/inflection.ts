@@ -24,7 +24,7 @@ export const FORM_NAMES = {
 };
 export type FormNames<P extends Part> = (typeof FORM_NAMES)[P][number];
 
-type SlotStrings<Tuple extends readonly [...any[]]> = {
+type SlotStrings<Tuple extends readonly [...unknown[]]> = {
   [Index in keyof Tuple]: Tuple[Index] extends string ? string : never;
 };
 export type Forms = {

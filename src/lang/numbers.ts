@@ -77,7 +77,7 @@ export function constructNumber(biject: Biject) {
     return zero;
   }
   let fstring = "";
-  let rtl = [...biject].reverse();
+  const rtl = [...biject].reverse();
   if (rtl[1] === "1") {
     fstring += teens[rtl[0]];
   } else if (rtl.length === 1) {
@@ -96,16 +96,16 @@ export function constructNumber(biject: Biject) {
 }
 
 function convertBase(value: string, fromBase: number, toBase: number): string {
-  var range: readonly string[] = B12_NUMS;
-  var fromRange = range.slice(0, fromBase);
-  var toRange = range.slice(0, toBase);
+  const range: readonly string[] = B12_NUMS;
+  const fromRange = range.slice(0, fromBase);
+  const toRange = range.slice(0, toBase);
 
-  var decValue = value
+  let decValue = value
     .split("")
     .reverse()
     .reduce((carry, digit, index) => (carry += fromRange.indexOf(digit) * Math.pow(fromBase, index)), 0);
 
-  var newValue = "";
+  let newValue = "";
   while (decValue > 0) {
     newValue = toRange[decValue % toBase] + newValue;
     decValue = (decValue - (decValue % toBase)) / toBase;
@@ -164,14 +164,14 @@ export function bijectiveToB12(biject: Biject): B12 {
   let flag = false;
   let num: B12 = [];
   for (let i = 0; i < biject.length; i++) {
-    let c = biject[i];
+    const c = biject[i];
     if (flag) {
       if (c === "T") {
         num = ["1", ...num];
       } else if (c === "E") {
         num = ["0", ...num];
       } else {
-        let newC = addB12(c, 1);
+        const newC = addB12(c, 1);
         num = [newC, ...num];
         flag = false;
       }

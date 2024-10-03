@@ -79,7 +79,7 @@ const ReverseContent = memo(function ReverseContent({
   includeOld: boolean;
 }) {
   const lookup = (q: string, { only, old }: { only?: Part; old?: boolean } = {}) => {
-    let inflMatches = infl.filter(
+    const inflMatches = infl.filter(
       (i) =>
         i.sol === q &&
         (!i.old || includeOld) &&
@@ -87,7 +87,7 @@ const ReverseContent = memo(function ReverseContent({
         (only === undefined || i.original.part === only) &&
         (old === undefined || old === i.old),
     );
-    let rawMatches = raw.filter((i) => i.sol === q && (only === undefined || i.part === only));
+    const rawMatches = raw.filter((i) => i.sol === q && (only === undefined || i.part === only));
 
     return rawMatches.map(terminal).concat(inflMatches.map(inflNode));
   };

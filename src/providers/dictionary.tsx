@@ -70,6 +70,7 @@ export function DictionaryProvider({ children }: PropsWithChildren) {
   return <Dictionary.Provider value={{ entries, refresh }}>{children}</Dictionary.Provider>;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const compare = (a: string, b: string): number => (((a as any) > b) as any) - (((a as any) < b) as any);
 
 export const entrySort = (a: FullEntry, b: FullEntry): number => {
@@ -78,7 +79,7 @@ export const entrySort = (a: FullEntry, b: FullEntry): number => {
   let f = compare(a.extra, b.extra);
   if (f !== 0) return f;
   for (let i = 0; i < a.meanings.length && i < b.meanings.length; i++) {
-    let f = compare(a.meanings[i].eng, b.meanings[i].eng);
+    f = compare(a.meanings[i].eng, b.meanings[i].eng);
     if (f !== 0) return f;
   }
   return a.meanings.length - b.meanings.length;

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { Dictionary, FullEntry } from "../providers/dictionary";
 import { markStress, separateRoot } from "./extra";
 import { applyFromSeparatedRoot } from "./inflection";
@@ -14,7 +14,7 @@ export function useInflEntries() {
   const { entries } = useContext(Dictionary);
   const [infl, setInfl] = useState<InflEntry[] | null>(null);
 
-  const refresh = async () => {
+  const refresh = useCallback(async () => {
     if (!entries) return;
     const infls: InflEntry[] = [];
     for (const i of entries) {
@@ -35,11 +35,11 @@ export function useInflEntries() {
       }
     }
     setInfl(infls);
-  };
+  }, [entries]);
 
   useEffect(() => {
     refresh();
-  }, [entries]);
+  }, [refresh]);
 
   return infl;
 }
