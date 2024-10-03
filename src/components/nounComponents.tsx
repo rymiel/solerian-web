@@ -1,6 +1,6 @@
 import { Dialog, DialogBody, HTMLTable, Tag } from "@blueprintjs/core";
 import { useState } from "react";
-import { DisplayWord, populateDualInfo } from "../lang/display";
+import { DisplayWord, usePopulateDualInfo } from "../lang/display";
 import { Part } from "../lang/extra";
 import { applyNormalize, FORM_NAMES, formsFromEntry, POSS_FORMS, POSS_SUFFIXES } from "../lang/inflection";
 import { zip } from "../lang/util";
@@ -19,17 +19,15 @@ function PossTableEntry({ word }: { word: DisplayWord }) {
   );
 }
 
-// note: only stressable nouns can have possessive suffixes
-const buildInflMap = (key: "old" | "cur", sol: string) =>
-  zip(
-    POSS_FORMS[key],
-    POSS_SUFFIXES[key].map((suffix) => populateDualInfo(applyNormalize(`${sol}${suffix}`), true)),
-  );
-
 function NounTableEntry({ word, stress, old }: { word: DisplayWord; stress: boolean; old: boolean }) {
   const [isOpen, setOpen] = useState(false);
+  const populate = usePopulateDualInfo();
 
-  const map = buildInflMap(old ? "old" : "cur", word.sol);
+  const key = old ? "old" : "cur";
+  const map = zip(
+    POSS_FORMS[key],
+    POSS_SUFFIXES[key].map((suffix) => populate(applyNormalize(`${word.sol}${suffix}`), true)),
+  );
 
   return (
     <td>
@@ -73,7 +71,8 @@ function NounTableEntry({ word, stress, old }: { word: DisplayWord; stress: bool
 }
 
 export function NounTable({ forms, stress, old }: { forms: readonly string[]; stress: boolean; old: boolean }) {
-  const infos = forms.map((i) => populateDualInfo(i, stress));
+  const populate = usePopulateDualInfo();
+  const infos = forms.map((i) => populate(i, stress));
   const map = zip(FORM_NAMES[Part.Noun], infos);
 
   return (

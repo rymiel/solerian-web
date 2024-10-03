@@ -18,6 +18,7 @@ import { UserProvider } from "./providers/user";
 import "./style/index.css";
 import "@blueprintjs/core/lib/css/blueprint.css";
 import "@blueprintjs/popover2/lib/css/blueprint-popover2.css";
+import { LangConfigProvider } from "./providers/langConfig";
 
 const router = createHashRouter([
   {
@@ -68,11 +69,13 @@ function Wrapper() {
     <StrictMode>
       <ApiVersionProvider>
         <BlueprintProvider>
-          <DictionaryProvider>
-            <UserProvider>
-              <RouterProvider router={router} />
-            </UserProvider>
-          </DictionaryProvider>
+          <LangConfigProvider>
+            <DictionaryProvider>
+              <UserProvider>
+                <RouterProvider router={router} />
+              </UserProvider>
+            </DictionaryProvider>
+          </LangConfigProvider>
         </BlueprintProvider>
       </ApiVersionProvider>
     </StrictMode>

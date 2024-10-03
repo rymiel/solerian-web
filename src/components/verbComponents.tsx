@@ -1,5 +1,5 @@
 import { HTMLTable } from "@blueprintjs/core";
-import { DisplayWord, populateDualInfo } from "../lang/display";
+import { DisplayWord, usePopulateDualInfo } from "../lang/display";
 import { Part } from "../lang/extra";
 import { FORM_NAMES, formsFromEntry } from "../lang/inflection";
 import { zip } from "../lang/util";
@@ -19,7 +19,8 @@ function VerbTableEntry({ word }: { word: DisplayWord }) {
 }
 
 export function VerbTable({ forms }: { forms: readonly string[] }) {
-  const infos = forms.map((i) => populateDualInfo(i));
+  const populate = usePopulateDualInfo();
+  const infos = forms.map((i) => populate(i));
   const map = zip(FORM_NAMES[Part.Verb], infos);
 
   return (

@@ -1,9 +1,9 @@
-import { createContext, PropsWithChildren, useEffect, useState } from "react";
+import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useState } from "react";
 import { ApiDictionary, apiFetch, ApiMeaning, ApiSection, ApiWord } from "../api";
 import { toastErrorHandler } from "../App";
 import { determineType, markStress, Part, partOfExtra } from "../lang/extra";
 import { scriptMultiUnicode } from "../lang/script";
-import { soundChange } from "../lang/soundChange";
+import { LangConfig } from "./langConfig";
 
 export interface FullEntry extends Omit<ApiWord, "meanings" | "sections"> {
   part: Part | null;
@@ -35,8 +35,10 @@ export const Dictionary = createContext<DictionaryData>({
 
 export function DictionaryProvider({ children }: PropsWithChildren) {
   const [entries, setEntries] = useState<FullEntry[] | null>(null);
+  const { soundChange } = useContext(LangConfig);
 
-  const refresh = async () => {
+  const refresh = useCallback(async () => {
+    if (soundChange === null) return;
     try {
       const d = await apiFetch<ApiDictionary>("/new");
       const mMeanings = d.meanings.map((i) => ({
@@ -51,7 +53,7 @@ export function DictionaryProvider({ children }: PropsWithChildren) {
             cls = i.ex !== undefined ? "X" : (determineType(i.sol, part) ?? "?");
           }
           const script = scriptMultiUnicode(i.sol);
-          const ipa = soundChange(i.sol, markStress(i));
+          const ipa = soundChange.soundChange(i.sol, markStress(i));
           const sections = i.sections.map((s) => d.sections.find((j) => j.hash === s)!);
           const meanings = i.meanings.map((s) => mMeanings.find((j) => j.hash === s)!);
           return { ...i, class: cls, part, script, ipa, sections, meanings };
@@ -61,11 +63,11 @@ export function DictionaryProvider({ children }: PropsWithChildren) {
     } catch (error) {
       toastErrorHandler(error);
     }
-  };
+  }, [soundChange]);
 
   useEffect(() => {
     refresh();
-  }, []);
+  }, [refresh]);
 
   return <Dictionary.Provider value={{ entries, refresh }}>{children}</Dictionary.Provider>;
 }

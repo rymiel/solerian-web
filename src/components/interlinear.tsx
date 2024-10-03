@@ -1,7 +1,7 @@
-import { ReactNode } from "react";
+import { ReactNode, useContext } from "react";
 import { Link } from "react-router-dom";
-import { soundChangeSentence } from "../lang/soundChange";
 import { uri } from "../lang/util";
+import { LangConfig } from "../providers/langConfig";
 
 export interface InterlinearData {
   sol: string;
@@ -89,6 +89,7 @@ export function InterlinearGloss({
   link?: boolean;
   indent?: boolean;
 }) {
+  const { soundChange } = useContext(LangConfig);
   const solParts = data.solSep.split(" ");
   const engParts = data.engSep.split(" ");
   const numParts = Math.max(solParts.length, engParts.length);
@@ -119,7 +120,7 @@ export function InterlinearGloss({
   const body = (
     <>
       {...parts}
-      <p className="bottom">{soundChangeSentence(solClean)}</p>
+      {soundChange && <p className="bottom">{soundChange.soundChangeSentence(solClean)}</p>}
       <p className="bottom">{eng}</p>
     </>
   );

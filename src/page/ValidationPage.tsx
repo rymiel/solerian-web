@@ -5,8 +5,9 @@ import { apiFetch } from "../api";
 import { App, toastErrorHandler } from "../App";
 import { applyDestress, applyNormalize } from "../lang/inflection";
 import { InflEntry, useInflEntries } from "../lang/inflEntries";
-import { ipaWithoutSoundChange } from "../lang/soundChange";
+import { SoundChangeInstance } from "../lang/soundChange";
 import { Dictionary, FullEntry } from "../providers/dictionary";
+import { LangConfig } from "../providers/langConfig";
 import { User } from "../providers/user";
 
 type Fail = [entry: FullEntry | InflEntry, reason: string];
@@ -22,9 +23,9 @@ async function validateLocal(list: FullEntry[] | InflEntry[]): Promise<Fail[]> {
   return fail;
 }
 
-async function validateRemote(list: FullEntry[] | InflEntry[]): Promise<Fail[]> {
+async function validateRemote(list: FullEntry[] | InflEntry[], soundChange: SoundChangeInstance): Promise<Fail[]> {
   const fail: Fail[] = [];
-  const lookup: Lookup[] = list.map((i) => [i.sol, ipaWithoutSoundChange(i.sol)]);
+  const lookup: Lookup[] = list.map((i) => [i.sol, soundChange.ipaWithoutSoundChange(i.sol)]);
   try {
     const failIdx = await apiFetch<number[]>("/validate", "POST", JSON.stringify(lookup));
     failIdx.forEach((f) => {
@@ -40,7 +41,7 @@ async function validateRemote(list: FullEntry[] | InflEntry[]): Promise<Fail[]> 
   return fail;
 }
 
-async function validate(raw: FullEntry[], infl: InflEntry[]): Promise<Fail[]> {
+async function validate(raw: FullEntry[], infl: InflEntry[], soundChange: SoundChangeInstance): Promise<Fail[]> {
   const fail: Fail[] = [];
 
   raw.forEach((entry) => {
@@ -69,8 +70,8 @@ async function validate(raw: FullEntry[], infl: InflEntry[]): Promise<Fail[]> {
 
   fail.push(...(await validateLocal(raw)));
   fail.push(...(await validateLocal(infl)));
-  fail.push(...(await validateRemote(raw)));
-  fail.push(...(await validateRemote(infl)));
+  fail.push(...(await validateRemote(raw, soundChange)));
+  fail.push(...(await validateRemote(infl, soundChange)));
 
   return fail;
 }
@@ -78,6 +79,7 @@ async function validate(raw: FullEntry[], infl: InflEntry[]): Promise<Fail[]> {
 export default function ValidatePage() {
   const { user } = useContext(User);
   const { entries } = useContext(Dictionary);
+  const { soundChange } = useContext(LangConfig);
   const infl = useInflEntries()?.filter((i) => i.old === false);
   const [fail, setFail] = useState<Fail[] | null>(null);
   const [isLoading, setLoading] = useState(false);
@@ -87,7 +89,7 @@ export default function ValidatePage() {
 
   if (!user) {
     footer = <NonIdealState icon="error" title="You cannot access this page" />;
-  } else if (entries && infl) {
+  } else if (entries && infl && soundChange) {
     header = (
       <Button
         intent="success"
@@ -98,7 +100,7 @@ export default function ValidatePage() {
         onClick={() => {
           setFail(null);
           setLoading(true);
-          validate(entries, infl).then((f) => {
+          validate(entries, infl, soundChange).then((f) => {
             setFail(f);
             setLoading(false);
           });

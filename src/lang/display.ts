@@ -1,5 +1,6 @@
+import { useContext } from "react";
+import { LangConfig } from "../providers/langConfig";
 import { scriptMultiUnicode } from "./script";
-import { soundChange } from "./soundChange";
 
 export interface DisplayWord {
   sol: string;
@@ -7,10 +8,12 @@ export interface DisplayWord {
   ipa: string;
 }
 
-export function populateDualInfo(word: string, markStress = true): DisplayWord {
-  return {
+export function usePopulateDualInfo() {
+  const { soundChange } = useContext(LangConfig);
+
+  return (word: string, markStress = true) => ({
     sol: word,
     script: scriptMultiUnicode(word),
-    ipa: soundChange(word, markStress),
-  };
+    ipa: soundChange ? soundChange.soundChange(word, markStress) : "[ ... ]",
+  });
 }

@@ -15,8 +15,9 @@ import reactStringReplace from "react-string-replace";
 import { App, AppToaster } from "../App";
 import { markStress } from "../lang/extra";
 import { InflEntry, useInflEntries } from "../lang/inflEntries";
-import { Change, CONFIG, singleWordSoundChangeSteps, soundChange, SoundChangeInstance } from "../lang/soundChange";
+import { Change, SoundChangeInstance } from "../lang/soundChange";
 import { Dictionary, FullEntry } from "../providers/dictionary";
+import { LangConfig } from "../providers/langConfig";
 import { User } from "../providers/user";
 
 function intersperse(arr: React.ReactNode[], w: React.ReactNode): React.ReactNode[] {
@@ -103,9 +104,17 @@ function StepList({ steps }: { steps: string[] }) {
   );
 }
 
-function Content({ rawEntries, inflEntries }: { rawEntries: FullEntry[]; inflEntries: InflEntry[] }) {
-  const [rules, setRules] = useState(CONFIG.changes.map(soundChangeToString).join("\n"));
-  const [changes, setChanges] = useState(CONFIG.changes);
+function Content({
+  rawEntries,
+  inflEntries,
+  soundChange,
+}: {
+  rawEntries: FullEntry[];
+  inflEntries: InflEntry[];
+  soundChange: SoundChangeInstance;
+}) {
+  const [rules, setRules] = useState(soundChange.config.changes.map(soundChangeToString).join("\n"));
+  const [changes, setChanges] = useState(soundChange.config.changes);
   const [localInstance, setLocalInstance] = useState<SoundChangeInstance | null>(null);
   const [ignoreNoChanges, setIgnoreNoChanges] = useState(false);
   const [useInfl, setUseInfl] = useState(false);
@@ -118,13 +127,13 @@ function Content({ rawEntries, inflEntries }: { rawEntries: FullEntry[]; inflEnt
   };
 
   const makeInstance = () => {
-    setLocalInstance(new SoundChangeInstance({ ...CONFIG, changes: changes }));
+    setLocalInstance(new SoundChangeInstance({ ...soundChange.config, changes: changes }));
   };
 
   const clearInstance = () => {
     setLocalInstance(null);
-    setRules(CONFIG.changes.map(soundChangeToString).join("\n"));
-    setChanges(CONFIG.changes);
+    setRules(soundChange.config.changes.map(soundChangeToString).join("\n"));
+    setChanges(soundChange.config.changes);
   };
 
   const copyRules = () => {
@@ -173,7 +182,7 @@ function Content({ rawEntries, inflEntries }: { rawEntries: FullEntry[]; inflEnt
           <tbody>
             {localInstance === null
               ? entries.map((e) => {
-                  const steps = singleWordSoundChangeSteps(e.sol, markStress(e));
+                  const steps = soundChange.singleWordSoundChangeSteps(e.sol, markStress(e));
                   if (ignoreNoChanges && steps.length <= 1) return undefined;
                   return (
                     <tr key={key(e)}>
@@ -181,12 +190,12 @@ function Content({ rawEntries, inflEntries }: { rawEntries: FullEntry[]; inflEnt
                       <td className="space-between">
                         <StepList steps={steps} />
                       </td>
-                      <td>{soundChange(e.sol, markStress(e))}</td>
+                      <td>{soundChange.soundChange(e.sol, markStress(e))}</td>
                     </tr>
                   );
                 })
               : entries.map((e) => {
-                  const oldSteps = singleWordSoundChangeSteps(e.sol, markStress(e));
+                  const oldSteps = soundChange.singleWordSoundChangeSteps(e.sol, markStress(e));
                   const newSteps = localInstance.singleWordSoundChangeSteps(e.sol, markStress(e));
                   if (oldSteps.toString() === newSteps.toString()) return undefined;
                   return (
@@ -201,7 +210,7 @@ function Content({ rawEntries, inflEntries }: { rawEntries: FullEntry[]; inflEnt
                         </p>
                       </td>
                       <td>
-                        <p>{soundChange(e.sol, markStress(e))}</p>
+                        <p>{soundChange.soundChange(e.sol, markStress(e))}</p>
                         <p>{localInstance.soundChange(e.sol, markStress(e))}</p>
                       </td>
                     </tr>
@@ -217,18 +226,19 @@ function Content({ rawEntries, inflEntries }: { rawEntries: FullEntry[]; inflEnt
 export default function SoundChangePage() {
   const { user } = useContext(User);
   const { entries } = useContext(Dictionary);
+  const { soundChange } = useContext(LangConfig);
   const infl = useInflEntries()?.filter((i) => i.old === false);
 
   let content;
 
   if (!user) {
     content = <NonIdealState icon="error" title="You cannot access this page" />;
-  } else if (entries === null || infl === undefined) {
+  } else if (entries === null || infl === undefined || soundChange === null) {
     content = <NonIdealState icon={<Spinner size={SpinnerSize.LARGE} />} />;
   } else {
     content = (
       <div className="inter">
-        <Content rawEntries={entries} inflEntries={infl} />
+        <Content rawEntries={entries} inflEntries={infl} soundChange={soundChange} />
       </div>
     );
   }
