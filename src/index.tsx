@@ -14,11 +14,11 @@ import ValidatePage from "./page/ValidationPage";
 import WordPage from "./page/WordPage";
 import { ApiVersionProvider } from "./providers/apiVersion";
 import { DictionaryProvider } from "./providers/dictionary";
+import { LangConfigProvider } from "./providers/langConfig";
 import { UserProvider } from "./providers/user";
-import "./style/index.css";
 import "@blueprintjs/core/lib/css/blueprint.css";
 import "@blueprintjs/popover2/lib/css/blueprint-popover2.css";
-import { LangConfigProvider } from "./providers/langConfig";
+import "./style/index.css";
 
 const router = createHashRouter([
   {
