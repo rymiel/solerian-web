@@ -74,7 +74,7 @@ export function VerbTable({ forms, old }: { forms: readonly string[]; old: boole
           <tr>
             <td>gerund</td>
             {/* NOTE: old form didn't have a gerund */}
-            {old ? <VerbTableEntry word={map["imp"]} /> : <GerundTableEntry word={map["ger"]} />}
+            {old ? <VerbTableEntry word={map["ger"]} /> : <GerundTableEntry word={map["ger"]} />}
             <td></td>
             <td></td>
           </tr>
