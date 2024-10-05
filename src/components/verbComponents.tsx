@@ -65,14 +65,13 @@ export function VerbTable({ forms, old }: { forms: readonly string[]; old: boole
       <HTMLTable compact bordered className="inflection">
         <tbody>
           <tr>
-            {/* TODO: old names */}
-            <td>infinitive</td>
+            <td>{old ? "1st infinitive" : "infinitive"}</td>
             <VerbTableEntry word={map["inf"]} />
             <td>imperative</td>
             <VerbTableEntry word={map["imp"]} />
           </tr>
           <tr>
-            <td>gerund</td>
+            <td>{old ? "2nd infinitive" : "gerund"}</td>
             {/* NOTE: old form didn't have a gerund */}
             {old ? <VerbTableEntry word={map["ger"]} /> : <GerundTableEntry word={map["ger"]} />}
             <td></td>
