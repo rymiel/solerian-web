@@ -10,7 +10,7 @@ import {
   Tag,
   TextArea,
 } from "@blueprintjs/core";
-import React, { useContext, useState } from "react";
+import { ReactNode, useContext, useState } from "react";
 import reactStringReplace from "react-string-replace";
 import { App, AppToaster } from "../App";
 import { markStress } from "../lang/extra";
@@ -20,8 +20,8 @@ import { Dictionary, FullEntry } from "../providers/dictionary";
 import { LangConfig } from "../providers/langConfig";
 import { User } from "../providers/user";
 
-function intersperse(arr: React.ReactNode[], w: React.ReactNode): React.ReactNode[] {
-  const out: React.ReactNode[] = [];
+function intersperse(arr: ReactNode[], w: ReactNode): ReactNode[] {
+  const out: ReactNode[] = [];
   arr.forEach((i, j) => {
     if (j > 0) {
       out.push(w);
@@ -31,7 +31,7 @@ function intersperse(arr: React.ReactNode[], w: React.ReactNode): React.ReactNod
   return out;
 }
 
-function tags(s: string | null): React.ReactNode {
+function tags(s: string | null): ReactNode {
   if (s === null) return null;
   if (s === "")
     return (
