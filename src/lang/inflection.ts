@@ -1,3 +1,4 @@
+import { FullEntry } from "../providers/dictionary";
 import { markStress, Part, SeparatedRoot, separateRoot, Types } from "./extra";
 import { gsub, sub, SubMap } from "./util";
 
@@ -196,26 +197,15 @@ export function applyFromSeparatedRoot({ match, part, type }: SeparatedRoot, mar
   return applyFrom(root, suffix, special, part, type, markStress) as GenericForms;
 }
 
-export interface Inflectable {
-  part: Part | null;
-  sol: string;
-  extra: string;
-  ex?: string | undefined;
-}
-export function formsFromEntry(entry: Inflectable, part: Part): [forms: GenericForms, stress: boolean] {
+export function formsFromEntry(entry: FullEntry, part: Part): [forms: GenericForms, stress: boolean] {
   if (entry.part !== part) {
     throw new Error(`Passed entry is not a ${Part[part]}`);
   }
-  let forms;
   // TODO: this is complicated for N+NOUN entries.
   const stress = markStress(entry);
+  let forms;
   if (entry.ex === undefined) {
-    const s = separateRoot(entry.sol, part);
-    if (s === null) {
-      throw new Error(`${Part[part]} failed to separate root`);
-    }
-
-    forms = applyFromSeparatedRoot(s, stress);
+    forms = formsFromDirect(entry.sol, stress, part);
   } else {
     const ex = entry.ex.split(",");
     forms = {
@@ -225,4 +215,13 @@ export function formsFromEntry(entry: Inflectable, part: Part): [forms: GenericF
   }
 
   return [forms, stress];
+}
+
+export function formsFromDirect(word: string, stress: boolean, part: Part): GenericForms {
+  const s = separateRoot(word, part);
+  if (s === null) {
+    throw new Error(`${Part[part]} failed to separate root`);
+  }
+
+  return applyFromSeparatedRoot(s, stress);
 }

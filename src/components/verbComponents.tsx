@@ -2,7 +2,7 @@ import { Dialog, DialogBody, HTMLTable } from "@blueprintjs/core";
 import { useState } from "react";
 import { DisplayWord, usePopulateDualInfo } from "../lang/display";
 import { Part } from "../lang/extra";
-import { FORM_NAMES, formsFromEntry, Inflectable } from "../lang/inflection";
+import { FORM_NAMES, formsFromDirect, formsFromEntry } from "../lang/inflection";
 import { zip } from "../lang/util";
 import { FullEntry } from "../providers/dictionary";
 import { convertAbbr } from "./interlinear";
@@ -22,12 +22,7 @@ function VerbTableEntry({ word }: { word: DisplayWord }) {
 
 function GerundTableEntry({ word }: { word: DisplayWord }) {
   const [isOpen, setOpen] = useState(false);
-  const entry: Inflectable = {
-    part: Part.Noun,
-    sol: word.sol,
-    extra: "N",
-  };
-  const [forms, stress] = formsFromEntry(entry, Part.Noun);
+  const forms = formsFromDirect(word.sol, true, Part.Noun);
 
   return (
     <td>
@@ -48,7 +43,7 @@ function GerundTableEntry({ word }: { word: DisplayWord }) {
         }
       >
         <DialogBody>
-          <NounTable forms={forms.cur} stress={stress} old={false} />
+          <NounTable forms={forms.cur} stress={true} old={false} />
         </DialogBody>
       </Dialog>
     </td>
