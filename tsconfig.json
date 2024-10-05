@@ -1,17 +1,12 @@
 {
     "compilerOptions": {
-        "noImplicitAny": true,
-        "strictNullChecks": true,
         "strict": true,
         "sourceMap": true,
         "module": "esnext",
         "target": "es2021",
         "jsx": "react-jsx",
         "outDir": "build/",
-        "allowJs": true,
-        "moduleResolution": "node",
-        "allowSyntheticDefaultImports": true,
-        "esModuleInterop": true,
+        "moduleResolution": "node10",
         "plugins": [{ "name": "typescript-plugin-css-modules" }],
         "noErrorTruncation": true
     },
