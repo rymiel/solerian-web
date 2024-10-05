@@ -1,10 +1,12 @@
-import { HTMLTable } from "@blueprintjs/core";
+import { Dialog, DialogBody, HTMLTable } from "@blueprintjs/core";
+import { useState } from "react";
 import { DisplayWord, usePopulateDualInfo } from "../lang/display";
 import { Part } from "../lang/extra";
-import { FORM_NAMES, formsFromEntry } from "../lang/inflection";
+import { FORM_NAMES, formsFromEntry, Inflectable } from "../lang/inflection";
 import { zip } from "../lang/util";
 import { FullEntry } from "../providers/dictionary";
 import { convertAbbr } from "./interlinear";
+import { NounTable } from "./nounComponents";
 
 function VerbTableEntry({ word }: { word: DisplayWord }) {
   return (
@@ -18,7 +20,42 @@ function VerbTableEntry({ word }: { word: DisplayWord }) {
   );
 }
 
-export function VerbTable({ forms }: { forms: readonly string[] }) {
+function GerundTableEntry({ word }: { word: DisplayWord }) {
+  const [isOpen, setOpen] = useState(false);
+  const entry: Inflectable = {
+    part: Part.Noun,
+    sol: word.sol,
+    extra: "N",
+  };
+  const [forms, stress] = formsFromEntry(entry, Part.Noun);
+
+  return (
+    <td>
+      <span className="dual">
+        <a onClick={() => setOpen(true)}>
+          <i>{word.sol}</i>
+        </a>
+        <span className="sol">{word.script}</span>
+      </span>
+      <p>{word.ipa}</p>
+      <Dialog
+        isOpen={isOpen}
+        onClose={() => setOpen(false)}
+        title={
+          <>
+            Noun forms of gerund <i>{word.sol}</i>
+          </>
+        }
+      >
+        <DialogBody>
+          <NounTable forms={forms.cur} stress={stress} old={false} />
+        </DialogBody>
+      </Dialog>
+    </td>
+  );
+}
+
+export function VerbTable({ forms, old }: { forms: readonly string[]; old: boolean }) {
   const populate = usePopulateDualInfo();
   const infos = forms.map((i) => populate(i));
   const map = zip(FORM_NAMES[Part.Verb], infos);
@@ -28,6 +65,7 @@ export function VerbTable({ forms }: { forms: readonly string[] }) {
       <HTMLTable compact bordered className="inflection">
         <tbody>
           <tr>
+            {/* TODO: old names */}
             <td>infinitive</td>
             <VerbTableEntry word={map["inf"]} />
             <td>imperative</td>
@@ -35,7 +73,8 @@ export function VerbTable({ forms }: { forms: readonly string[] }) {
           </tr>
           <tr>
             <td>gerund</td>
-            <VerbTableEntry word={map["ger"]} />
+            {/* NOTE: old form didn't have a gerund */}
+            {old ? <VerbTableEntry word={map["imp"]} /> : <GerundTableEntry word={map["ger"]} />}
             <td></td>
             <td></td>
           </tr>
@@ -97,10 +136,10 @@ export function VerbInfo({ entry }: { entry: FullEntry }) {
 
   return (
     <>
-      <VerbTable forms={forms.cur} />
+      <VerbTable forms={forms.cur} old={false} />
       <details>
         <summary>Old forms for this verb</summary>
-        <VerbTable forms={forms.old} />
+        <VerbTable forms={forms.old} old={true} />
       </details>
     </>
   );
