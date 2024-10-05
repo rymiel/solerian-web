@@ -326,7 +326,7 @@ function TextSectionEditor({
           placeholder={`Content for ${title}`}
           fill
         />
-        <WordSelect onSelect={(t) => setContent((c) => `${c}[${t.hash}] (“${t.meanings[0].eng}”)`)} />
+        <WordSelect onSelect={(t) => setContent((c) => `${c}[${t.hash}] (“${t.meanings[0]?.eng}”)`)} />
       </ControlGroup>
       <Button fill intent="success" text="Submit" onClick={submit} />
       <Divider />

@@ -81,7 +81,7 @@ export const entrySort = (a: FullEntry, b: FullEntry): number => {
   let f = compare(a.extra, b.extra);
   if (f !== 0) return f;
   for (let i = 0; i < a.meanings.length && i < b.meanings.length; i++) {
-    f = compare(a.meanings[i].eng, b.meanings[i].eng);
+    f = compare(a.meanings[i]?.eng ?? "", b.meanings[i]?.eng ?? "");
     if (f !== 0) return f;
   }
   return a.meanings.length - b.meanings.length;

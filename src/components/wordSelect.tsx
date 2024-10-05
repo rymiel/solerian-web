@@ -25,7 +25,7 @@ const renderEntry: ItemRenderer<FullEntry> = (entry, { handleClick, handleFocus,
   if (!modifiers.matchesPredicate) {
     return null;
   }
-  let eng = entry.meanings[0].eng;
+  let eng = entry.meanings[0]?.eng;
   if (entry.meanings.length > 1) {
     eng += "; ...";
   }

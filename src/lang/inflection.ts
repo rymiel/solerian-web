@@ -190,10 +190,10 @@ function applyFrom<P extends Part>(
 
 export function applyFromSeparatedRoot({ match, part, type }: SeparatedRoot, markStress = true): GenericForms {
   const word = match.input;
-  const cutoff = match[1].length;
+  const cutoff = match[1]?.length ?? 0;
   const root = word.slice(0, -cutoff);
   const suffix = word.slice(-cutoff);
-  const special = match[2] || "";
+  const special = match[2] ?? "";
   return applyFrom(root, suffix, special, part, type, markStress) as GenericForms;
 }
 
