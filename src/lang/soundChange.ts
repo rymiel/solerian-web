@@ -121,10 +121,10 @@ export class SoundChangeInstance {
     const words = sentence
       .toLowerCase()
       .split(" ")
-      .flatMap((i) => {
+      .map((i) => {
         if (i.includes("-")) {
           const [prefix, word] = i.split("-");
-          return [this.singleWordSoundChange(prefix, false), this.singleWordSoundChange(word, true)];
+          return `${this.singleWordSoundChange(prefix, false)}‿${this.singleWordSoundChange(word, true)}`;
         }
         return this.singleWordSoundChange(i, true);
       });
