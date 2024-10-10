@@ -26,6 +26,10 @@ export function UserProvider({ children }: PropsWithChildren) {
   };
   useEffect(() => {
     update();
+
+    const id = setInterval(() => update(), 1_000 * 60 * 10);
+
+    return () => clearInterval(id);
   }, []);
 
   return <User.Provider value={{ user, update }}>{children}</User.Provider>;
