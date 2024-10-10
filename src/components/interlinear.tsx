@@ -40,9 +40,11 @@ const ABBREVIATIONS: Record<string, string> = {
   F: "feminine",
   N: "neuter",
 };
+const ABBR_SEP = /([-.() ])/;
+const WORD_SEP = /([\u201c\u201d -])/;
 
-export function convertAbbr(s: string): ReactNode[] {
-  const parts = s.split(/([-.() ])/);
+export function Abbr({ children }: { children: string }): ReactNode {
+  const parts = children.split(ABBR_SEP);
 
   return parts.map((i, j) => {
     const abbr = ABBREVIATIONS[i] as string | undefined;
@@ -58,16 +60,15 @@ export function convertAbbr(s: string): ReactNode[] {
   });
 }
 
-const SEP = /([\u201c\u201d -])/;
 interface ILWord {
   text: string;
   index: number;
   bold: boolean;
 }
-const splitIntoWords = (s: string): ILWord[] => s.split(SEP).map((i, j) => ({ text: i, index: j, bold: false }));
+const splitIntoWords = (s: string): ILWord[] => s.split(WORD_SEP).map((i, j) => ({ text: i, index: j, bold: false }));
 const elem = (w: ILWord): ReactNode => (w.bold ? <b key={w.index}>{w.text}</b> : w.text);
 const links = (w: ILWord): ReactNode =>
-  SEP.test(w.text) ? (
+  WORD_SEP.test(w.text) ? (
     elem(w)
   ) : (
     <Link key={w.index} to={uri`/reverse/${w.text}`}>
@@ -112,7 +113,11 @@ export function InterlinearGloss({
     parts.push(
       <div className="box" key={i}>
         {eSol && <p className="original">{eSol}</p>}
-        {eEng && <p>{convertAbbr(eEng)}</p>}
+        {eEng && (
+          <p>
+            <Abbr>{eEng}</Abbr>
+          </p>
+        )}
       </div>,
     );
   }

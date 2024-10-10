@@ -5,7 +5,7 @@ import { Part } from "../lang/extra";
 import { FORM_NAMES, formsFromDirect, formsFromEntry } from "../lang/inflection";
 import { zip } from "../lang/util";
 import { FullEntry } from "../providers/dictionary";
-import { convertAbbr } from "./interlinear";
+import { Abbr } from "./interlinear";
 import { NounTable } from "./nounComponents";
 
 function VerbTableEntry({ word }: { word: DisplayWord }) {
@@ -84,38 +84,54 @@ export function VerbTable({ forms, old }: { forms: readonly string[]; old: boole
         </thead>
         <tbody>
           <tr>
-            <td className="hl">{convertAbbr("SG")}</td>
-            <td className="rb">{convertAbbr("1")}</td>
+            <td className="hl">
+              <Abbr>SG</Abbr>
+            </td>
+            <td className="rb">
+              <Abbr>1</Abbr>
+            </td>
             <VerbTableEntry word={map["1sg_prs"]} />
             <VerbTableEntry word={map["1sg_pst"]} />
           </tr>
           <tr>
             <th></th>
-            <td className="rb">{convertAbbr("2")}</td>
+            <td className="rb">
+              <Abbr>2</Abbr>
+            </td>
             <VerbTableEntry word={map["2sg_prs"]} />
             <VerbTableEntry word={map["2sg_pst"]} />
           </tr>
           <tr>
             <th></th>
-            <td className="rb">{convertAbbr("3")}</td>
+            <td className="rb">
+              <Abbr>3</Abbr>
+            </td>
             <VerbTableEntry word={map["3sg_prs"]} />
             <VerbTableEntry word={map["3sg_pst"]} />
           </tr>
           <tr>
-            <td className="hl">{convertAbbr("PL")}</td>
-            <td className="rb">{convertAbbr("1")}</td>
+            <td className="hl">
+              <Abbr>PL</Abbr>
+            </td>
+            <td className="rb">
+              <Abbr>1</Abbr>
+            </td>
             <VerbTableEntry word={map["1pl_prs"]} />
             <VerbTableEntry word={map["1pl_pst"]} />
           </tr>
           <tr>
             <th></th>
-            <td className="rb">{convertAbbr("2")}</td>
+            <td className="rb">
+              <Abbr>2</Abbr>
+            </td>
             <VerbTableEntry word={map["2pl_prs"]} />
             <VerbTableEntry word={map["2pl_pst"]} />
           </tr>
           <tr>
             <th></th>
-            <td className="rb">{convertAbbr("3")}</td>
+            <td className="rb">
+              <Abbr>3</Abbr>
+            </td>
             <VerbTableEntry word={map["3pl_prs"]} />
             <VerbTableEntry word={map["3pl_pst"]} />
           </tr>

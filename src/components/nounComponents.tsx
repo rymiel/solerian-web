@@ -5,7 +5,7 @@ import { Part } from "../lang/extra";
 import { applyNormalize, FORM_NAMES, formsFromEntry, POSS_FORMS, POSS_SUFFIXES } from "../lang/inflection";
 import { zip } from "../lang/util";
 import { FullEntry } from "../providers/dictionary";
-import { convertAbbr } from "./interlinear";
+import { Abbr } from "./interlinear";
 
 function PossTableEntry({ word }: { word: DisplayWord }) {
   return (
@@ -57,7 +57,9 @@ function NounTableEntry({ word, stress, old }: { word: DisplayWord; stress: bool
               <tbody>
                 {Object.entries(map).map(([name, form]) => (
                   <tr key={name}>
-                    <td>{convertAbbr(name)}</td>
+                    <td>
+                      <Abbr>{name}</Abbr>
+                    </td>
                     <PossTableEntry word={form} />
                   </tr>
                 ))}
@@ -80,23 +82,33 @@ export function NounTable({ forms, stress, old }: { forms: readonly string[]; st
       <thead>
         <tr>
           <th className="rb"></th>
-          <th className="db">{convertAbbr("SG")}</th>
-          <th className="db">{convertAbbr("PL")}</th>
+          <th className="db">
+            <Abbr>SG</Abbr>
+          </th>
+          <th className="db">
+            <Abbr>PL</Abbr>
+          </th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td className="hl rb">{convertAbbr("NOM")}</td>
+          <td className="hl rb">
+            <Abbr>NOM</Abbr>
+          </td>
           <NounTableEntry word={map.nom_sg} stress={stress} old={old} />
           <NounTableEntry word={map.nom_pl} stress={stress} old={old} />
         </tr>
         <tr>
-          <td className="hl rb">{convertAbbr("ACC")}</td>
+          <td className="hl rb">
+            <Abbr>ACC</Abbr>
+          </td>
           <NounTableEntry word={map.acc_sg} stress={stress} old={old} />
           <NounTableEntry word={map.acc_pl} stress={stress} old={old} />
         </tr>
         <tr>
-          <td className="hl rb">{convertAbbr("GEN")}</td>
+          <td className="hl rb">
+            <Abbr>GEN</Abbr>
+          </td>
           <NounTableEntry word={map.gen_sg} stress={stress} old={old} />
           <NounTableEntry word={map.gen_pl} stress={stress} old={old} />
         </tr>

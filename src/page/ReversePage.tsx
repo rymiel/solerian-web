@@ -2,7 +2,7 @@ import { Button, ControlGroup, InputGroup, NonIdealState, Spinner, SpinnerSize, 
 import { memo, useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { App } from "../App";
-import { convertAbbr } from "../components/interlinear";
+import { Abbr } from "../components/interlinear";
 import { Part } from "../lang/extra";
 import { applyNormalize, FORM_NAMES, POSS_FORMS, POSS_SUFFIXES } from "../lang/inflection";
 import { InflEntry, useInflEntries } from "../lang/inflEntries";
@@ -25,15 +25,15 @@ function terminal(entry: FullEntry) {
 }
 
 function inflNode(entry: InflEntry) {
-  const formName = convertAbbr(FORM_NAMES[entry.original.part!][entry.form].replaceAll("_", " ").toUpperCase());
+  const formName = FORM_NAMES[entry.original.part!][entry.form].replaceAll("_", " ").toUpperCase();
   const partName = Part[entry.original.part!].toLowerCase();
   const cls = entry.original.class;
   const className = entry.old ? `type ${cls}` : `type ${cls}`; // TODO: actual old names
 
   return (
     <>
-      <i>{entry.sol}</i>: {entry.old && <Tag intent="warning">old</Tag>} {formName} of {className} {partName}{" "}
-      <i>{entry.original.sol}</i>
+      <i>{entry.sol}</i>: {entry.old && <Tag intent="warning">old</Tag>} <Abbr>{formName}</Abbr> of {className}{" "}
+      {partName} <i>{entry.original.sol}</i>
       <ul>
         <li>{terminal(entry.original)}</li>
       </ul>
@@ -57,7 +57,7 @@ function echo(original: string, cut: string, children: React.ReactNode[]) {
 function poss(original: string, cut: string, form: string, old: boolean, children: React.ReactNode[]) {
   return (
     <>
-      <i>{original}</i>: {old && <Tag intent="warning">old</Tag>} {convertAbbr(form)} possessive of <i>{cut}</i>
+      <i>{original}</i>: {old && <Tag intent="warning">old</Tag>} <Abbr>{form}</Abbr> possessive of <i>{cut}</i>
       <ul>
         {children.map((i, j) => (
           <li key={j}>{i}</li>
