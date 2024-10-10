@@ -1,9 +1,10 @@
 import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useState } from "react";
-import { ApiDictionary, apiFetch, ApiMeaning, ApiSection, ApiWord } from "../api";
-import { toastErrorHandler } from "../App";
-import { determineType, markStress, Part, partOfExtra } from "../lang/extra";
-import { scriptMultiUnicode } from "../lang/script";
-import { LangConfig } from "./langConfig";
+
+import { determineType, markStress, Part, partOfExtra } from "lang/extra";
+import { scriptMultiUnicode } from "lang/script";
+import { LangConfig } from "providers/langConfig";
+import { ApiDictionary, apiFetch, ApiMeaning, ApiSection, ApiWord } from "api";
+import { toastErrorHandler } from "App";
 
 export interface FullEntry extends Omit<ApiWord, "meanings" | "sections"> {
   part: Part | null;

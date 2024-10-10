@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const webpack = require("webpack");
 
-var PACKAGE = require('./package.json');
+var PACKAGE = require("./package.json");
 var version = PACKAGE.version;
 
 const config = {
@@ -32,6 +32,7 @@ const config = {
     alias: {
       "@blueprintjs": path.resolve(__dirname, "./node_modules/@blueprintjs"),
     },
+    modules: [path.join(__dirname, "./src"), path.join(__dirname, "./node_modules")],
   },
   output: {
     filename: "[name].bundle.js",
@@ -48,7 +49,7 @@ const config = {
     new webpack.DefinePlugin({
       WEB_VERSION: JSON.stringify(version),
     }),
-  ]
+  ],
 };
 
 module.exports = (env, argv) => {

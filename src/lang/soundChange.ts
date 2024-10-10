@@ -1,5 +1,5 @@
-import { applyKnownStress } from "./inflection";
-import { gsub, GSubMap } from "./util";
+import { applyKnownStress } from "lang/inflection";
+import { gsub, GSubMap } from "lang/util";
 
 export type Unromanize = readonly (readonly [string, string])[];
 export type Change = readonly [from: string, to: string, leftContext: string | null, rightContext: string | null];

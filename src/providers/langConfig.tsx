@@ -1,5 +1,6 @@
 import { createContext, PropsWithChildren, useEffect, useState } from "react";
-import { SoundChangeConfig, SoundChangeInstance } from "../lang/soundChange";
+
+import { SoundChangeConfig, SoundChangeInstance } from "lang/soundChange";
 
 interface LangConfigData {
   soundChange: SoundChangeInstance | null;

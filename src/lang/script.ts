@@ -1,4 +1,4 @@
-import { gsub, GSubMap } from "./util";
+import { gsub, GSubMap } from "lang/util";
 
 const LETTERSX: Readonly<(string | null)[]> = [
   "s",

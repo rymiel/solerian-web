@@ -18,15 +18,16 @@ import {
 } from "@blueprintjs/core";
 import { createContext, useContext, useState } from "react";
 import { useParams } from "react-router-dom";
-import { ApiBase, apiFetch, ApiSection } from "../api";
-import { App } from "../App";
-import { InterlinearData, InterlinearGloss } from "../components/interlinear";
-import { RichText } from "../components/richText";
-import { WordSelect } from "../components/wordSelect";
-import { Part } from "../lang/extra";
-import { uri } from "../lang/util";
-import { Dictionary, FullEntry, FullMeaning, FullSection } from "../providers/dictionary";
-import { User } from "../providers/user";
+
+import { InterlinearData, InterlinearGloss } from "components/interlinear";
+import { RichText } from "components/richText";
+import { WordSelect } from "components/wordSelect";
+import { Part } from "lang/extra";
+import { uri } from "lang/util";
+import { Dictionary, FullEntry, FullMeaning, FullSection } from "providers/dictionary";
+import { User } from "providers/user";
+import { ApiBase, apiFetch, ApiSection } from "api";
+import { App } from "App";
 
 export enum SectionTitle {
   TRANSLATION = "translation",

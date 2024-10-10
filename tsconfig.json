@@ -7,6 +7,7 @@
         "jsx": "react-jsx",
         "outDir": "build/",
         "moduleResolution": "node10",
+        "baseUrl": "./src",
         "plugins": [{ "name": "typescript-plugin-css-modules" }],
         "noErrorTruncation": true
     },

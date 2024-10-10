@@ -1,14 +1,15 @@
 import { Button, NonIdealState, Spinner, SpinnerSize } from "@blueprintjs/core";
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
-import { apiFetch } from "../api";
-import { App, toastErrorHandler } from "../App";
-import { applyDestress, applyNormalize } from "../lang/inflection";
-import { InflEntry, useInflEntries } from "../lang/inflEntries";
-import { SoundChangeInstance } from "../lang/soundChange";
-import { Dictionary, FullEntry } from "../providers/dictionary";
-import { LangConfig } from "../providers/langConfig";
-import { User } from "../providers/user";
+
+import { applyDestress, applyNormalize } from "lang/inflection";
+import { InflEntry, useInflEntries } from "lang/inflEntries";
+import { SoundChangeInstance } from "lang/soundChange";
+import { Dictionary, FullEntry } from "providers/dictionary";
+import { LangConfig } from "providers/langConfig";
+import { User } from "providers/user";
+import { apiFetch } from "api";
+import { App, toastErrorHandler } from "App";
 
 type Fail = [entry: FullEntry | InflEntry, reason: string];
 type Lookup = [word: string, ipa: string];

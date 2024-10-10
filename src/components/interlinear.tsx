@@ -1,7 +1,8 @@
 import { ReactNode, useContext } from "react";
 import { Link } from "react-router-dom";
-import { uri } from "../lang/util";
-import { LangConfig } from "../providers/langConfig";
+
+import { uri } from "lang/util";
+import { LangConfig } from "providers/langConfig";
 
 export interface InterlinearData {
   sol: string;

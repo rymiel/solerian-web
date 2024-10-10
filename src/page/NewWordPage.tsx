@@ -1,13 +1,14 @@
 import { Button, Checkbox, Classes, FormGroup, HTMLSelect, InputGroup, NonIdealState } from "@blueprintjs/core";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { apiFetch } from "../api";
-import { App } from "../App";
-import { determineType, partOfExtra, PARTS_OF_SPEECH } from "../lang/extra";
-import { FORM_NAMES } from "../lang/inflection";
-import { uri } from "../lang/util";
-import { Dictionary } from "../providers/dictionary";
-import { User } from "../providers/user";
+
+import { determineType, partOfExtra, PARTS_OF_SPEECH } from "lang/extra";
+import { FORM_NAMES } from "lang/inflection";
+import { uri } from "lang/util";
+import { Dictionary } from "providers/dictionary";
+import { User } from "providers/user";
+import { apiFetch } from "api";
+import { App } from "App";
 
 function Editor() {
   const dict = useContext(Dictionary);

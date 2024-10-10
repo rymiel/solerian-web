@@ -1,13 +1,14 @@
 import { Button, ControlGroup, InputGroup, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
 import { memo, useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { App } from "../App";
-import { Abbr } from "../components/interlinear";
-import { Part } from "../lang/extra";
-import { applyNormalize, FORM_NAMES, POSS_FORMS, POSS_SUFFIXES } from "../lang/inflection";
-import { InflEntry, useInflEntries } from "../lang/inflEntries";
-import { uri } from "../lang/util";
-import { Dictionary, FullEntry } from "../providers/dictionary";
+
+import { Abbr } from "components/interlinear";
+import { Part } from "lang/extra";
+import { applyNormalize, FORM_NAMES, POSS_FORMS, POSS_SUFFIXES } from "lang/inflection";
+import { InflEntry, useInflEntries } from "lang/inflEntries";
+import { uri } from "lang/util";
+import { Dictionary, FullEntry } from "providers/dictionary";
+import { App } from "App";
 
 function terminal(entry: FullEntry) {
   let meaning = entry.meanings[0].eng;

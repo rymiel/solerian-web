@@ -1,5 +1,6 @@
 import { createContext, PropsWithChildren, useState } from "react";
-import { API } from "../api";
+
+import { API } from "api";
 
 export const ApiVersion = createContext<string | null>(null);
 

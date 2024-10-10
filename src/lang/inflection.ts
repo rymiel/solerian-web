@@ -1,6 +1,6 @@
-import { FullEntry } from "../providers/dictionary";
-import { markStress, Part, SeparatedRoot, separateRoot, Types } from "./extra";
-import { gsub, sub, SubMap } from "./util";
+import { markStress, Part, SeparatedRoot, separateRoot, Types } from "lang/extra";
+import { gsub, sub, SubMap } from "lang/util";
+import { FullEntry } from "providers/dictionary";
 
 export const FORM_NAMES = {
   [Part.Noun]: ["nom_sg", "acc_sg", "gen_sg", "nom_pl", "acc_pl", "gen_pl"] as const,

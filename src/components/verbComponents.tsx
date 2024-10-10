@@ -1,12 +1,13 @@
 import { Dialog, DialogBody, HTMLTable } from "@blueprintjs/core";
 import { useState } from "react";
-import { DisplayWord, usePopulateDualInfo } from "../lang/display";
-import { Part } from "../lang/extra";
-import { FORM_NAMES, formsFromDirect, formsFromEntry } from "../lang/inflection";
-import { zip } from "../lang/util";
-import { FullEntry } from "../providers/dictionary";
-import { Abbr } from "./interlinear";
-import { NounTable } from "./nounComponents";
+
+import { Abbr } from "components/interlinear";
+import { NounTable } from "components/nounComponents";
+import { DisplayWord, usePopulateDualInfo } from "lang/display";
+import { Part } from "lang/extra";
+import { FORM_NAMES, formsFromDirect, formsFromEntry } from "lang/inflection";
+import { zip } from "lang/util";
+import { FullEntry } from "providers/dictionary";
 
 function VerbTableEntry({ word }: { word: DisplayWord }) {
   return (

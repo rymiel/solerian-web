@@ -1,6 +1,7 @@
 import { useContext } from "react";
-import { LangConfig } from "../providers/langConfig";
-import { scriptMultiUnicode } from "./script";
+
+import { scriptMultiUnicode } from "lang/script";
+import { LangConfig } from "providers/langConfig";
 
 export interface DisplayWord {
   sol: string;

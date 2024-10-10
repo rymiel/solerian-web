@@ -1,13 +1,14 @@
 import { Button, HTMLTable, Icon, InputGroup, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
 import { useContext, useLayoutEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { App } from "../App";
-import { entryHasMatch } from "../components/wordSelect";
-import { PARTS_OF_SPEECH } from "../lang/extra";
-import { uri } from "../lang/util";
-import { Dictionary } from "../providers/dictionary";
-import { User } from "../providers/user";
-import { SectionTitle, SIMPLE_SECTIONS } from "./EditWordPage";
+
+import { entryHasMatch } from "components/wordSelect";
+import { PARTS_OF_SPEECH } from "lang/extra";
+import { uri } from "lang/util";
+import { SectionTitle, SIMPLE_SECTIONS } from "page/EditWordPage";
+import { Dictionary } from "providers/dictionary";
+import { User } from "providers/user";
+import { App } from "App";
 
 function ExtraCell({ extra, cls }: { extra: string; cls: string | null }) {
   const abbr = PARTS_OF_SPEECH[extra] as string | undefined;

@@ -1,8 +1,9 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import reactStringReplace from "react-string-replace";
-import { uri } from "../lang/util";
-import { Dictionary } from "../providers/dictionary";
+
+import { uri } from "lang/util";
+import { Dictionary } from "providers/dictionary";
 
 const LINK_WRAPPER = /(\[[^\]]+\])/g;
 const SIMPLE_LINK = /\[([A-Za-z0-9_-]+)\]/;

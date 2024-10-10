@@ -1,11 +1,12 @@
 import { Dialog, DialogBody, HTMLTable, Tag } from "@blueprintjs/core";
 import { useState } from "react";
-import { DisplayWord, usePopulateDualInfo } from "../lang/display";
-import { Part } from "../lang/extra";
-import { applyNormalize, FORM_NAMES, formsFromEntry, POSS_FORMS, POSS_SUFFIXES } from "../lang/inflection";
-import { zip } from "../lang/util";
-import { FullEntry } from "../providers/dictionary";
-import { Abbr } from "./interlinear";
+
+import { Abbr } from "components/interlinear";
+import { DisplayWord, usePopulateDualInfo } from "lang/display";
+import { Part } from "lang/extra";
+import { applyNormalize, FORM_NAMES, formsFromEntry, POSS_FORMS, POSS_SUFFIXES } from "lang/inflection";
+import { zip } from "lang/util";
+import { FullEntry } from "providers/dictionary";
 
 function PossTableEntry({ word }: { word: DisplayWord }) {
   return (

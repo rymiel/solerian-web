@@ -3,5 +3,17 @@
   "plugins": [
     "@ianvs/prettier-plugin-sort-imports"
   ],
-  "importOrderTypeScriptVersion": "5.0.0"
+  "importOrderTypeScriptVersion": "5.0.0",
+  "importOrder": [
+    "<BUILTIN_MODULES>",
+    "",
+    "<THIRD_PARTY_MODULES>",
+    "",
+    "^(components|lang|page|providers)(/.*)$",
+    "^(App|api)$",
+    "",
+    "^(?!.*[.]css$)[./].*$",
+    "",
+    "[.]css$"
+  ]
 }

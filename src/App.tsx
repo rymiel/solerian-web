@@ -15,9 +15,10 @@ import {
 } from "@blueprintjs/core";
 import { JSX, useContext, useState } from "react";
 import { Link } from "react-router-dom";
-import { apiFetch, CustomApiError } from "./api";
-import { ApiVersion } from "./providers/apiVersion";
-import { User } from "./providers/user";
+
+import { ApiVersion } from "providers/apiVersion";
+import { User } from "providers/user";
+import { apiFetch, CustomApiError } from "api";
 
 export const AppToaster = OverlayToaster.createAsync({
   position: Position.TOP,

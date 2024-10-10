@@ -12,13 +12,14 @@ import {
 } from "@blueprintjs/core";
 import { ReactNode, useContext, useState } from "react";
 import reactStringReplace from "react-string-replace";
-import { App, AppToaster } from "../App";
-import { markStress } from "../lang/extra";
-import { InflEntry, useInflEntries } from "../lang/inflEntries";
-import { Change, SoundChangeInstance } from "../lang/soundChange";
-import { Dictionary, FullEntry } from "../providers/dictionary";
-import { LangConfig } from "../providers/langConfig";
-import { User } from "../providers/user";
+
+import { markStress } from "lang/extra";
+import { InflEntry, useInflEntries } from "lang/inflEntries";
+import { Change, SoundChangeInstance } from "lang/soundChange";
+import { Dictionary, FullEntry } from "providers/dictionary";
+import { LangConfig } from "providers/langConfig";
+import { User } from "providers/user";
+import { App, AppToaster } from "App";
 
 function intersperse(arr: ReactNode[], w: ReactNode): ReactNode[] {
   const out: ReactNode[] = [];

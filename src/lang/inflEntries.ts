@@ -1,7 +1,8 @@
 import { useCallback, useContext, useEffect, useState } from "react";
-import { Dictionary, FullEntry } from "../providers/dictionary";
-import { markStress, separateRoot } from "./extra";
-import { applyFromSeparatedRoot } from "./inflection";
+
+import { markStress, separateRoot } from "lang/extra";
+import { applyFromSeparatedRoot } from "lang/inflection";
+import { Dictionary, FullEntry } from "providers/dictionary";
 
 export interface InflEntry {
   sol: string;
