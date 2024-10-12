@@ -80,4 +80,5 @@ export const PARTS_OF_SPEECH: Readonly<Record<string, string>> = {
   phrase: "Phrase",
   "postpos.": "Postposition",
   "pron.": "Pronoun (pattern %)",
+  particle: "Particle",
 };
