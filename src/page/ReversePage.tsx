@@ -79,6 +79,7 @@ const ReverseContent = memo(function ReverseContent({
   query: string;
   includeOld: boolean;
 }) {
+  const particles = raw.filter((i) => i.extra === "particle");
   const lookup = (q: string, { only, old }: { only?: Part; old?: boolean } = {}) => {
     const inflMatches = infl.filter(
       (i) =>
@@ -135,6 +136,14 @@ const ReverseContent = memo(function ReverseContent({
     }
   }
 
+  for (const p of particles) {
+    if (p.sol.endsWith("-")) {
+      if (query === p.sol.slice(0, -1)) {
+        r.push(terminal(p));
+      }
+    }
+  }
+
   if (r.length === 0) {
     return (
       <ul>
@@ -170,7 +179,7 @@ export default function ReversePage() {
   if (query === undefined) {
     content = <NonIdealState icon="search" />;
   } else if (entries && infl) {
-    content = query.split(" ").map((i, j) => (
+    content = query.split(/[ -]/).map((i, j) => (
       <Fragment key={j}>
         {j > 0 && <Divider />}
         <ReverseContent infl={infl} raw={entries} query={i} includeOld={includeOld} />
