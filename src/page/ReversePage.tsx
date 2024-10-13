@@ -1,5 +1,5 @@
-import { Button, ControlGroup, InputGroup, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
-import { memo, useContext, useState } from "react";
+import { Button, ControlGroup, Divider, InputGroup, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
+import { Fragment, memo, ReactNode, useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { Abbr } from "components/interlinear";
@@ -136,7 +136,16 @@ const ReverseContent = memo(function ReverseContent({
   }
 
   if (r.length === 0) {
-    return <NonIdealState icon="cross-circle" title="No results" />;
+    return (
+      <ul>
+        <li>
+          <i>{query}</i>:{" "}
+          <Tag intent="danger" large icon="cross-circle">
+            Invalid word
+          </Tag>
+        </li>
+      </ul>
+    );
   } else {
     return (
       <ul>
@@ -156,13 +165,17 @@ export default function ReversePage() {
   const [includeOld, setIncludeOld] = useState(false);
   const infl = useInflEntries();
 
-  let content = <NonIdealState icon={<Spinner size={SpinnerSize.LARGE} />} />;
+  let content: ReactNode = <NonIdealState icon={<Spinner size={SpinnerSize.LARGE} />} />;
 
   if (query === undefined) {
     content = <NonIdealState icon="search" />;
   } else if (entries && infl) {
-    // TODO: multiple words
-    content = <ReverseContent key="content" infl={infl} raw={entries} query={query} includeOld={includeOld} />;
+    content = query.split(" ").map((i, j) => (
+      <Fragment key={j}>
+        {j > 0 && <Divider />}
+        <ReverseContent infl={infl} raw={entries} query={i} includeOld={includeOld} />
+      </Fragment>
+    ));
   }
 
   return App(
