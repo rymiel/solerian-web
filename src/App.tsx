@@ -123,6 +123,13 @@ function Menu() {
                 </Link>
               </li>
             )}
+            {user && (
+              <li>
+                <Link to="/generate" onClick={() => setOpen(false)}>
+                  Generate
+                </Link>
+              </li>
+            )}
           </ul>
         </nav>
       </Drawer>

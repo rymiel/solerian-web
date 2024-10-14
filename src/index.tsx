@@ -6,6 +6,7 @@ import { createHashRouter, RouterProvider } from "react-router-dom";
 import DictionaryPage from "page/DictionaryPage";
 import EditWordPage from "page/EditWordPage";
 import ErrorPage from "page/ErrorPage";
+import GeneratePage from "page/GeneratePage";
 import NewWordPage from "page/NewWordPage";
 import NumbersPage from "page/NumbersPage";
 import ReversePage from "page/ReversePage";
@@ -63,6 +64,10 @@ const router = createHashRouter([
   {
     path: "/sound_changes",
     element: <SoundChangePage />,
+  },
+  {
+    path: "/generate",
+    element: <GeneratePage />,
   },
 ]);
 
