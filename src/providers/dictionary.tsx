@@ -2,15 +2,20 @@ import { createContext, PropsWithChildren, useCallback, useContext, useEffect, u
 
 import { determineType, markStress, Part, partOfExtra } from "lang/extra";
 import { scriptMultiUnicode } from "lang/script";
+import { uri } from "lang/util";
 import { LangConfig } from "providers/langConfig";
 import { ApiDictionary, apiFetch, ApiMeaning, ApiSection, ApiWord } from "api";
 import { toastErrorHandler } from "App";
 
-export interface FullEntry extends Omit<ApiWord, "meanings" | "sections"> {
+export interface SortableEntry extends Omit<ApiWord, "meanings" | "sections"> {
+  meanings: FullMeaning[];
+}
+export interface FullEntry extends SortableEntry {
   part: Part | null;
   script: string;
   ipa: string;
   class: string | null;
+  link: string;
 
   meanings: FullMeaning[];
   sections: FullSection[];
@@ -60,7 +65,16 @@ export function DictionaryProvider({ children }: PropsWithChildren) {
           return { ...i, class: cls, part, script, ipa, sections, meanings };
         })
         .sort(entrySort);
-      setEntries(mWords);
+      const sWords = mWords.map((i) => {
+        const matching = mWords.filter((j) => j.sol === i.sol);
+        if (matching.length === 1) {
+          return { ...i, link: uri`/w/${i.sol}` };
+        }
+        const index = matching.indexOf(i);
+        console.log(i, matching, index);
+        return { ...i, link: uri`/w/${i.sol}/${index + 1}` };
+      });
+      setEntries(sWords);
     } catch (error) {
       toastErrorHandler(error);
     }
@@ -76,7 +90,7 @@ export function DictionaryProvider({ children }: PropsWithChildren) {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const compare = (a: string, b: string): number => (((a as any) > b) as any) - (((a as any) < b) as any);
 
-export const entrySort = (a: FullEntry, b: FullEntry): number => {
+export const entrySort = (a: SortableEntry, b: SortableEntry): number => {
   if (a.tag === undefined && b.tag !== undefined) return -1;
   if (a.tag !== undefined && b.tag === undefined) return 1;
   let f = compare(a.extra, b.extra);

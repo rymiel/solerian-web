@@ -23,7 +23,6 @@ import { InterlinearData, InterlinearGloss } from "components/interlinear";
 import { RichText } from "components/richText";
 import { WordSelect } from "components/wordSelect";
 import { Part } from "lang/extra";
-import { uri } from "lang/util";
 import { Dictionary, FullEntry, FullMeaning, FullSection } from "providers/dictionary";
 import { User } from "providers/user";
 import { ApiBase, apiFetch, ApiSection } from "api";
@@ -428,7 +427,7 @@ function EditWordPageContent({ entry }: { entry: FullEntry }) {
 
   return (
     <EditContext.Provider value={{ openDrawer, closeDrawer, page: entry.hash }}>
-      <AnchorButton text="Back" icon="arrow-left" href={uri`#/w/${entry.sol}`} /> <br />
+      <AnchorButton text="Back" icon="arrow-left" href={"#" + entry.link} /> <br />
       <EntryData v={entry} />
       <Drawer isOpen={isOpen} onClose={() => setOpen(false)}>
         {element}

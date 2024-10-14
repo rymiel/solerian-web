@@ -382,3 +382,12 @@ h4 .bp5-icon {
 .space-between .center {
   margin: auto;
 }
+
+.bp5-heading.meaning {
+  margin-top: 1rem;
+}
+
+span.edit {
+  font-size: small;
+  margin-left: 1rem;
+}

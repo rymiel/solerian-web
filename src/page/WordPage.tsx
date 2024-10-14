@@ -1,4 +1,4 @@
-import { AnchorButton, H2, H3, H4, Icon, IconSize, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
+import { H2, H3, H4, Icon, IconSize, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
 import { useContext } from "react";
 import { useParams } from "react-router-dom";
 
@@ -37,7 +37,17 @@ function SectionContent({ section, on }: { section: FullSection; on: string }) {
   }
 }
 
-function WordPageContent({ entry }: { entry: FullEntry }) {
+function WordPageHeader({ entry }: { entry: FullEntry }) {
+  return (
+    <>
+      <H2>{entry.sol}</H2>
+      <p className="sol space-right">{entry.script}</p>
+      <span className="space-right">{entry.ipa}</span>
+    </>
+  );
+}
+
+function WordPageContent({ entry, highlighted = false }: { entry: FullEntry; highlighted?: boolean }) {
   const { user } = useContext(User);
 
   const partHeader = (PARTS_OF_SPEECH[entry.extra] ?? entry.extra).replace("%", entry.class ?? "?");
@@ -52,17 +62,21 @@ function WordPageContent({ entry }: { entry: FullEntry }) {
 
   return (
     <>
-      <H2>{entry.sol}</H2>
-      <p className="sol space-right">{entry.script}</p>
-      <span className="space-right">{entry.ipa}</span>
-      {user && <AnchorButton intent="primary" text="Edit" icon="edit" href={uri`#/edit/${entry.hash}`} />}
-      <H3>{partHeader}</H3>
+      <H3 className="meaning">
+        {highlighted ? <mark>{partHeader}</mark> : partHeader}
+        {user && (
+          <span className="edit">
+            [ <a href={uri`#/edit/${entry.hash}`}>edit</a> ]
+          </span>
+        )}
+      </H3>
+
       {entry.tag && (
         <Tag large intent="danger">
           {entry.tag}
         </Tag>
       )}
-      <ul>
+      <ol>
         {entry.meanings.map((m) => (
           <li key={m.hash}>
             <p>{m.eng}</p>
@@ -77,7 +91,7 @@ function WordPageContent({ entry }: { entry: FullEntry }) {
             )}
           </li>
         ))}
-      </ul>
+      </ol>
       {entry.sections.map((s) => (
         <SectionContent key={s.hash} section={s} on={entry.hash} />
       ))}
@@ -89,17 +103,20 @@ function WordPageContent({ entry }: { entry: FullEntry }) {
 
 export default function WordPage() {
   const { entries } = useContext(Dictionary);
-  const { word } = useParams() as { word: string };
+  const { word, num } = useParams() as { word: string; num?: string };
 
   let content = <NonIdealState icon={<Spinner size={SpinnerSize.LARGE} />} />;
 
   if (entries) {
-    const entry = entries.find((e) => e.sol === word);
+    const matching = entries.filter((e) => e.sol === word);
 
-    if (entry) {
+    if (matching.length > 0) {
       content = (
         <div className="inter word">
-          <WordPageContent entry={entry} />
+          <WordPageHeader entry={matching[0]} /> {/* TODO: Be smarter about this? */}
+          {matching.map((m, i) => (
+            <WordPageContent key={m.hash} entry={m} highlighted={String(i + 1) == num} />
+          ))}
         </div>
       );
     } else {

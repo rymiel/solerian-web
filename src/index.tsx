@@ -34,6 +34,10 @@ const router = createHashRouter([
     element: <WordPage />,
   },
   {
+    path: "/w/:word/:num",
+    element: <WordPage />,
+  },
+  {
     path: "/edit/:hash",
     element: <EditWordPage />,
   },

@@ -24,5 +24,5 @@ export function zip<K extends string, V>(ks: readonly K[], vs: readonly V[]): Re
   return Object.fromEntries(ks.map((k, i) => [k, vs[i]])) as Record<K, V>;
 }
 
-export const uri = (strings: readonly string[], ...values: readonly string[]) =>
-  String.raw({ raw: strings }, ...values.map((i) => encodeURIComponent(i)));
+export const uri = (strings: readonly string[], ...values: readonly unknown[]) =>
+  String.raw({ raw: strings }, ...values.map((i) => encodeURIComponent(String(i))));

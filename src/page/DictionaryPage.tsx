@@ -4,7 +4,6 @@ import { useNavigate } from "react-router";
 
 import { entryHasMatch } from "components/wordSelect";
 import { PARTS_OF_SPEECH } from "lang/extra";
-import { uri } from "lang/util";
 import { SectionTitle, SIMPLE_SECTIONS } from "page/EditWordPage";
 import { Dictionary } from "providers/dictionary";
 import { User } from "providers/user";
@@ -39,10 +38,10 @@ export default function DictionaryPage() {
   let content = <NonIdealState icon={<Spinner size={SpinnerSize.LARGE} />} />;
 
   const clickPreserveScroll = (e: React.MouseEvent<HTMLTableRowElement>) => {
-    const target = e.currentTarget.dataset.name;
+    const target = e.currentTarget.dataset.link;
     const top = document.getElementById("main")?.scrollTop;
     history.replaceState({ ...(history.state ?? {}), dictionaryScroll: top }, "");
-    document.location.hash = `/w/${target}`;
+    document.location.hash = target ?? "";
     e.preventDefault();
   };
   useLayoutEffect(() => {
@@ -74,14 +73,14 @@ export default function DictionaryPage() {
           <tbody>
             {entries.map((e, i) =>
               entryHasMatch(search, e) ? (
-                <tr key={e.hash} onClick={clickPreserveScroll} data-name={e.sol}>
+                <tr key={e.hash} onClick={clickPreserveScroll} data-link={e.link}>
                   <td>
-                    <a href={uri`#/w/${e.sol}`} className="link-fill">
+                    <a href={"#" + e.link} className="link-fill">
                       <span>{i + 1}</span>
                     </a>
                   </td>
                   <td>
-                    <a href={uri`#/w/${e.sol}`} className="link-fill">
+                    <a href={"#" + e.link} className="link-fill">
                       <span>
                         {e.tag && <Tag intent="danger">{e.tag}</Tag>}{" "}
                         {e.meanings.map((m, mi) => (mi === 0 ? "" : "; ") + m.eng)}
@@ -97,18 +96,18 @@ export default function DictionaryPage() {
                     </a>
                   </td>
                   <td>
-                    <a href={uri`#/w/${e.sol}`} className="link-fill dual">
+                    <a href={"#" + e.link} className="link-fill dual">
                       <i>{e.sol}</i>
                       <span className="sol">{e.script}</span>
                     </a>
                   </td>
                   <td>
-                    <a href={uri`#/w/${e.sol}`} className="link-fill">
+                    <a href={"#" + e.link} className="link-fill">
                       <ExtraCell extra={e.extra} cls={e.class} />
                     </a>
                   </td>
                   <td>
-                    <a href={uri`#/w/${e.sol}`} className="link-fill">
+                    <a href={"#" + e.link} className="link-fill">
                       <span>{e.ipa}</span>
                     </a>
                   </td>

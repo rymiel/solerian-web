@@ -1,6 +1,6 @@
 import { Button, ControlGroup, Divider, InputGroup, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
 import { Fragment, memo, ReactNode, useContext, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { Abbr } from "components/interlinear";
 import { Part } from "lang/extra";
@@ -17,9 +17,9 @@ function terminal(entry: FullEntry) {
   }
   return (
     <>
-      <a href={uri`#/w/${entry.sol}`}>
+      <Link to={entry.link}>
         <i>{entry.sol}</i>
-      </a>
+      </Link>
       : ({entry.extra}) "{meaning}"
     </>
   );

@@ -2,7 +2,6 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 import reactStringReplace from "react-string-replace";
 
-import { uri } from "lang/util";
 import { Dictionary } from "providers/dictionary";
 
 const LINK_WRAPPER = /(\[[^\]]+\])/g;
@@ -44,7 +43,7 @@ export function RichText({ text, on }: { text: string; on?: string }) {
     }
 
     return (
-      <Link to={uri`/w/${entry.sol}`}>
+      <Link to={entry.link}>
         <i>{label ?? entry.sol}</i>
       </Link>
     );
