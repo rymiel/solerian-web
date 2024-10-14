@@ -11,11 +11,14 @@ import { User } from "providers/user";
 import { apiFetch } from "api";
 import { App, toastErrorHandler } from "App";
 
-type Fail = [entry: FullEntry | InflEntry, reason: string];
+interface MinimalWord {
+  sol: string;
+}
+type Fail<T extends MinimalWord = FullEntry | InflEntry> = [entry: T, reason: string];
 type Lookup = [word: string, ipa: string];
 
-async function validateLocal(list: FullEntry[] | InflEntry[]): Promise<Fail[]> {
-  const fail: Fail[] = [];
+async function validateLocal<T extends MinimalWord>(list: T[]): Promise<Fail<T>[]> {
+  const fail: Fail<T>[] = [];
   list.forEach((e) => {
     if (e.sol.includes("aa") || e.sol.includes("rr")) {
       fail.push([e, "invalid cluster"]);
@@ -24,8 +27,8 @@ async function validateLocal(list: FullEntry[] | InflEntry[]): Promise<Fail[]> {
   return fail;
 }
 
-async function validateRemote(list: FullEntry[] | InflEntry[], soundChange: SoundChangeInstance): Promise<Fail[]> {
-  const fail: Fail[] = [];
+async function validateRemote<T extends MinimalWord>(list: T[], soundChange: SoundChangeInstance): Promise<Fail<T>[]> {
+  const fail: Fail<T>[] = [];
   const lookup: Lookup[] = list.map((i) => [i.sol, soundChange.ipaWithoutSoundChange(i.sol)]);
   try {
     const failIdx = await apiFetch<number[]>("/validate", "POST", JSON.stringify(lookup));
@@ -40,6 +43,13 @@ async function validateRemote(list: FullEntry[] | InflEntry[], soundChange: Soun
     toastErrorHandler(e);
   }
   return fail;
+}
+
+export async function validateCombined<T extends MinimalWord>(
+  list: T[],
+  soundChange: SoundChangeInstance,
+): Promise<Fail<T>[]> {
+  return (await Promise.all([validateLocal(list), validateRemote(list, soundChange)])).flat();
 }
 
 async function validate(raw: FullEntry[], infl: InflEntry[], soundChange: SoundChangeInstance): Promise<Fail[]> {
@@ -71,8 +81,7 @@ async function validate(raw: FullEntry[], infl: InflEntry[], soundChange: SoundC
 
   fail.push(...(await validateLocal(raw)));
   fail.push(...(await validateLocal(infl)));
-  fail.push(...(await validateRemote(raw, soundChange)));
-  fail.push(...(await validateRemote(infl, soundChange)));
+  fail.push(...(await validateRemote([...raw, ...infl], soundChange)));
 
   return fail;
 }
