@@ -15,7 +15,7 @@ function Content() {
 
   return (
     <>
-      <ControlGroup vertical>
+      <ControlGroup vertical className="fit-width">
         <NumericInput value={num} onValueChange={setNum} />
         <InputGroup value={b12?.join("")} disabled />
         <InputGroup value={biject === 0 ? "0" : biject?.join("")} disabled />
