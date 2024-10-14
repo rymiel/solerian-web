@@ -77,6 +77,19 @@ function Logout() {
   );
 }
 
+const MENU_LINKS = [
+  ["/", "Home"],
+  ["/reverse", "Reverse"],
+  ["/stats", "Stats"],
+] as const;
+
+const PRIVATE_MENU_LINKS = [
+  ["/validate", "Validate"],
+  ["/numbers", "Numbers"],
+  ["/sound_changes", "Sound Changes"],
+  ["/generate", "Generate"],
+];
+
 function Menu() {
   const [isOpen, setOpen] = useState(false);
   const { user } = useContext(User);
@@ -87,49 +100,22 @@ function Menu() {
       <Drawer isOpen={isOpen} onClose={() => setOpen(false)} position="left" size={DrawerSize.SMALL}>
         <nav>
           <ul>
-            <li>
-              <Link to="/" onClick={() => setOpen(false)}>
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link to="/reverse" onClick={() => setOpen(false)}>
-                Reverse
-              </Link>
-            </li>
-            <li>
-              <Link to="/stats" onClick={() => setOpen(false)}>
-                Stats
-              </Link>
-            </li>
-            {user && (
-              <li>
-                <Link to="/validate" onClick={() => setOpen(false)}>
-                  Validate
+            {MENU_LINKS.map(([slug, name]) => (
+              <li key={slug}>
+                <Link to={slug} onClick={() => setOpen(false)}>
+                  {name}
                 </Link>
               </li>
-            )}
-            {user && (
-              <li>
-                <Link to="/numbers" onClick={() => setOpen(false)}>
-                  Numbers
-                </Link>
-              </li>
-            )}
-            {user && (
-              <li>
-                <Link to="/sound_changes" onClick={() => setOpen(false)}>
-                  Sound Changes
-                </Link>
-              </li>
-            )}
-            {user && (
-              <li>
-                <Link to="/generate" onClick={() => setOpen(false)}>
-                  Generate
-                </Link>
-              </li>
-            )}
+            ))}
+            {user && <Divider />}
+            {user &&
+              PRIVATE_MENU_LINKS.map(([slug, name]) => (
+                <li key={slug}>
+                  <Link to={slug} onClick={() => setOpen(false)}>
+                    {name}
+                  </Link>
+                </li>
+              ))}
           </ul>
         </nav>
       </Drawer>
