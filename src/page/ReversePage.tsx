@@ -15,12 +15,13 @@ function terminal(entry: FullEntry) {
   if (entry.meanings.length > 1) {
     meaning += "; ...";
   }
+  const tag = entry.tag === undefined ? undefined : <Tag intent="danger">{entry.tag}</Tag>;
   return (
     <>
       <Link to={entry.link}>
         <i>{entry.sol}</i>
       </Link>
-      : ({entry.extra}) "{meaning}"
+      : {tag} ({entry.extra}) "{meaning}"
     </>
   );
 }
