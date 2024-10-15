@@ -14,9 +14,10 @@ import {
   Popover,
   Spinner,
   SpinnerSize,
+  Tag,
   TextArea,
 } from "@blueprintjs/core";
-import { createContext, useContext, useState } from "react";
+import { createContext, ReactElement, useCallback, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { InterlinearData, InterlinearGloss } from "components/interlinear";
@@ -145,34 +146,49 @@ function MeaningData({ v }: { v: FullMeaning }) {
 
 function SectionData({ v }: { v: FullSection }) {
   const edit = useContext(EditContext);
+  const sectionDataEditorButton = useCallback((): readonly [ReactElement, () => void] => {
+    const open = edit.openDrawer;
+    const simple = SIMPLE_SECTIONS.find(([title]) => v.title === title);
+    if (v.title === SectionTitle.TRANSLATION) {
+      const data = JSON.parse(v.content) as InterlinearData;
+      const handler = () => open(<TranslationSectionEditor as={v.hash} existing={data} />);
+      const element = <Button intent="warning" text="Edit translation section" icon="arrow-right" onClick={handler} />;
+      return [element, handler];
+    } else if (simple !== undefined) {
+      const [title, name] = simple;
+      const handler = () => open(<TextSectionEditor as={v.hash} content={v.content} title={title} />);
+      const element = (
+        <Button
+          intent="warning"
+          text={`Edit ${name.toLowerCase()} section`}
+          icon="arrow-right"
+          key={title}
+          onClick={handler}
+        />
+      );
+      return [element, handler];
+    } else {
+      const handler = () => {};
+      const element = (
+        <Tag large intent="danger">
+          Unknown section {v.title}.
+        </Tag>
+      );
+      return [element, handler];
+    }
+  }, [edit.openDrawer, v.content, v.hash, v.title]);
+  const [button, handler] = sectionDataEditorButton();
+  useEffect(() => {
+    if (edit.active === v.hash && !edit.drawerOpen) {
+      handler();
+    }
+  }, [edit.active, v.hash, handler, edit.drawerOpen]);
   return (
     <>
       <BaseData v={v} />
       <InfoTag left="title" right={v.title} fixed />
       <InfoTag left="content" right={v.content} fixed />
-      {v.title === SectionTitle.TRANSLATION && (
-        <Button
-          intent="warning"
-          text="Edit translation section"
-          icon="arrow-right"
-          onClick={() =>
-            edit.openDrawer(
-              <TranslationSectionEditor as={v.hash} existing={JSON.parse(v.content) as InterlinearData} />,
-            )
-          }
-        />
-      )}
-      {SIMPLE_SECTIONS.map(([title, name]) =>
-        v.title === title ? (
-          <Button
-            intent="warning"
-            text={`Edit ${name.toLowerCase()} section`}
-            icon="arrow-right"
-            key={title}
-            onClick={() => edit.openDrawer(<TextSectionEditor as={v.hash} content={v.content} title={title} />)}
-          />
-        ) : undefined,
-      )}
+      {button}
     </>
   );
 }
@@ -401,7 +417,9 @@ function MeaningEditor({ to, existing }: { to?: string; existing?: FullMeaning }
 interface EditContextData {
   openDrawer: (element: React.ReactNode) => void;
   closeDrawer: () => void;
+  drawerOpen: boolean;
   page: string;
+  active: string | undefined;
 }
 
 const EditContext = createContext<EditContextData>({
@@ -411,25 +429,30 @@ const EditContext = createContext<EditContextData>({
   closeDrawer: () => {
     throw new Error("No edit drawer context provided");
   },
+  drawerOpen: false,
   page: "",
+  active: undefined,
 });
 
-function EditWordPageContent({ entry }: { entry: FullEntry }) {
+function EditWordPageContent({ entry, active }: { entry: FullEntry; active: string | undefined }) {
   const [isOpen, setOpen] = useState(false);
   const [element, setElement] = useState<React.ReactNode>(null);
 
-  const openDrawer = (element: React.ReactNode) => {
+  const openDrawer = useCallback((element: React.ReactNode) => {
     setElement(element);
     setOpen(true);
-  };
+  }, []);
 
-  const closeDrawer = () => setOpen(false);
+  const closeDrawer = useCallback(() => {
+    document.location.hash = `/edit/${entry.hash}`;
+    setOpen(false);
+  }, [entry.hash]);
 
   return (
-    <EditContext.Provider value={{ openDrawer, closeDrawer, page: entry.hash }}>
+    <EditContext.Provider value={{ openDrawer, closeDrawer, drawerOpen: isOpen, page: entry.hash, active }}>
       <AnchorButton text="Back" icon="arrow-left" href={"#" + entry.link} /> <br />
       <EntryData v={entry} />
-      <Drawer isOpen={isOpen} onClose={() => setOpen(false)}>
+      <Drawer isOpen={isOpen} onClose={closeDrawer}>
         {element}
       </Drawer>
     </EditContext.Provider>
@@ -438,7 +461,7 @@ function EditWordPageContent({ entry }: { entry: FullEntry }) {
 
 export default function EditWordPage() {
   const { entries } = useContext(Dictionary);
-  const { hash } = useParams() as { hash: string };
+  const { hash, edit } = useParams() as { hash: string; edit?: string };
   const { user } = useContext(User);
 
   let content = <NonIdealState icon={<Spinner size={SpinnerSize.LARGE} />} />;
@@ -451,7 +474,7 @@ export default function EditWordPage() {
     if (entry) {
       content = (
         <div className="inter">
-          <EditWordPageContent entry={entry} />
+          <EditWordPageContent entry={entry} active={edit} />
         </div>
       );
     } else {
