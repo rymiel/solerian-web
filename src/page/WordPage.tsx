@@ -13,11 +13,17 @@ import { Dictionary, FullEntry, FullSection } from "providers/dictionary";
 import { User } from "providers/user";
 import { App } from "App";
 
-function SectionContent({ section, on }: { section: FullSection; on: string }) {
+function SectionContent({ entry, section, on }: { entry: FullEntry; section: FullSection; on: string }) {
+  const { user } = useContext(User);
   const simple = SIMPLE_SECTIONS.find(([title]) => section.title === title);
   if (section.title === SectionTitle.TRANSLATION) {
     const data = JSON.parse(section.content) as InterlinearData;
-    return <InterlinearGloss data={data} asterisk link indent />;
+    const extra = user && (
+      <span className="edit">
+        [ <a href={uri`#/edit/${entry.hash}/${section.hash}`}>edit</a> ]
+      </span>
+    );
+    return <InterlinearGloss data={data} asterisk link indent extra={extra} />;
   } else if (simple !== undefined) {
     const [, name, iconProps] = simple;
     return (
@@ -84,7 +90,7 @@ function WordPageContent({ entry, highlighted = false }: { entry: FullEntry; hig
               <dl>
                 {m.sections.map((s) => (
                   <dd key={s.hash}>
-                    <SectionContent section={s} on={entry.hash} />
+                    <SectionContent entry={entry} section={s} on={entry.hash} />
                   </dd>
                 ))}
               </dl>
@@ -93,7 +99,7 @@ function WordPageContent({ entry, highlighted = false }: { entry: FullEntry; hig
         ))}
       </ol>
       {entry.sections.map((s) => (
-        <SectionContent key={s.hash} section={s} on={entry.hash} />
+        <SectionContent key={s.hash} entry={entry} section={s} on={entry.hash} />
       ))}
       {table !== null && <H4>Inflection tables</H4>}
       {table}
