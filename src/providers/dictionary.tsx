@@ -67,11 +67,8 @@ export function DictionaryProvider({ children }: PropsWithChildren) {
         .sort(entrySort);
       const sWords = mWords.map((i) => {
         const matching = mWords.filter((j) => j.sol === i.sol);
-        if (matching.length === 1) {
-          return { ...i, link: uri`/w/${i.sol}` };
-        }
-        const index = matching.indexOf(i);
-        return { ...i, link: uri`/w/${i.sol}/${index + 1}` };
+        const link = matching.length === 1 ? uri`/w/${i.sol}` : uri`/w/${i.sol}/${matching.indexOf(i) + 1}`;
+        return { ...i, link };
       });
       setEntries(sWords);
     } catch (error) {
