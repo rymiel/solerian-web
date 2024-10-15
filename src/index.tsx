@@ -12,6 +12,7 @@ import NumbersPage from "page/NumbersPage";
 import ReversePage from "page/ReversePage";
 import SoundChangePage from "page/SoundChangePage";
 import StatsPage from "page/StatsPage";
+import TranslationsPage from "page/TranslationsPage";
 import ValidatePage from "page/ValidationPage";
 import WordPage from "page/WordPage";
 import { ApiVersionProvider } from "providers/apiVersion";
@@ -72,6 +73,10 @@ const router = createHashRouter([
   {
     path: "/generate",
     element: <GeneratePage />,
+  },
+  {
+    path: "/translations",
+    element: <TranslationsPage />,
   },
 ]);
 

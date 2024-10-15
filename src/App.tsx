@@ -81,6 +81,7 @@ const MENU_LINKS = [
   ["/", "Home"],
   ["/reverse", "Reverse"],
   ["/stats", "Stats"],
+  ["/translations", "Translations"],
 ] as const;
 
 const PRIVATE_MENU_LINKS = [
