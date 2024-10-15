@@ -85,11 +85,13 @@ export function InterlinearGloss({
   asterisk = false,
   link = false,
   indent = false,
+  extra,
 }: {
   data: InterlinearData;
   asterisk?: boolean;
   link?: boolean;
   indent?: boolean;
+  extra?: ReactNode;
 }) {
   const { soundChange } = useContext(LangConfig);
   const solParts = data.solSep.split(" ");
@@ -133,7 +135,7 @@ export function InterlinearGloss({
 
   return (
     <div className="interlinear">
-      <p className="original">{sol}</p>
+      <p className="original">{sol}{extra}</p>
       {indent ? (
         <dl>
           <dd>{body}</dd>

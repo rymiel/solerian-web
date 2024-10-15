@@ -3,18 +3,19 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 
 import { InterlinearData, InterlinearGloss } from "components/interlinear";
+import { uri } from "lang/util";
 import { Dictionary, FullEntry } from "providers/dictionary";
+import { User } from "providers/user";
 import { App } from "App";
 
 import { SectionTitle } from "./EditWordPage";
 
 function Content({ entries }: { entries: FullEntry[] }) {
+  const { user } = useContext(User);
   const examples = entries.flatMap((e) =>
     e.meanings
       .map((m, mi) => {
-        const s = m.sections
-          .filter((s) => s.title === SectionTitle.TRANSLATION)
-          .map((s) => JSON.parse(s.content) as InterlinearData);
+        const s = m.sections.filter((s) => s.title === SectionTitle.TRANSLATION);
         if (s.length === 0) return null;
         return [e, mi + 1, s] as const;
       })
@@ -25,15 +26,27 @@ function Content({ entries }: { entries: FullEntry[] }) {
     <>
       <p>This page lists all translations from all words with examples sentences in the dictionary.</p>
       <ul>
-        {examples.map(([entry, nth, sentences]) => (
+        {examples.map(([entry, nth, sections]) => (
           <li key={`${entry.hash}-${nth}`}>
             <p>
               <Link to={entry.link}>{entry.sol}</Link> ({nth})
             </p>
             <dl>
-              {sentences.map((sentence, i) => (
-                <dd key={i}>
-                  <InterlinearGloss data={sentence} asterisk link indent />
+              {sections.map((section) => (
+                <dd key={section.hash}>
+                  <InterlinearGloss
+                    data={JSON.parse(section.content) as InterlinearData}
+                    asterisk
+                    link
+                    indent
+                    extra={
+                      user && (
+                        <span className="edit">
+                          [ <a href={uri`#/edit/${entry.hash}/${section.hash}`}>edit</a> ]
+                        </span>
+                      )
+                    }
+                  />
                 </dd>
               ))}
             </dl>
