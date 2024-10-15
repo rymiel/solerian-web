@@ -71,7 +71,6 @@ export function DictionaryProvider({ children }: PropsWithChildren) {
           return { ...i, link: uri`/w/${i.sol}` };
         }
         const index = matching.indexOf(i);
-        console.log(i, matching, index);
         return { ...i, link: uri`/w/${i.sol}/${index + 1}` };
       });
       setEntries(sWords);
