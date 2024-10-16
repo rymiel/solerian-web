@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 
 import { InterlinearData, InterlinearGloss } from "components/interlinear";
 import { NounInfo } from "components/nounComponents";
+import { PronounInfo } from "components/pronounComponents";
 import { RichText } from "components/richText";
 import { VerbInfo } from "components/verbComponents";
 import { Part, PARTS_OF_SPEECH } from "lang/extra";
@@ -64,6 +65,8 @@ function WordPageContent({ entry, highlighted = false }: { entry: FullEntry; hig
     table = <NounInfo entry={entry} />;
   } else if (part === Part.Verb) {
     table = <VerbInfo entry={entry} />;
+  } else if (part === Part.Pronoun) {
+    table = <PronounInfo entry={entry} />;
   }
 
   return (
