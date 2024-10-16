@@ -10,7 +10,7 @@ import {
 } from "@blueprintjs/core";
 import { useContext, useEffect, useState } from "react";
 
-import { GEN_INSTANCE, generateWord } from "lang/generation";
+import { GenerationInstance } from "lang/generation";
 import { SoundChangeInstance } from "lang/soundChange";
 import { LangConfig } from "providers/langConfig";
 import { User } from "providers/user";
@@ -18,7 +18,7 @@ import { App } from "App";
 
 import { validateCombined } from "./ValidationPage";
 
-function Content({ soundChange }: { soundChange: SoundChangeInstance }) {
+function Content({ soundChange, generation }: { soundChange: SoundChangeInstance; generation: GenerationInstance }) {
   const [current, setCurrent] = useState("");
   const [isValid, setValid] = useState<boolean | undefined>(undefined);
   const [sylls, setSylls] = useState(1);
@@ -27,11 +27,11 @@ function Content({ soundChange }: { soundChange: SoundChangeInstance }) {
   useEffect(() => {
     if (current === "") {
       setValid(undefined);
-      const word = generateWord(GEN_INSTANCE, sylls);
+      const word = generation.generateWord(sylls);
       setCurrent(word);
       setHistory((h) => [word, ...h]);
     }
-  }, [current, sylls]);
+  }, [current, generation, sylls]);
 
   useEffect(() => {
     if (current !== "") {
@@ -77,18 +77,18 @@ function Content({ soundChange }: { soundChange: SoundChangeInstance }) {
 
 export default function GeneratePage() {
   const { user } = useContext(User);
-  const { soundChange } = useContext(LangConfig);
+  const { soundChange, generation } = useContext(LangConfig);
 
   let content;
 
   if (!user) {
     content = <NonIdealState icon="error" title="You cannot access this page" />;
-  } else if (soundChange === null) {
+  } else if (soundChange === null || generation === null) {
     content = <NonIdealState icon={<Spinner size={SpinnerSize.LARGE} />} />;
   } else {
     content = (
       <div className="inter">
-        <Content soundChange={soundChange} />
+        <Content soundChange={soundChange} generation={generation} />
       </div>
     );
   }

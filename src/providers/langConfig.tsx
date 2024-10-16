@@ -1,28 +1,33 @@
 import { createContext, PropsWithChildren, useEffect, useState } from "react";
 
+import { GenerationConfig, GenerationInstance } from "lang/generation";
 import { SoundChangeConfig, SoundChangeInstance } from "lang/soundChange";
 
 interface LangConfigData {
   soundChange: SoundChangeInstance | null;
+  generation: GenerationInstance | null;
 }
 
 export const LangConfig = createContext<LangConfigData>({
   soundChange: null,
+  generation: null,
 });
 
 export function LangConfigProvider({ children }: PropsWithChildren) {
   const [soundChange, setSoundChange] = useState<SoundChangeInstance | null>(null);
+  const [generation, setGeneration] = useState<GenerationInstance | null>(null);
 
   // TODO: actual api
 
   useEffect(() => {
-    setSoundChange(new SoundChangeInstance(CONFIG));
+    setSoundChange(new SoundChangeInstance(SOUND_CHANGE_CONFIG));
+    setGeneration(new GenerationInstance(GENERATION_CONFIG));
   }, []);
 
-  return <LangConfig.Provider value={{ soundChange }}>{children}</LangConfig.Provider>;
+  return <LangConfig.Provider value={{ soundChange, generation }}>{children}</LangConfig.Provider>;
 }
 
-const CONFIG: SoundChangeConfig = {
+const SOUND_CHANGE_CONFIG: SoundChangeConfig = {
   vowel: "əaeiouyáéíóúýæÆɐ",
   stress: "áéíóúýƆÆ",
   unromanize: {
@@ -95,4 +100,57 @@ const CONFIG: SoundChangeConfig = {
     ["x", "", null, null],
     ["nŋ", "ŋ", null, null],
   ],
+};
+
+const GENERATION_CONFIG: GenerationConfig = {
+  onset: [
+    ["sk", 1],
+    ["", 3],
+    ["C", 10],
+    ["PS", 1],
+  ],
+  nucleus: [
+    ["e", 4],
+    ["a", 4],
+    ["i", 3],
+    ["à", 3],
+    ["o", 2],
+    ["u", 2],
+    ["y", 2],
+  ],
+  coda: [
+    ["", 20],
+    ["C", 60],
+    ["sP", 3],
+    ["Ps", 1],
+    ["Ns", 2],
+    ["NP", 4],
+    ["Ls", 2],
+    ["LP", 4],
+    ["LN", 4],
+    ["xs", 1],
+    ["xL", 4],
+  ],
+  groups: {
+    C: [
+      ["t", 12],
+      ["s", 12],
+      ["n", 12],
+      ["r", 10],
+      ["l", 10],
+      ["m", 8],
+      ["k", 8],
+      ["d", 8],
+      ["x", 5],
+      ["f", 5],
+      ["j", 3],
+      ["st", 3],
+      ["g", 2],
+      ["ǹ", 1],
+    ],
+    P: "tdkg",
+    L: "lr",
+    N: "nm",
+    S: "lrs",
+  },
 };
