@@ -1,7 +1,7 @@
 export enum Part {
   Noun,
   Verb,
-  // Pronoun
+  Pronoun,
 }
 
 const SUFFIXES = {
@@ -29,6 +29,7 @@ const SUFFIXES = {
     [/r(lus)$/, "5r"],
     [/(lus)$/, "5"],
   ],
+  [Part.Pronoun]: [],
 } as const;
 export type Types = { [P in Part]: (typeof SUFFIXES)[P][number][1] };
 
@@ -37,6 +38,8 @@ export function partOfExtra(extra: string): Part | null {
     return Part.Noun;
   } else if (extra.startsWith("V")) {
     return Part.Verb;
+  } else if (extra === "pron.") {
+    return Part.Pronoun;
   } else {
     return null;
   }

@@ -21,6 +21,7 @@ export const FORM_NAMES = {
     "3pl_pst",
     "imp",
   ] as const,
+  [Part.Pronoun]: ["nom", "acc", "gen"] as const,
 };
 export type FormNames<P extends Part> = (typeof FORM_NAMES)[P][number];
 
@@ -82,7 +83,8 @@ const FORM_SUFFIXES: Forms = {
            old: ["lus", "là", "r", "lék", "léts", "lát", "lág", "lás", "ret", "reg", "ras", "làmo", "lànà", "lona", "lí"]},
     "5": {cur: ["lus", "là", "r", "lék", "léts", "lán", "láig", "lást", "re", "reg", "ras", "làmo", "lànà", "lànà", "lí"],
           old: ["lus", "là", "r", "lék", "léts", "lát", "lág", "lás", "ret", "reg", "ras", "làmo", "lànà", "lona", "lí"]},
-  }
+  },
+  [Part.Pronoun]: {},
 };
 
 export const POSS_SUFFIXES = {
