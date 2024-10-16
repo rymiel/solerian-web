@@ -65,9 +65,9 @@ const TO_SUFFIXED: GSubMap = [
   [/ú/g, "u'"],
   [/ý/g, "y'"],
 ] as const;
-const toSuffixed = (s: string): string => gsub(s, TO_SUFFIXED);
+const toSuffixed = (s: string): string => gsub(s.toLowerCase(), TO_SUFFIXED);
 
-export function scriptUnicode(text: string): string {
+function scriptUnicode(text: string): string {
   const res: LetterContext[] = [];
   let flag = false; // detaching flag
 
@@ -120,9 +120,14 @@ export function scriptMultiUnicode(words: string): string {
     return "";
   }
 
-  let buffer = "";
-  words.split(" ").forEach((w) => {
-    buffer += scriptUnicode(toSuffixed(w)) + " ";
-  });
-  return buffer.trim();
+  return words
+    .split(" ")
+    .map((w) =>
+      w
+        .split("-")
+        .map((p) => scriptUnicode(toSuffixed(p)))
+        .join(""),
+    )
+    .join(" ")
+    .trim();
 }

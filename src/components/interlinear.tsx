@@ -1,6 +1,7 @@
 import { ReactNode, useContext } from "react";
 import { Link } from "react-router-dom";
 
+import { scriptMultiUnicode } from "lang/script";
 import { uri } from "lang/util";
 import { LangConfig } from "providers/langConfig";
 
@@ -85,12 +86,14 @@ export function InterlinearGloss({
   asterisk = false,
   link = false,
   indent = false,
+  script = false,
   extra,
 }: {
   data: InterlinearData;
   asterisk?: boolean;
   link?: boolean;
   indent?: boolean;
+  script?: boolean;
   extra?: ReactNode;
 }) {
   const { soundChange } = useContext(LangConfig);
@@ -135,7 +138,11 @@ export function InterlinearGloss({
 
   return (
     <div className="interlinear">
-      <p className="original">{sol}{extra}</p>
+      <p className="original">
+        {sol}
+        {extra}
+      </p>
+      {script && <p className="original sol fit-width">{scriptMultiUnicode(solClean)}</p>}
       {indent ? (
         <dl>
           <dd>{body}</dd>

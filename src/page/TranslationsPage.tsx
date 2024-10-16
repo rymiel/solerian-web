@@ -39,6 +39,7 @@ function Content({ entries }: { entries: FullEntry[] }) {
                     asterisk
                     link
                     indent
+                    script
                     extra={
                       user && (
                         <span className="edit">
