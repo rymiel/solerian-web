@@ -108,16 +108,19 @@ function Menu() {
                 </Link>
               </li>
             ))}
-            {user && <Divider />}
-            {user &&
-              PRIVATE_MENU_LINKS.map(([slug, name]) => (
+          </ul>
+          {user && <Divider />}
+          {user && (
+            <ul>
+              {PRIVATE_MENU_LINKS.map(([slug, name]) => (
                 <li key={slug}>
                   <Link to={slug} onClick={() => setOpen(false)}>
                     {name}
                   </Link>
                 </li>
               ))}
-          </ul>
+            </ul>
+          )}
         </nav>
       </Drawer>
     </>
