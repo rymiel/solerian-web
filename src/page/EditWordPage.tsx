@@ -292,7 +292,7 @@ function TranslationSectionEditor({ to, as, existing }: { to?: string; as?: stri
       <InputGroup onValueChange={setEng} defaultValue={eng} placeholder="Translation" />
       <Button fill intent="success" text="Submit" onClick={submit} />
       <Divider />
-      <InterlinearGloss data={data} asterisk />
+      <InterlinearGloss data={data} asterisk script />
     </div>
   );
 }
