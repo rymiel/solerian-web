@@ -5,9 +5,8 @@ import { Abbr } from "components/interlinear";
 import { NounTable } from "components/nounComponents";
 import { DisplayWord, usePopulateDualInfo } from "lang/display";
 import { Part } from "lang/extra";
-import { FORM_NAMES, formsFromDirect, formsFromEntry } from "lang/inflection";
+import { FORM_NAMES, formsFromDirect, formsFromEntry, InflectableEntry } from "lang/inflection";
 import { zip } from "lang/util";
-import { FullEntry } from "providers/dictionary";
 
 function VerbTableEntry({ word }: { word: DisplayWord }) {
   return (
@@ -142,7 +141,7 @@ export function VerbTable({ forms, old }: { forms: readonly string[]; old: boole
   );
 }
 
-export function VerbInfo({ entry }: { entry: FullEntry }) {
+export function VerbInfo({ entry }: { entry: InflectableEntry }) {
   const [forms] = formsFromEntry(entry, Part.Verb);
 
   return (

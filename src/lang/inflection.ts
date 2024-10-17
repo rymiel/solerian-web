@@ -1,6 +1,5 @@
 import { markStress, Part, SeparatedRoot, separateRoot, Types } from "lang/extra";
 import { gsub, sub, SubMap } from "lang/util";
-import { FullEntry } from "providers/dictionary";
 
 export const FORM_NAMES = {
   [Part.Noun]: ["nom_sg", "acc_sg", "gen_sg", "nom_pl", "acc_pl", "gen_pl"] as const,
@@ -199,7 +198,13 @@ export function applyFromSeparatedRoot({ match, part, type }: SeparatedRoot, mar
   return applyFrom(root, suffix, special, part, type, markStress) as GenericForms;
 }
 
-export function formsFromEntry(entry: FullEntry, part: Part): [forms: GenericForms, stress: boolean] {
+export interface InflectableEntry {
+  part: Part | null;
+  extra: string;
+  ex?: string;
+  sol: string;
+}
+export function formsFromEntry(entry: InflectableEntry, part: Part): [forms: GenericForms, stress: boolean] {
   if (entry.part !== part) {
     throw new Error(`Passed entry is not a ${Part[part]}`);
   }

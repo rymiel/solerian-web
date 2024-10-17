@@ -3,9 +3,8 @@ import { HTMLTable } from "@blueprintjs/core";
 import { Abbr } from "components/interlinear";
 import { DisplayWord, usePopulateDualInfo } from "lang/display";
 import { Part } from "lang/extra";
-import { FORM_NAMES, formsFromEntry } from "lang/inflection";
+import { FORM_NAMES, formsFromEntry, InflectableEntry } from "lang/inflection";
 import { zip } from "lang/util";
-import { FullEntry } from "providers/dictionary";
 
 function PronounTableEntry({ word }: { word: DisplayWord }) {
   return (
@@ -50,7 +49,7 @@ function PronounTable({ forms }: { forms: readonly string[] }) {
   );
 }
 
-export function PronounInfo({ entry }: { entry: FullEntry }) {
+export function PronounInfo({ entry }: { entry: InflectableEntry }) {
   const [forms] = formsFromEntry(entry, Part.Pronoun);
 
   return (

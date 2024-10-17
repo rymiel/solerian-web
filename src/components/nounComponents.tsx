@@ -4,9 +4,15 @@ import { useState } from "react";
 import { Abbr } from "components/interlinear";
 import { DisplayWord, usePopulateDualInfo } from "lang/display";
 import { Part } from "lang/extra";
-import { applyNormalize, FORM_NAMES, formsFromEntry, POSS_FORMS, POSS_SUFFIXES } from "lang/inflection";
+import {
+  applyNormalize,
+  FORM_NAMES,
+  formsFromEntry,
+  InflectableEntry,
+  POSS_FORMS,
+  POSS_SUFFIXES,
+} from "lang/inflection";
 import { zip } from "lang/util";
-import { FullEntry } from "providers/dictionary";
 
 function PossTableEntry({ word }: { word: DisplayWord }) {
   return (
@@ -118,7 +124,7 @@ export function NounTable({ forms, stress, old }: { forms: readonly string[]; st
   );
 }
 
-export function NounInfo({ entry }: { entry: FullEntry }) {
+export function NounInfo({ entry }: { entry: InflectableEntry }) {
   const [forms, stress] = formsFromEntry(entry, Part.Noun);
 
   return (
