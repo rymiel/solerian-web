@@ -1,9 +1,22 @@
-import { Button, Checkbox, Classes, FormGroup, HTMLSelect, InputGroup, NonIdealState } from "@blueprintjs/core";
+import {
+  Button,
+  Checkbox,
+  Classes,
+  ControlGroup,
+  FormGroup,
+  HTMLSelect,
+  InputGroup,
+  NonIdealState,
+  Tag,
+} from "@blueprintjs/core";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { determineType, partOfExtra, PARTS_OF_SPEECH } from "lang/extra";
-import { FORM_NAMES } from "lang/inflection";
+import { NounInfo } from "components/nounComponents";
+import { PronounInfo } from "components/pronounComponents";
+import { VerbInfo } from "components/verbComponents";
+import { determineType, Part, partOfExtra, PARTS_OF_SPEECH, separateRoot } from "lang/extra";
+import { FORM_NAMES, InflectableEntry } from "lang/inflection";
 import { uri } from "lang/util";
 import { Dictionary } from "providers/dictionary";
 import { User } from "providers/user";
@@ -19,6 +32,14 @@ function Editor() {
   const [showEx, setShowEx] = useState(false);
   const [exForms, setExForms] = useState<string[]>([]);
   const part = partOfExtra(extra);
+
+  const entry: InflectableEntry = {
+    part,
+    extra,
+    sol,
+    ex: exForms.length === 0 ? undefined : exForms.join(","),
+  };
+  const valid = (part === null ? false : separateRoot(sol, part) !== null) || exForms.length > 0;
 
   useEffect(() => {
     if (showEx) {
@@ -39,21 +60,24 @@ function Editor() {
   return (
     <div className="inter">
       <p>Creating new entry.</p>
-      <InputGroup onValueChange={setSol} placeholder="Solerian" />
-      <HTMLSelect onChange={(e) => setExtra(e.currentTarget.value)} defaultValue={""}>
-        <option value="">Extra</option>
-        {Object.entries(PARTS_OF_SPEECH).map(([k, v]) => {
-          const p = partOfExtra(k);
-          const cls = p !== null ? determineType(sol, p) : null;
-          return (
-            <option key={k} value={k}>
-              {v.replace("%", cls ?? "?")}
-            </option>
-          );
-        })}
-      </HTMLSelect>
-      <InputGroup onValueChange={setEng} placeholder="Translation" />
-      <Checkbox onChange={(e) => setShowEx(e.currentTarget.checked)} label="Exceptional" />
+      <ControlGroup vertical className="fit-width">
+        <InputGroup onValueChange={setSol} placeholder="Solerian" />
+        <HTMLSelect onChange={(e) => setExtra(e.currentTarget.value)} defaultValue={""} fill>
+          <option value="">Extra</option>
+          {Object.entries(PARTS_OF_SPEECH).map(([k, v]) => {
+            const p = partOfExtra(k);
+            const cls = p !== null ? determineType(sol, p) : null;
+            return (
+              <option key={k} value={k}>
+                {v.replace("%", cls ?? "?")}
+              </option>
+            );
+          })}
+        </HTMLSelect>
+        <InputGroup onValueChange={setEng} placeholder="Translation" />
+        <Button fill intent="success" text="Submit" onClick={submit} />
+        <Checkbox onChange={(e) => setShowEx(e.currentTarget.checked)} label="Exceptional" />
+      </ControlGroup>
       {showEx && part === null && (
         <p className={Classes.TEXT_MUTED}>
           <i>This "Extra" value can't be exceptional.</i>
@@ -85,8 +109,14 @@ function Editor() {
           </div>
         </div>
       )}
-      {JSON.stringify(exForms)}
-      <Button fill intent="success" text="Submit" onClick={submit} />
+      {valid && part === Part.Noun && <NounInfo entry={entry} />}
+      {valid && part === Part.Verb && <VerbInfo entry={entry} />}
+      {valid && part === Part.Pronoun && <PronounInfo entry={entry} />}
+      {!valid && part !== null && (
+        <Tag large intent="danger">
+          Invalid form
+        </Tag>
+      )}
     </div>
   );
 }
