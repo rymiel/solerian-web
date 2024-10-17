@@ -136,5 +136,5 @@ export default function NewWordPage() {
     );
   }
 
-  return App(content, "Edit");
+  return App(content, "New");
 }
