@@ -127,7 +127,7 @@ export function markStress(word: { extra: string } | { original: { extra: string
 
 export const PARTS_OF_SPEECH: Readonly<Record<string, string>> = {
   N: "Noun (pattern %)",
-  "N+NAME": "Name and onomatonym (pattern %)",
+  "N+NAME": "Noun and onomatonym (pattern %)",
   NAME: "Onomatonym (pattern %)",
   V: "Verb (pattern %)",
   "adv.": "Adverb",
