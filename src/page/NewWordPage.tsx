@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { NounInfo } from "components/nounComponents";
 import { PronounInfo } from "components/pronounComponents";
 import { VerbInfo } from "components/verbComponents";
-import { determineType, Part, partOfExtra, PARTS_OF_SPEECH, separateRoot } from "lang/extra";
+import { determineType, Part, partOfExtra, PARTS_OF_SPEECH, patternDescriptors, separateRoot } from "lang/extra";
 import { FORM_NAMES, InflectableEntry } from "lang/inflection";
 import { uri } from "lang/util";
 import { Dictionary } from "providers/dictionary";
@@ -32,6 +32,7 @@ function Editor() {
   const [showEx, setShowEx] = useState(false);
   const [exForms, setExForms] = useState<string[]>([]);
   const part = partOfExtra(extra);
+  const names = part === null ? null : patternDescriptors(sol, part);
 
   const entry: InflectableEntry = {
     part,
@@ -78,6 +79,15 @@ function Editor() {
         <Button fill intent="success" text="Submit" onClick={submit} />
         <Checkbox onChange={(e) => setShowEx(e.currentTarget.checked)} label="Exceptional" />
       </ControlGroup>
+      {names !== null && part !== null && (
+        <p>
+          {names[0]}
+          <br />
+          {names[1]}
+          <br />
+          {names[2]}
+        </p>
+      )}
       {showEx && part === null && (
         <p className={Classes.TEXT_MUTED}>
           <i>This "Extra" value can't be exceptional.</i>
