@@ -49,7 +49,7 @@ export const API =
 
 declare const WEB_VERSION: string;
 
-type HTTPMethod = "GET" | "POST";
+type HTTPMethod = "GET" | "POST" | "DELETE";
 type Body = FormData | Record<string, string | undefined> | string;
 
 export async function apiFetch<T>(endpoint: string, method?: HTTPMethod, body?: Body): Promise<T> {

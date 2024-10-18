@@ -303,6 +303,16 @@ abbr {
   cursor: help;
 }
 
+.sidebar {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar .bottom {
+  margin-top: auto;
+}
+
 h1 .bp5-icon,
 h2 .bp5-icon,
 h3 .bp5-icon,

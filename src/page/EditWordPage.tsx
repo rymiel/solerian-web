@@ -323,8 +323,15 @@ function TextSectionEditor({
     });
   };
 
+  const delete_ = () => {
+    apiFetch(`/section/${as}`, "DELETE").then(() => {
+      dict.refresh();
+      edit.closeDrawer();
+    });
+  };
+
   return (
-    <div className="inter">
+    <div className="inter sidebar">
       {to && (
         <p>
           Adding new {title} text section to <Code>{to}</Code>.
@@ -347,6 +354,7 @@ function TextSectionEditor({
       <Button fill intent="success" text="Submit" onClick={submit} />
       <Divider />
       <RichText text={content} on={edit.page} />
+      <Button fill className="bottom" intent="danger" icon="trash" text="Delete entry" onClick={delete_} />
     </div>
   );
 }
