@@ -1,4 +1,4 @@
-import { markStress, Part, SeparatedRoot, separateRoot, Types } from "lang/extra";
+import { markStress, Part, Patterns, SeparatedRoot, separateRoot } from "lang/extra";
 import { gsub, sub, SubMap } from "lang/util";
 
 export const FORM_NAMES = {
@@ -25,11 +25,11 @@ export const FORM_NAMES = {
 export type FormNames<P extends Part> = (typeof FORM_NAMES)[P][number];
 
 type SlotStrings<Tuple extends readonly [...unknown[]]> = {
-  [Index in keyof Tuple]: Tuple[Index] extends string ? string : never;
+  [Index in keyof Tuple]: string;
 };
 export type Forms = {
   readonly [P in Part]: {
-    readonly [T in Types[P]]: {
+    readonly [T in Patterns[P]]: {
       readonly cur: SlotStrings<(typeof FORM_NAMES)[P]>;
       readonly old: SlotStrings<(typeof FORM_NAMES)[P]>;
     };
@@ -142,16 +142,22 @@ export function applyNormalize(word: string): string {
   return word;
 }
 
-function applyFrom<P extends Part>(
+type UnknownForms = {
+  readonly [T in Patterns[Part]]?: GenericForms;
+};
+function applyFrom(
   baseRoot: string,
   ending: string,
   special: string,
-  part: P,
-  type: Types[P],
+  part: Part,
+  pattern: Patterns[Part],
   markStress = true,
-): Forms[P][Types[P]] {
+): GenericForms {
   const stressSuffix = isStressed(ending) || fullVowelCount(baseRoot) == 0;
-  const suffixes = FORM_SUFFIXES[part][type];
+  const suffixes = (FORM_SUFFIXES[part] as UnknownForms)[pattern];
+  if (suffixes === undefined) {
+    throw new Error(`Pattern ${pattern} does not belong to part ${part}`);
+  }
   const mapSuffix = (suffix: string): string => {
     const stressFirst = suffix.startsWith("<");
     const stressLast = suffix.startsWith(">");
@@ -184,9 +190,9 @@ function applyFrom<P extends Part>(
   };
 
   return {
-    cur: suffixes.cur.map(mapSuffix) as Forms[P][Types[P]]["cur"],
-    old: suffixes.old.map(mapSuffix) as Forms[P][Types[P]]["old"],
-  } as Forms[P][Types[P]];
+    cur: suffixes.cur.map(mapSuffix),
+    old: suffixes.old.map(mapSuffix),
+  };
 }
 
 export function applyFromSeparatedRoot({ match, part, type }: SeparatedRoot, markStress = true): GenericForms {
@@ -195,7 +201,7 @@ export function applyFromSeparatedRoot({ match, part, type }: SeparatedRoot, mar
   const root = word.slice(0, -cutoff);
   const suffix = word.slice(-cutoff);
   const special = match[2] ?? "";
-  return applyFrom(root, suffix, special, part, type, markStress) as GenericForms;
+  return applyFrom(root, suffix, special, part, type, markStress);
 }
 
 export interface InflectableEntry {

@@ -3,7 +3,7 @@ import { Fragment, memo, ReactNode, useContext, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { Abbr } from "components/interlinear";
-import { Part } from "lang/extra";
+import { Part, patternNames } from "lang/extra";
 import { applyNormalize, FORM_NAMES, POSS_FORMS, POSS_SUFFIXES } from "lang/inflection";
 import { InflEntry, useInflEntries } from "lang/inflEntries";
 import { uri } from "lang/util";
@@ -27,15 +27,20 @@ function terminal(entry: FullEntry) {
 }
 
 function inflNode(entry: InflEntry) {
-  const formName = FORM_NAMES[entry.original.part!][entry.form].replaceAll("_", " ").toUpperCase();
-  const partName = Part[entry.original.part!].toLowerCase();
-  const cls = entry.original.class;
-  const className = entry.old ? `type ${cls}` : `type ${cls}`; // TODO: actual old names
+  const part = entry.original.part!;
+  const formName = FORM_NAMES[part][entry.form].replaceAll("_", " ").toUpperCase();
+  const partName = Part[part].toLowerCase();
+  const pattern = entry.original.class!;
+  const names = patternNames(part, pattern);
+  const className = entry.old ? `old class ${names[1]}` : `pattern ${names[0]}`;
 
   return (
     <>
-      <i>{entry.sol}</i>: {entry.old && <Tag intent="warning">old</Tag>} <Abbr>{formName}</Abbr> of {className}{" "}
-      {partName} <i>{entry.original.sol}</i>
+      <i>{entry.sol}</i>: {entry.old && <Tag intent="warning">old</Tag>} <Abbr>{formName}</Abbr> of{" "}
+      <span title={names[2]}>
+        {className} {partName}
+      </span>{" "}
+      <i>{entry.original.sol}</i>
       <ul>
         <li>{terminal(entry.original)}</li>
       </ul>

@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { NounInfo } from "components/nounComponents";
 import { PronounInfo } from "components/pronounComponents";
 import { VerbInfo } from "components/verbComponents";
-import { determineType, Part, partOfExtra, PARTS_OF_SPEECH, patternDescriptors, separateRoot } from "lang/extra";
+import { determinePattern, Part, partOfExtra, PARTS_OF_SPEECH, patternNames, separateRoot } from "lang/extra";
 import { FORM_NAMES, InflectableEntry } from "lang/inflection";
 import { uri } from "lang/util";
 import { Dictionary } from "providers/dictionary";
@@ -32,7 +32,8 @@ function Editor() {
   const [showEx, setShowEx] = useState(false);
   const [exForms, setExForms] = useState<string[]>([]);
   const part = partOfExtra(extra);
-  const names = part === null ? null : patternDescriptors(sol, part);
+  const pattern = determinePattern(sol, part);
+  const names = patternNames(part, pattern);
 
   const entry: InflectableEntry = {
     part,
@@ -67,7 +68,7 @@ function Editor() {
           <option value="">Extra</option>
           {Object.entries(PARTS_OF_SPEECH).map(([k, v]) => {
             const p = partOfExtra(k);
-            const cls = p !== null ? determineType(sol, p) : null;
+            const cls = determinePattern(sol, p);
             return (
               <option key={k} value={k}>
                 {v.replace("%", cls ?? "?")}
@@ -81,9 +82,9 @@ function Editor() {
       </ControlGroup>
       {names !== null && part !== null && (
         <p>
-          {names[0]}
+          Pattern {names[0]} {Part[part].toLowerCase()}
           <br />
-          {names[1]}
+          Old class {names[1]} {Part[part].toLowerCase()}
           <br />
           {names[2]}
         </p>

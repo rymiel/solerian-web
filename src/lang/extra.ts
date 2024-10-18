@@ -31,11 +31,12 @@ const SUFFIXES = {
   ],
   [Part.Pronoun]: [],
 } as const;
-export type Types = { readonly [P in Part]: (typeof SUFFIXES)[P][number][1] };
+export type Patterns = { readonly [P in Part]: (typeof SUFFIXES)[P][number][1] };
+export type AnyPattern<P extends Part = Part> = Patterns[P] | "X" | "?";
 
 type PatternNames = readonly [cur: string, old: string, quant: string];
 type PatternNameTable = {
-  readonly [P in Part]: { readonly [T in Types[P]]: PatternNames };
+  readonly [P in Part]: { readonly [T in Patterns[P]]: PatternNames };
 };
 const PATTERN_NAME_TABLE: PatternNameTable = {
   [Part.Noun]: {
@@ -64,30 +65,23 @@ const PATTERN_NAME_TABLE: PatternNameTable = {
   },
   [Part.Pronoun]: {},
 };
+const EXCEPTIONAL_NAMES: PatternNames = ["X", "X", "Exceptional"];
+const UNKNOWN_NAMES: PatternNames = ["?", "?", "Unknown"];
 
-export function patternNames(word: string, part: Part): PatternNames | null {
-  const f = <P extends Part>(p: P) => {
-    const t = determineType(word, p);
-    return t === null ? null : PATTERN_NAME_TABLE[p][t];
-  };
+type UnknownPatternTable = { [T in Patterns[Part]]?: PatternNames };
 
-  // prettier-ignore
-  switch (part) {
-    case Part.Noun: return f(part);
-    case Part.Verb: return f(part);
-    case Part.Pronoun: return f(part);
+export function patternNames<P extends Part>(part: P, pattern: AnyPattern<P>): PatternNames;
+export function patternNames<P extends Part>(part: P | null, pattern: AnyPattern<P> | null): PatternNames | null;
+export function patternNames(part: Part | null, pattern: AnyPattern | null): PatternNames | null {
+  if (part === null || pattern === null) return null;
+  if (pattern === "X") return EXCEPTIONAL_NAMES;
+  if (pattern === "?") return UNKNOWN_NAMES;
+
+  const x = (PATTERN_NAME_TABLE[part] as UnknownPatternTable)[pattern];
+  if (x === undefined) {
+    throw new Error(`Pattern ${pattern} does not belong to part ${part}`);
   }
-}
-
-export function patternDescriptors(word: string, part: Part): PatternNames | null {
-  const names = patternNames(word, part);
-  if (names === null) return null;
-
-  return [
-    `Pattern ${names[0]} ${Part[part].toLowerCase()}`,
-    `Old class ${names[1]} ${Part[part].toLowerCase()}`,
-    `${names[2]}`,
-  ];
+  return x;
 }
 
 export function partOfExtra(extra: string): Part | null {
@@ -102,10 +96,11 @@ export function partOfExtra(extra: string): Part | null {
   }
 }
 
-export function determineType<P extends Part>(word: string, part: P): Types[P] | null;
-export function determineType(word: string, part: Part): Types[Part] | null {
-  const types = SUFFIXES[part];
-  for (const [suffix, t] of types) {
+export function determinePattern<P extends Part>(word: string, part: P | null): Patterns[P] | null;
+export function determinePattern(word: string, part: Part | null): Patterns[Part] | null {
+  if (part === null) return null;
+  const suffixes = SUFFIXES[part];
+  for (const [suffix, t] of suffixes) {
     if (suffix.test(word)) {
       return t;
     }
@@ -113,7 +108,7 @@ export function determineType(word: string, part: Part): Types[Part] | null {
   return null;
 }
 
-export type SeparatedRoot = { match: RegExpExecArray; part: Part; type: Types[Part] };
+export type SeparatedRoot = { match: RegExpExecArray; part: Part; type: Patterns[Part] };
 export function separateRoot(word: string, part: Part): SeparatedRoot | null {
   const classes = SUFFIXES[part];
   for (const [suffix, type] of classes) {

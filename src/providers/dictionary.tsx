@@ -1,6 +1,6 @@
 import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useState } from "react";
 
-import { determineType, markStress, Part, partOfExtra } from "lang/extra";
+import { AnyPattern, determinePattern, markStress, Part, partOfExtra } from "lang/extra";
 import { scriptMultiUnicode } from "lang/script";
 import { uri } from "lang/util";
 import { LangConfig } from "providers/langConfig";
@@ -14,7 +14,7 @@ export interface FullEntry extends SortableEntry {
   part: Part | null;
   script: string;
   ipa: string;
-  class: string | null;
+  class: AnyPattern | null;
   link: string;
 
   meanings: FullMeaning[];
@@ -54,9 +54,9 @@ export function DictionaryProvider({ children }: PropsWithChildren) {
       const mWords = d.words
         .map((i) => {
           const part = partOfExtra(i.extra);
-          let cls = null;
+          let cls: AnyPattern | null = null;
           if (part !== null) {
-            cls = i.ex !== undefined ? "X" : (determineType(i.sol, part) ?? "?");
+            cls = i.ex !== undefined ? "X" : (determinePattern(i.sol, part) ?? "?");
           }
           const script = scriptMultiUnicode(i.sol);
           const ipa = soundChange.soundChange(i.sol, markStress(i));
