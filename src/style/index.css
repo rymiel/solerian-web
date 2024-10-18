@@ -246,7 +246,7 @@ footer p {
 
 .word nav {
   border: 1px solid #aaa;
-  padding: 2px 2vw 7px;
+  padding: 2px 15px 7px;
   height: fit-content;
   display: table;
 }
