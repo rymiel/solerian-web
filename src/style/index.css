@@ -249,6 +249,8 @@ footer p {
   padding: 2px 15px 7px;
   height: fit-content;
   display: table;
+  position: sticky;
+  top: 8px;
 }
 
 .word nav ol {
@@ -266,7 +268,9 @@ footer p {
   }
 }
 
+.word h3.bp5-heading.meaning,
 .word h4.bp5-heading {
+  scroll-margin-top: 1em;
   margin-top: 1rem;
 }
 
@@ -409,10 +413,6 @@ h4 .bp5-icon {
 }
 .space-between .center {
   margin: auto;
-}
-
-.bp5-heading.meaning {
-  margin-top: 1rem;
 }
 
 span.edit {
