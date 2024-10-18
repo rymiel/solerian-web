@@ -193,6 +193,16 @@ export default function ReversePage() {
     ));
   }
 
+  let forms = "...";
+  if (infl) {
+    const oldNouns = infl.reduce((t, i) => (i.original.part === Part.Noun && i.old ? t + 1 : t), 0);
+    const curNouns = infl.reduce((t, i) => (i.original.part === Part.Noun && !i.old ? t + 1 : t), 0);
+    const verbs = infl.reduce((t, i) => (i.original.part === Part.Verb ? t + 1 : t), 0);
+    // raw forms + echo prefix + possessive suffixes
+    const estimate = infl.length + verbs + curNouns * POSS_SUFFIXES.cur.length + oldNouns * POSS_SUFFIXES.old.length;
+    forms = `${infl.length} forms, ${estimate} estimated`;
+  }
+
   return App(
     <div className="inter">
       <form
@@ -203,7 +213,7 @@ export default function ReversePage() {
       >
         <ControlGroup fill>
           <InputGroup
-            placeholder={infl ? `Reverse search (${infl.length} forms)` : undefined}
+            placeholder={`Reverse search (${forms})`}
             onValueChange={(s) => setSearch(s)}
             value={search}
             large
