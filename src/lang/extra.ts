@@ -138,3 +138,7 @@ export const PARTS_OF_SPEECH: Readonly<Record<string, string>> = {
   "pron.": "Pronoun (pattern %)",
   particle: "Particle",
 };
+
+export function partOfSpeechShort(s: string): string {
+  return (PARTS_OF_SPEECH[s] ?? s).split(" ")[0];
+}

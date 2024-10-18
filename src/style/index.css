@@ -238,6 +238,34 @@ footer p {
   display: inline;
 }
 
+.word {
+  display: grid;
+  grid-template-columns: min-content auto;
+  column-gap: 12px;
+}
+
+.word nav {
+  border: 1px solid #aaa;
+  padding: 2px 2vw 7px;
+  height: fit-content;
+  display: table;
+}
+
+.word nav ol {
+  padding-left: 20px;
+}
+
+@media (max-aspect-ratio: 1/1) {
+  .word {
+    display: grid;
+    grid-template-columns: auto;
+  }
+
+  .word nav {
+    display: none;
+  }
+}
+
 .word h4.bp5-heading {
   margin-top: 1rem;
 }

@@ -1,13 +1,13 @@
 import { H2, H3, H4, Icon, IconSize, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
-import { useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useContext, useEffect, useRef } from "react";
+import { Link, useParams } from "react-router-dom";
 
 import { InterlinearData, InterlinearGloss } from "components/interlinear";
 import { NounInfo } from "components/nounComponents";
 import { PronounInfo } from "components/pronounComponents";
 import { RichText } from "components/richText";
 import { VerbInfo } from "components/verbComponents";
-import { Part, PARTS_OF_SPEECH } from "lang/extra";
+import { Part, partOfSpeechShort, PARTS_OF_SPEECH } from "lang/extra";
 import { uri } from "lang/util";
 import { SectionTitle, SIMPLE_SECTIONS } from "page/EditWordPage";
 import { Dictionary, FullEntry, FullSection } from "providers/dictionary";
@@ -56,6 +56,13 @@ function WordPageHeader({ entry }: { entry: FullEntry }) {
 
 function WordPageContent({ entry, highlighted = false }: { entry: FullEntry; highlighted?: boolean }) {
   const { user } = useContext(User);
+  const ref = useRef<HTMLHeadingElement | null>(null);
+
+  useEffect(() => {
+    if (highlighted) {
+      ref.current?.scrollIntoView();
+    }
+  }, [highlighted]);
 
   const partHeader = (PARTS_OF_SPEECH[entry.extra] ?? entry.extra).replace("%", entry.class ?? "?");
   const part = entry.part;
@@ -71,7 +78,7 @@ function WordPageContent({ entry, highlighted = false }: { entry: FullEntry; hig
 
   return (
     <>
-      <H3 className="meaning">
+      <H3 className="meaning" ref={ref}>
         {highlighted ? <mark>{partHeader}</mark> : partHeader}
         {user && (
           <span className="edit">
@@ -120,12 +127,24 @@ export default function WordPage() {
     const matching = entries.filter((e) => e.sol === word);
 
     if (matching.length > 0) {
+      const parts = matching.map((i) => partOfSpeechShort(i.extra));
       content = (
         <div className="inter word">
-          <WordPageHeader entry={matching[0]} /> {/* TODO: Be smarter about this? */}
-          {matching.map((m, i) => (
-            <WordPageContent key={m.hash} entry={m} highlighted={String(i + 1) == num} />
-          ))}
+          <nav>
+            <ol>
+              {parts.map((i, j) => (
+                <li key={j}>
+                  <Link to={`/w/${word}/${j + 1}`}>{i}</Link>
+                </li>
+              ))}
+            </ol>
+          </nav>
+          <div className="content">
+            <WordPageHeader entry={matching[0]} /> {/* TODO: Be smarter about this? */}
+            {matching.map((m, i) => (
+              <WordPageContent key={m.hash} entry={m} highlighted={String(i + 1) == num} />
+            ))}
+          </div>
         </div>
       );
     } else {
