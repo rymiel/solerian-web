@@ -354,7 +354,7 @@ function TextSectionEditor({
       <Button fill intent="success" text="Submit" onClick={submit} />
       <Divider />
       <RichText text={content} on={edit.page} />
-      <Button fill className="bottom" intent="danger" icon="trash" text="Delete entry" onClick={delete_} />
+      {as && <Button fill className="bottom" intent="danger" icon="trash" text="Delete entry" onClick={delete_} />}
     </div>
   );
 }
