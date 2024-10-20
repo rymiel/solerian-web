@@ -195,9 +195,18 @@ export default function ReversePage() {
 
   let forms = "...";
   if (infl) {
-    const oldNouns = infl.reduce((t, i) => (i.original.part === Part.Noun && i.old ? t + 1 : t), 0);
-    const curNouns = infl.reduce((t, i) => (i.original.part === Part.Noun && !i.old ? t + 1 : t), 0);
-    const verbs = infl.reduce((t, i) => (i.original.part === Part.Verb ? t + 1 : t), 0);
+    let oldNouns = 0;
+    let curNouns = 0;
+    let verbs = 0;
+    for (const e of infl) {
+      if (e.original.part === Part.Noun && e.old) {
+        oldNouns++;
+      } else if (e.original.part === Part.Noun && !e.old) {
+        curNouns++;
+      } else if (e.original.part === Part.Verb) {
+        verbs++;
+      }
+    }
     // raw forms + echo prefix + possessive suffixes
     const estimate = infl.length + verbs + curNouns * POSS_SUFFIXES.cur.length + oldNouns * POSS_SUFFIXES.old.length;
     forms = `${infl.length} forms, ${estimate} estimated`;
