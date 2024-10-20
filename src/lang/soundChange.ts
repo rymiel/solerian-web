@@ -119,6 +119,8 @@ export class SoundChangeInstance {
 
   public soundChangeSentence(sentence: string): string {
     const words = sentence
+      .replaceAll(",", " | ") // minor prosodic break
+      .replaceAll(/\s+/g, " ") // squeeze
       .toLowerCase()
       .split(" ")
       .map((i) => {
