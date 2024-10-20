@@ -45,20 +45,18 @@ function Login() {
     apiFetch("/login", "POST", { username, secret }).then(() => user.update());
   };
 
-  return (
-    <Popover
-      interactionKind="click"
-      popoverClassName={Classes.POPOVER_CONTENT_SIZING}
-      content={
-        <div>
-          <InputGroup onValueChange={(v) => setUsername(v)} placeholder="Username" />
-          <InputGroup onValueChange={(v) => setSecret(v)} placeholder="Password" type="password" />
-          <Button fill intent="success" text="Log in" onClick={login} />
-        </div>
-      }
-      renderTarget={({ isOpen, ...targetProps }) => <a {...targetProps}>Not logged in.</a>}
-    />
-  );
+  return <Popover
+    interactionKind="click"
+    popoverClassName={Classes.POPOVER_CONTENT_SIZING}
+    content={
+      <div>
+        <InputGroup onValueChange={(v) => setUsername(v)} placeholder="Username" />
+        <InputGroup onValueChange={(v) => setSecret(v)} placeholder="Password" type="password" />
+        <Button fill intent="success" text="Log in" onClick={login} />
+      </div>
+    }
+    renderTarget={({ isOpen, ...targetProps }) => <a {...targetProps}>Not logged in.</a>}
+  />;
 }
 
 function Logout() {
@@ -67,14 +65,12 @@ function Logout() {
     apiFetch("/logout", "POST").then(() => user.update());
   };
 
-  return (
-    <Popover
-      interactionKind="click"
-      popoverClassName={Classes.POPOVER_CONTENT_SIZING}
-      content={<Button intent={Intent.DANGER} text="Sign out" onClick={signout} />}
-      renderTarget={({ isOpen, ...targetProps }) => <a {...targetProps}>{user.user?.name}</a>}
-    />
-  );
+  return <Popover
+    interactionKind="click"
+    popoverClassName={Classes.POPOVER_CONTENT_SIZING}
+    content={<Button intent={Intent.DANGER} text="Sign out" onClick={signout} />}
+    renderTarget={({ isOpen, ...targetProps }) => <a {...targetProps}>{user.user?.name}</a>}
+  />;
 }
 
 const MENU_LINKS = [
@@ -95,36 +91,28 @@ function Menu() {
   const [isOpen, setOpen] = useState(false);
   const { user } = useContext(User);
 
-  return (
-    <>
-      <Icon className="menu" icon="menu" size={36} onClick={() => setOpen(true)} />
-      <Drawer isOpen={isOpen} onClose={() => setOpen(false)} position="left" size={DrawerSize.SMALL}>
-        <nav>
-          <ul>
-            {MENU_LINKS.map(([slug, name]) => (
-              <li key={slug}>
-                <Link to={slug} onClick={() => setOpen(false)}>
-                  {name}
-                </Link>
-              </li>
-            ))}
-          </ul>
-          {user && <Divider />}
-          {user && (
-            <ul>
-              {PRIVATE_MENU_LINKS.map(([slug, name]) => (
-                <li key={slug}>
-                  <Link to={slug} onClick={() => setOpen(false)}>
-                    {name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
-        </nav>
-      </Drawer>
-    </>
-  );
+  return <>
+    <Icon className="menu" icon="menu" size={36} onClick={() => setOpen(true)} />
+    <Drawer isOpen={isOpen} onClose={() => setOpen(false)} position="left" size={DrawerSize.SMALL}>
+      <nav>
+        <ul>
+          {MENU_LINKS.map(([slug, name]) => <li key={slug}>
+            <Link to={slug} onClick={() => setOpen(false)}>
+              {name}
+            </Link>
+          </li>)}
+        </ul>
+        {user && <Divider />}
+        {user && <ul>
+          {PRIVATE_MENU_LINKS.map(([slug, name]) => <li key={slug}>
+            <Link to={slug} onClick={() => setOpen(false)}>
+              {name}
+            </Link>
+          </li>)}
+        </ul>}
+      </nav>
+    </Drawer>
+  </>;
 }
 
 export function App(body: JSX.Element, header?: string, headerElement?: JSX.Element) {
@@ -135,33 +123,29 @@ export function App(body: JSX.Element, header?: string, headerElement?: JSX.Elem
   } else {
     document.title = `Solerian | ${header}`;
   }
-  return (
-    <>
-      <header className={Classes.DARK}>
-        <Menu />
-        <H1 className="sc">
-          <a href={"#/"}>Solerian</a>
-        </H1>
-        {header && (
-          <>
-            <Divider></Divider>
-            <H2 className="sc">{header}</H2>
-            {headerElement && <div className="header-element">{headerElement}</div>}
-          </>
-        )}
-        <div id="usertext">{user.user ? <Logout /> : <Login />}</div>
-      </header>
-      <div id="center">
-        <main id="main">{body}</main>
-      </div>
-      <footer className={Classes.DARK}>
-        <small>
-          <p>
-            <span className="sc">Solerian</span> by rymiel, web version {WEB_VERSION}
-            {version && `, api version ${version}`}
-          </p>
-        </small>
-      </footer>
-    </>
-  );
+  return <>
+    <header className={Classes.DARK}>
+      <Menu />
+      <H1 className="sc">
+        <a href={"#/"}>Solerian</a>
+      </H1>
+      {header && <>
+        <Divider></Divider>
+        <H2 className="sc">{header}</H2>
+        {headerElement && <div className="header-element">{headerElement}</div>}
+      </>}
+      <div id="usertext">{user.user ? <Logout /> : <Login />}</div>
+    </header>
+    <div id="center">
+      <main id="main">{body}</main>
+    </div>
+    <footer className={Classes.DARK}>
+      <small>
+        <p>
+          <span className="sc">Solerian</span> by rymiel, web version {WEB_VERSION}
+          {version && `, api version ${version}`}
+        </p>
+      </small>
+    </footer>
+  </>;
 }

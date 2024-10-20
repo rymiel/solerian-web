@@ -59,77 +59,56 @@ function Editor() {
     });
   };
 
-  return (
-    <div className="inter">
-      <p>Creating new entry.</p>
-      <ControlGroup vertical className="fit-width">
-        <InputGroup onValueChange={setSol} placeholder="Solerian" />
-        <HTMLSelect onChange={(e) => setExtra(e.currentTarget.value)} defaultValue={""} fill>
-          <option value="">Extra</option>
-          {Object.entries(PARTS_OF_SPEECH).map(([k, v]) => {
-            const p = partOfExtra(k);
-            const cls = determinePattern(sol, p);
-            return (
-              <option key={k} value={k}>
-                {v.replace("%", cls ?? "?")}
-              </option>
-            );
-          })}
-        </HTMLSelect>
-        <InputGroup onValueChange={setEng} placeholder="Translation" />
-        <Button fill intent="success" text="Submit" onClick={submit} />
-        <Checkbox onChange={(e) => setShowEx(e.currentTarget.checked)} label="Exceptional" />
-      </ControlGroup>
-      {names !== null && part !== null && (
-        <p>
-          Pattern {names[0]} {Part[part].toLowerCase()}
-          <br />
-          Old class {names[1]} {Part[part].toLowerCase()}
-          <br />
-          {names[2]}
-        </p>
-      )}
-      {showEx && part === null && (
-        <p className={Classes.TEXT_MUTED}>
-          <i>This "Extra" value can't be exceptional.</i>
-        </p>
-      )}
-      {showEx && part !== null && (
-        <div className="flex-row">
-          <div>
-            {FORM_NAMES[part].map((i, j) => (
-              <FormGroup key={i} label={i} inline className="compact">
-                <InputGroup
-                  placeholder={i}
-                  onValueChange={(v) => setExForms((e) => e.map((f, fi) => (fi === j ? v : f)))}
-                />
-              </FormGroup>
-            ))}
-          </div>
-          <div>
-            {FORM_NAMES[part].map((i, j) => (
-              <FormGroup key={i} label={`old ${i}`} inline className="compact">
-                <InputGroup
-                  placeholder={`old ${i}`}
-                  onValueChange={(v) =>
-                    setExForms((e) => e.map((f, fi) => (fi === j + FORM_NAMES[part].length ? v : f)))
-                  }
-                />
-              </FormGroup>
-            ))}
-          </div>
-        </div>
-      )}
-      {valid && part === Part.Noun && <NounInfo entry={entry} />}
-      {valid && part === Part.Verb && <VerbInfo entry={entry} />}
-      {valid && part === Part.Pronoun && <PronounInfo entry={entry} />}
-      {!valid && part !== null && (
-        <Tag large intent="danger">
-          Invalid form
-        </Tag>
-      )}
-    </div>
-  );
+  return <div className="inter">
+    <p>Creating new entry.</p>
+    <ControlGroup vertical className="fit-width">
+      <InputGroup onValueChange={setSol} placeholder="Solerian" />
+      <HTMLSelect onChange={(e) => setExtra(e.currentTarget.value)} defaultValue={""} fill>
+        <option value="">Extra</option>
+        {Object.entries(PARTS_OF_SPEECH).map(([k, v]) => {
+          const p = partOfExtra(k);
+          const cls = determinePattern(sol, p);
+          return <option key={k} value={k}>
+            {v.replace("%", cls ?? "?")}
+          </option>;
+        })}
+      </HTMLSelect>
+      <InputGroup onValueChange={setEng} placeholder="Translation" />
+      <Button fill intent="success" text="Submit" onClick={submit} />
+      <Checkbox onChange={(e) => setShowEx(e.currentTarget.checked)} label="Exceptional" />
+    </ControlGroup>
+    {names !== null && part !== null && <p>
+      Pattern {names[0]} {Part[part].toLowerCase()}
+      <br />
+      Old class {names[1]} {Part[part].toLowerCase()}
+      <br />
+      {names[2]}
+    </p>}
+    {showEx && part === null && <p className={Classes.TEXT_MUTED}>
+      <i>This "Extra" value can't be exceptional.</i>
+    </p>}
+    {showEx && part !== null && <div className="flex-row">
+      <div>
+        {FORM_NAMES[part].map((i, j) => <FormGroup key={i} label={i} inline className="compact">
+          <InputGroup placeholder={i} onValueChange={(v) => setExForms((e) => e.map((f, fi) => (fi === j ? v : f)))} />
+        </FormGroup>)}
+      </div>
+      <div>
+        {FORM_NAMES[part].map((i, j) => <FormGroup key={i} label={`old ${i}`} inline className="compact">
+          <InputGroup
+            placeholder={`old ${i}`}
+            onValueChange={(v) => setExForms((e) => e.map((f, fi) => (fi === j + FORM_NAMES[part].length ? v : f)))}
+          />
+        </FormGroup>)}
+      </div>
+    </div>}
+    {valid && part === Part.Noun && <NounInfo entry={entry} />}
+    {valid && part === Part.Verb && <VerbInfo entry={entry} />}
+    {valid && part === Part.Pronoun && <PronounInfo entry={entry} />}
+    {!valid && part !== null && <Tag large intent="danger">
+      Invalid form
+    </Tag>}
+  </div>;
 }
 
 export default function NewWordPage() {
@@ -140,11 +119,9 @@ export default function NewWordPage() {
   if (!user) {
     content = <NonIdealState icon="error" title="You cannot access this page" />;
   } else {
-    content = (
-      <div className="inter">
-        <Editor />
-      </div>
-    );
+    content = <div className="inter">
+      <Editor />
+    </div>;
   }
 
   return App(content, "New");

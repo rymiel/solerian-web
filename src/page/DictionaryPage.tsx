@@ -13,19 +13,15 @@ function ExtraCell({ extra, cls }: { extra: string; cls: string | null }) {
   const abbr = PARTS_OF_SPEECH[extra] as string | undefined;
 
   if (abbr) {
-    return (
-      <abbr title={abbr.replace("%", cls ?? "")}>
-        {extra}
-        {cls && `-${cls}`}
-      </abbr>
-    );
+    return <abbr title={abbr.replace("%", cls ?? "")}>
+      {extra}
+      {cls && `-${cls}`}
+    </abbr>;
   } else {
-    return (
-      <span>
-        {extra}
-        {cls && `-${cls}`}
-      </span>
-    );
+    return <span>
+      {extra}
+      {cls && `-${cls}`}
+    </span>;
   }
 }
 
@@ -53,81 +49,78 @@ export default function DictionaryPage() {
   }, [entries]);
 
   if (entries) {
-    content = (
-      <div className="inter">
-        <HTMLTable className="margin-auto dictionary" compact striped interactive>
-          <thead>
-            <tr>
-              <td colSpan={5}>
-                <InputGroup type="search" placeholder="Search" onValueChange={setSearch} value={search} />
-              </td>
-            </tr>
-            <tr>
-              <th>#</th>
-              <th>English</th>
-              <th>Solerian</th>
-              <th>Extra</th>
-              <th>Pronunciation</th>
-            </tr>
-          </thead>
-          <tbody>
-            {entries.map((e, i) =>
-              entryHasMatch(search, e) ? (
-                <tr key={e.hash} onClick={clickPreserveScroll} data-link={e.link}>
-                  <td>
-                    <a href={"#" + e.link} className="link-fill">
-                      <span>{i + 1}</span>
-                    </a>
-                  </td>
-                  <td>
-                    <a href={"#" + e.link} className="link-fill">
-                      <span>
-                        {e.tag && <Tag intent="danger">{e.tag}</Tag>}{" "}
-                        {e.meanings.map((m, mi) => (mi === 0 ? "" : "; ") + m.eng)}
-                        {e.meanings.some((m) => m.sections.some((s) => s.title === SectionTitle.TRANSLATION)) && (
-                          <Icon icon="label" title="has a translation" />
-                        )}
-                        {SIMPLE_SECTIONS.map(([title, name, iconProps]) =>
-                          e.sections.some((s) => s.title === title) ? (
-                            <Icon {...iconProps} key={title} title={`has ${name.toLowerCase()}`} />
-                          ) : undefined,
-                        )}
-                      </span>
-                    </a>
-                  </td>
-                  <td>
-                    <a href={"#" + e.link} className="link-fill dual">
-                      <i>{e.sol}</i>
-                      <span className="sol">{e.script}</span>
-                    </a>
-                  </td>
-                  <td>
-                    <a href={"#" + e.link} className="link-fill">
-                      <ExtraCell extra={e.extra} cls={e.class} />
-                    </a>
-                  </td>
-                  <td>
-                    <a href={"#" + e.link} className="link-fill">
-                      <span>{e.ipa}</span>
-                    </a>
-                  </td>
-                </tr>
-              ) : undefined,
-            )}
-          </tbody>
-
-          {user && (
-            <tfoot>
-              <tr>
-                <td colSpan={5}>
-                  <Button intent="success" text="Add new entry" icon="plus" fill onClick={() => navigate("/new")} />
+    content = <div className="inter">
+      <HTMLTable className="margin-auto dictionary" compact striped interactive>
+        <thead>
+          <tr>
+            <td colSpan={5}>
+              <InputGroup type="search" placeholder="Search" onValueChange={setSearch} value={search} />
+            </td>
+          </tr>
+          <tr>
+            <th>#</th>
+            <th>English</th>
+            <th>Solerian</th>
+            <th>Extra</th>
+            <th>Pronunciation</th>
+          </tr>
+        </thead>
+        <tbody>
+          {entries.map((e, i) =>
+            entryHasMatch(search, e) ? (
+              <tr key={e.hash} onClick={clickPreserveScroll} data-link={e.link}>
+                <td>
+                  <a href={"#" + e.link} className="link-fill">
+                    <span>{i + 1}</span>
+                  </a>
+                </td>
+                <td>
+                  <a href={"#" + e.link} className="link-fill">
+                    <span>
+                      {e.tag && <Tag intent="danger">{e.tag}</Tag>}{" "}
+                      {e.meanings.map((m, mi) => (mi === 0 ? "" : "; ") + m.eng)}
+                      {e.meanings.some((m) => m.sections.some((s) => s.title === SectionTitle.TRANSLATION)) && <Icon
+                        icon="label"
+                        title="has a translation"
+                      />}
+                      {SIMPLE_SECTIONS.map(([title, name, iconProps]) =>
+                        e.sections.some((s) => s.title === title) ? (
+                          <Icon {...iconProps} key={title} title={`has ${name.toLowerCase()}`} />
+                        ) : undefined,
+                      )}
+                    </span>
+                  </a>
+                </td>
+                <td>
+                  <a href={"#" + e.link} className="link-fill dual">
+                    <i>{e.sol}</i>
+                    <span className="sol">{e.script}</span>
+                  </a>
+                </td>
+                <td>
+                  <a href={"#" + e.link} className="link-fill">
+                    <ExtraCell extra={e.extra} cls={e.class} />
+                  </a>
+                </td>
+                <td>
+                  <a href={"#" + e.link} className="link-fill">
+                    <span>{e.ipa}</span>
+                  </a>
                 </td>
               </tr>
-            </tfoot>
+            ) : undefined,
           )}
-        </HTMLTable>
-      </div>
-    );
+        </tbody>
+
+        {user && <tfoot>
+          <tr>
+            <td colSpan={5}>
+              <Button intent="success" text="Add new entry" icon="plus" fill onClick={() => navigate("/new")} />
+            </td>
+          </tr>
+        </tfoot>}
+      </HTMLTable>
+    </div>;
   }
 
   return App(content, "Home");

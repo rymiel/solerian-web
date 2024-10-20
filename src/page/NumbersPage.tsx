@@ -13,16 +13,14 @@ function Content() {
   const biject = b12 !== null ? b12toBijective(b12) : null;
   const words = biject !== null ? constructNumber(biject) : null;
 
-  return (
-    <>
-      <ControlGroup vertical className="fit-width">
-        <NumericInput value={num} onValueChange={setNum} />
-        <InputGroup value={b12?.join("")} disabled />
-        <InputGroup value={biject === 0 ? "0" : biject?.join("")} disabled />
-        <p>{words}</p>
-      </ControlGroup>
-    </>
-  );
+  return <>
+    <ControlGroup vertical className="fit-width">
+      <NumericInput value={num} onValueChange={setNum} />
+      <InputGroup value={b12?.join("")} disabled />
+      <InputGroup value={biject === 0 ? "0" : biject?.join("")} disabled />
+      <p>{words}</p>
+    </ControlGroup>
+  </>;
 }
 
 export default function NumbersPage() {
@@ -33,11 +31,9 @@ export default function NumbersPage() {
   if (!user) {
     content = <NonIdealState icon="error" title="You cannot access this page" />;
   } else {
-    content = (
-      <div className="inter">
-        <Content />
-      </div>
-    );
+    content = <div className="inter">
+      <Content />
+    </div>;
   }
 
   return App(content, "Numbers");

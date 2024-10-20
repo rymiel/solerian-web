@@ -72,109 +72,97 @@ function Content() {
       }
     }
 
-    content = (
-      <div className="stats">
-        <H4 className="n-header">Noun stats</H4>
+    content = <div className="stats">
+      <H4 className="n-header">Noun stats</H4>
 
-        <HTMLTable className="n-left" compact striped>
-          <thead>
-            <th>Class</th>
-            <th>Count</th>
-          </thead>
-          <tbody>
-            {Object.keys(nounClassTally)
-              .sort()
-              .map((i) => (
-                <tr key={i}>
-                  <td>
-                    {i}
-                    {NOUN_GENDERS[i] ? ` (${NOUN_GENDERS[i]})` : undefined}
-                  </td>
-                  <td>{nounClassTally[i]}</td>
-                </tr>
-              ))}
-          </tbody>
-        </HTMLTable>
-        <HTMLTable className="n-right" compact striped>
-          <thead>
-            <th>Gender</th>
-            <th>Count</th>
-          </thead>
-          <tbody>
-            {Object.keys(NOUN_EXPLANATIONS).map((i) => (
-              <tr key={i}>
-                <td>
-                  <abbr className="il" title={NOUN_EXPLANATIONS[i]}>
-                    {i}
-                  </abbr>
-                </td>
-                <td>{nounGenderTally[i]}</td>
-              </tr>
-            ))}
-          </tbody>
-        </HTMLTable>
-        <Divider className="divider-1" />
-        <H4 className="v-header">Verb stats</H4>
-        <HTMLTable className="v-left" compact striped>
-          <thead>
-            <th>Class</th>
-            <th>Count</th>
-          </thead>
-          <tbody>
-            {Object.keys(verbClassTally)
-              .sort()
-              .map((i) => (
-                <tr key={i}>
-                  <td>{i}</td>
-                  <td>{verbClassTally[i]}</td>
-                </tr>
-              ))}
-          </tbody>
-        </HTMLTable>
-        <HTMLTable className="v-right" compact striped>
-          <thead>
-            <th>Base</th>
-            <th>Count</th>
-          </thead>
-          <tbody>
-            {Object.keys(VERB_EXPLANATIONS).map((i) => (
-              <tr key={i}>
-                <td>
-                  <abbr className="il" title={VERB_EXPLANATIONS[i]}>
-                    {i}
-                  </abbr>
-                </td>
-                <td>{verbBaseTally[i]}</td>
-              </tr>
-            ))}
-          </tbody>
-        </HTMLTable>
-        <Divider className="divider-2" />
-        <H4 className="g-header">General stats</H4>
-        <HTMLTable className="g-left" compact striped>
-          <thead>
-            <th>Extra</th>
-            <th>Count</th>
-          </thead>
-          <tbody>
-            {Object.keys(extraTally)
-              .sort()
-              .map((i) => (
-                <tr key={i}>
-                  <td>{i}</td>
-                  <td>{extraTally[i]}</td>
-                </tr>
-              ))}
-          </tbody>
-          <tfoot>
-            <tr>
-              <td>Total</td>
-              <td>{entries.length}</td>
-            </tr>
-          </tfoot>
-        </HTMLTable>
-      </div>
-    );
+      <HTMLTable className="n-left" compact striped>
+        <thead>
+          <th>Class</th>
+          <th>Count</th>
+        </thead>
+        <tbody>
+          {Object.keys(nounClassTally)
+            .sort()
+            .map((i) => <tr key={i}>
+              <td>
+                {i}
+                {NOUN_GENDERS[i] ? ` (${NOUN_GENDERS[i]})` : undefined}
+              </td>
+              <td>{nounClassTally[i]}</td>
+            </tr>)}
+        </tbody>
+      </HTMLTable>
+      <HTMLTable className="n-right" compact striped>
+        <thead>
+          <th>Gender</th>
+          <th>Count</th>
+        </thead>
+        <tbody>
+          {Object.keys(NOUN_EXPLANATIONS).map((i) => <tr key={i}>
+            <td>
+              <abbr className="il" title={NOUN_EXPLANATIONS[i]}>
+                {i}
+              </abbr>
+            </td>
+            <td>{nounGenderTally[i]}</td>
+          </tr>)}
+        </tbody>
+      </HTMLTable>
+      <Divider className="divider-1" />
+      <H4 className="v-header">Verb stats</H4>
+      <HTMLTable className="v-left" compact striped>
+        <thead>
+          <th>Class</th>
+          <th>Count</th>
+        </thead>
+        <tbody>
+          {Object.keys(verbClassTally)
+            .sort()
+            .map((i) => <tr key={i}>
+              <td>{i}</td>
+              <td>{verbClassTally[i]}</td>
+            </tr>)}
+        </tbody>
+      </HTMLTable>
+      <HTMLTable className="v-right" compact striped>
+        <thead>
+          <th>Base</th>
+          <th>Count</th>
+        </thead>
+        <tbody>
+          {Object.keys(VERB_EXPLANATIONS).map((i) => <tr key={i}>
+            <td>
+              <abbr className="il" title={VERB_EXPLANATIONS[i]}>
+                {i}
+              </abbr>
+            </td>
+            <td>{verbBaseTally[i]}</td>
+          </tr>)}
+        </tbody>
+      </HTMLTable>
+      <Divider className="divider-2" />
+      <H4 className="g-header">General stats</H4>
+      <HTMLTable className="g-left" compact striped>
+        <thead>
+          <th>Extra</th>
+          <th>Count</th>
+        </thead>
+        <tbody>
+          {Object.keys(extraTally)
+            .sort()
+            .map((i) => <tr key={i}>
+              <td>{i}</td>
+              <td>{extraTally[i]}</td>
+            </tr>)}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>Total</td>
+            <td>{entries.length}</td>
+          </tr>
+        </tfoot>
+      </HTMLTable>
+    </div>;
   }
 
   return content;

@@ -45,34 +45,30 @@ function Content({ soundChange, generation }: { soundChange: SoundChangeInstance
     generate();
   };
 
-  return (
-    <div>
-      <ControlGroup vertical className="fit-width">
-        <NumericInput onValueChange={changeSylls} value={sylls} min={1} />
-        <Button intent="primary" text="Generate" onClick={generate} />
-      </ControlGroup>
-      <Divider />
-      <p>{current !== "" ? current : "..."}</p>
-      <p>{current !== "" ? soundChange.soundChange(current, false) : "..."}</p>
-      <p>
-        {isValid === undefined ? (
-          <Tag intent="warning">Checking validity...</Tag>
-        ) : isValid ? (
-          <Tag intent="success">Valid</Tag>
-        ) : (
-          <Tag intent="danger">Invalid</Tag>
-        )}
-      </p>
-      <Divider />
-      <ul>
-        {history.map((i, j) => (
-          <li key={j} onClick={() => setCurrent(i)}>
-            {i}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+  return <div>
+    <ControlGroup vertical className="fit-width">
+      <NumericInput onValueChange={changeSylls} value={sylls} min={1} />
+      <Button intent="primary" text="Generate" onClick={generate} />
+    </ControlGroup>
+    <Divider />
+    <p>{current !== "" ? current : "..."}</p>
+    <p>{current !== "" ? soundChange.soundChange(current, false) : "..."}</p>
+    <p>
+      {isValid === undefined ? (
+        <Tag intent="warning">Checking validity...</Tag>
+      ) : isValid ? (
+        <Tag intent="success">Valid</Tag>
+      ) : (
+        <Tag intent="danger">Invalid</Tag>
+      )}
+    </p>
+    <Divider />
+    <ul>
+      {history.map((i, j) => <li key={j} onClick={() => setCurrent(i)}>
+        {i}
+      </li>)}
+    </ul>
+  </div>;
 }
 
 export default function GeneratePage() {
@@ -86,11 +82,9 @@ export default function GeneratePage() {
   } else if (soundChange === null || generation === null) {
     content = <NonIdealState icon={<Spinner size={SpinnerSize.LARGE} />} />;
   } else {
-    content = (
-      <div className="inter">
-        <Content soundChange={soundChange} generation={generation} />
-      </div>
-    );
+    content = <div className="inter">
+      <Content soundChange={soundChange} generation={generation} />
+    </div>;
   }
 
   return App(content, "Generate");

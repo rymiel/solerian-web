@@ -22,40 +22,32 @@ function Content({ entries }: { entries: FullEntry[] }) {
       .filter((i) => i !== null),
   );
 
-  return (
-    <>
-      <p>This page lists all translations from all words with examples sentences in the dictionary.</p>
-      <ul>
-        {examples.map(([entry, nth, sections]) => (
-          <li key={`${entry.hash}-${nth}`}>
-            <p>
-              <Link to={entry.link}>{entry.sol}</Link> ({nth})
-            </p>
-            <dl>
-              {sections.map((section) => (
-                <dd key={section.hash}>
-                  <InterlinearGloss
-                    data={JSON.parse(section.content) as InterlinearData}
-                    asterisk
-                    link
-                    indent
-                    script
-                    extra={
-                      user && (
-                        <span className="edit">
-                          [ <a href={uri`#/edit/${entry.hash}/${section.hash}`}>edit</a> ]
-                        </span>
-                      )
-                    }
-                  />
-                </dd>
-              ))}
-            </dl>
-          </li>
-        ))}
-      </ul>
-    </>
-  );
+  return <>
+    <p>This page lists all translations from all words with examples sentences in the dictionary.</p>
+    <ul>
+      {examples.map(([entry, nth, sections]) => <li key={`${entry.hash}-${nth}`}>
+        <p>
+          <Link to={entry.link}>{entry.sol}</Link> ({nth})
+        </p>
+        <dl>
+          {sections.map((section) => <dd key={section.hash}>
+            <InterlinearGloss
+              data={JSON.parse(section.content) as InterlinearData}
+              asterisk
+              link
+              indent
+              script
+              extra={
+                user && <span className="edit">
+                  [ <a href={uri`#/edit/${entry.hash}/${section.hash}`}>edit</a> ]
+                </span>
+              }
+            />
+          </dd>)}
+        </dl>
+      </li>)}
+    </ul>
+  </>;
 }
 
 export default function TranslationsPage() {
@@ -64,11 +56,9 @@ export default function TranslationsPage() {
   let content = <NonIdealState icon={<Spinner size={SpinnerSize.LARGE} />} />;
 
   if (entries) {
-    content = (
-      <div className="inter">
-        <Content entries={entries} />
-      </div>
-    );
+    content = <div className="inter">
+      <Content entries={entries} />
+    </div>;
   }
 
   return App(content, "Translations");

@@ -35,32 +35,24 @@ function intersperse(arr: ReactNode[], w: ReactNode): ReactNode[] {
 function tags(s: string | null): ReactNode {
   if (s === null) return null;
   if (s === "")
-    return (
-      <Tag intent="danger" minimal>
-        ∅
-      </Tag>
-    );
-  return reactStringReplace(s, /(\{\w\})/, (m, i) => (
-    <Tag key={i} intent="primary" minimal>
-      {m.slice(1, -1)}
-    </Tag>
-  ));
+    return <Tag intent="danger" minimal>
+      ∅
+    </Tag>;
+  return reactStringReplace(s, /(\{\w\})/, (m, i) => <Tag key={i} intent="primary" minimal>
+    {m.slice(1, -1)}
+  </Tag>);
 }
 
 function SoundChange({ change }: { change: Change }) {
   const [from, to, left, right] = change.map(tags);
   if (left === null && right === null) {
-    return (
-      <>
-        <Code>{from}</Code> → <Code>{to}</Code>
-      </>
-    );
+    return <>
+      <Code>{from}</Code> → <Code>{to}</Code>
+    </>;
   } else {
-    return (
-      <>
-        <Code>{from}</Code> → <Code>{to}</Code> / {left && <Code>{left}</Code>} _ {right && <Code>{right}</Code>}
-      </>
-    );
+    return <>
+      <Code>{from}</Code> → <Code>{to}</Code> / {left && <Code>{left}</Code>} _ {right && <Code>{right}</Code>}
+    </>;
   }
 }
 
@@ -145,83 +137,75 @@ function Content({
 
   const key = (e: FullEntry | InflEntry) => ("hash" in e ? e.hash : `"${e.original.hash}"-${e.form}`);
 
-  return (
-    <div className="flex-row">
-      <div>
-        <div className="flex-row">
-          <div>
-            {changes.map((c, i) => (
-              <span key={i}>
-                <SoundChange change={c} />
-                <br />
-              </span>
-            ))}
-          </div>
-          <TextArea style={{ minWidth: "300px" }} onChange={(e) => onChange(e.currentTarget.value)} value={rules} />
+  return <div className="flex-row">
+    <div>
+      <div className="flex-row">
+        <div>
+          {changes.map((c, i) => <span key={i}>
+            <SoundChange change={c} />
+            <br />
+          </span>)}
         </div>
-        <Button text="Test changes" intent="success" fill onClick={makeInstance} />
-        <Button text="Forget changes" intent="danger" fill onClick={clearInstance} />
-        <Button text="Copy rules" intent="primary" fill onClick={copyRules} />
+        <TextArea style={{ minWidth: "300px" }} onChange={(e) => onChange(e.currentTarget.value)} value={rules} />
       </div>
-      <div className="margin-auto">
-        <FormGroup>
-          <CheckboxCard compact onChange={(e) => setIgnoreNoChanges(e.currentTarget.checked)}>
-            Ignore <i>no changes</i>
-          </CheckboxCard>
-          <CheckboxCard compact onChange={(e) => setUseInfl(e.currentTarget.checked)}>
-            Use inflected entries
-          </CheckboxCard>
-        </FormGroup>
-        <HTMLTable compact striped>
-          <thead>
-            <tr>
-              <th>Word</th>
-              <th>Changes</th>
-              <th>Result</th>
-            </tr>
-          </thead>
-          <tbody>
-            {localInstance === null
-              ? entries.map((e) => {
-                  const steps = soundChange.singleWordSoundChangeSteps(e.sol, markStress(e));
-                  if (ignoreNoChanges && steps.length <= 1) return undefined;
-                  return (
-                    <tr key={key(e)}>
-                      <td>{e.sol}</td>
-                      <td className="space-between">
-                        <StepList steps={steps} />
-                      </td>
-                      <td>{soundChange.soundChange(e.sol, markStress(e))}</td>
-                    </tr>
-                  );
-                })
-              : entries.map((e) => {
-                  const oldSteps = soundChange.singleWordSoundChangeSteps(e.sol, markStress(e));
-                  const newSteps = localInstance.singleWordSoundChangeSteps(e.sol, markStress(e));
-                  if (oldSteps.toString() === newSteps.toString()) return undefined;
-                  return (
-                    <tr key={key(e)}>
-                      <td>{e.sol}</td>
-                      <td>
-                        <p className="space-between">
-                          <StepList steps={oldSteps} />
-                        </p>
-                        <p className="space-between">
-                          <StepList steps={newSteps} />
-                        </p>
-                      </td>
-                      <td>
-                        <p>{soundChange.soundChange(e.sol, markStress(e))}</p>
-                        <p>{localInstance.soundChange(e.sol, markStress(e))}</p>
-                      </td>
-                    </tr>
-                  );
-                })}
-          </tbody>
-        </HTMLTable>
-      </div>
+      <Button text="Test changes" intent="success" fill onClick={makeInstance} />
+      <Button text="Forget changes" intent="danger" fill onClick={clearInstance} />
+      <Button text="Copy rules" intent="primary" fill onClick={copyRules} />
     </div>
-  );
+    <div className="margin-auto">
+      <FormGroup>
+        <CheckboxCard compact onChange={(e) => setIgnoreNoChanges(e.currentTarget.checked)}>
+          Ignore <i>no changes</i>
+        </CheckboxCard>
+        <CheckboxCard compact onChange={(e) => setUseInfl(e.currentTarget.checked)}>
+          Use inflected entries
+        </CheckboxCard>
+      </FormGroup>
+      <HTMLTable compact striped>
+        <thead>
+          <tr>
+            <th>Word</th>
+            <th>Changes</th>
+            <th>Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          {localInstance === null
+            ? entries.map((e) => {
+                const steps = soundChange.singleWordSoundChangeSteps(e.sol, markStress(e));
+                if (ignoreNoChanges && steps.length <= 1) return undefined;
+                return <tr key={key(e)}>
+                  <td>{e.sol}</td>
+                  <td className="space-between">
+                    <StepList steps={steps} />
+                  </td>
+                  <td>{soundChange.soundChange(e.sol, markStress(e))}</td>
+                </tr>;
+              })
+            : entries.map((e) => {
+                const oldSteps = soundChange.singleWordSoundChangeSteps(e.sol, markStress(e));
+                const newSteps = localInstance.singleWordSoundChangeSteps(e.sol, markStress(e));
+                if (oldSteps.toString() === newSteps.toString()) return undefined;
+                return <tr key={key(e)}>
+                  <td>{e.sol}</td>
+                  <td>
+                    <p className="space-between">
+                      <StepList steps={oldSteps} />
+                    </p>
+                    <p className="space-between">
+                      <StepList steps={newSteps} />
+                    </p>
+                  </td>
+                  <td>
+                    <p>{soundChange.soundChange(e.sol, markStress(e))}</p>
+                    <p>{localInstance.soundChange(e.sol, markStress(e))}</p>
+                  </td>
+                </tr>;
+              })}
+        </tbody>
+      </HTMLTable>
+    </div>
+  </div>;
 }
 
 export default function SoundChangePage() {
@@ -237,11 +221,9 @@ export default function SoundChangePage() {
   } else if (entries === null || infl === undefined || soundChange === null) {
     content = <NonIdealState icon={<Spinner size={SpinnerSize.LARGE} />} />;
   } else {
-    content = (
-      <div className="inter">
-        <Content rawEntries={entries} inflEntries={infl} soundChange={soundChange} />
-      </div>
-    );
+    content = <div className="inter">
+      <Content rawEntries={entries} inflEntries={infl} soundChange={soundChange} />
+    </div>;
   }
 
   return App(content, "Sound changes");

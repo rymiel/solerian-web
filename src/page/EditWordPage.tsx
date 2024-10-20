@@ -58,22 +58,20 @@ function InfoTag({
   generated?: boolean;
 }) {
   const editable = !fixed && !generated;
-  return (
-    <>
-      <CompoundTag
-        leftContent={left}
-        intent={fixed ? "danger" : generated ? "success" : "primary"}
-        icon={fixed ? "anchor" : generated ? "generate" : "draw"}
-        interactive={editable}
-        onClick={onClick}
-        rightIcon={editable ? "edit" : undefined}
-        large
-      >
-        {right === null ? <i>(null)</i> : right === undefined ? <i>(undefined)</i> : right}
-      </CompoundTag>
-      <br />
-    </>
-  );
+  return <>
+    <CompoundTag
+      leftContent={left}
+      intent={fixed ? "danger" : generated ? "success" : "primary"}
+      icon={fixed ? "anchor" : generated ? "generate" : "draw"}
+      interactive={editable}
+      onClick={onClick}
+      rightIcon={editable ? "edit" : undefined}
+      large
+    >
+      {right === null ? <i>(null)</i> : right === undefined ? <i>(undefined)</i> : right}
+    </CompoundTag>
+    <br />
+  </>;
 }
 
 function InfoSection({
@@ -87,61 +85,53 @@ function InfoSection({
   fixed?: boolean;
   generated?: boolean;
 }) {
-  return (
-    <Callout
-      title={title}
-      className="edit-section"
-      intent={fixed ? "danger" : generated ? "success" : "primary"}
-      icon={fixed ? "anchor" : generated ? "generate" : "draw"}
-      compact
-    >
-      {children}
-    </Callout>
-  );
+  return <Callout
+    title={title}
+    className="edit-section"
+    intent={fixed ? "danger" : generated ? "success" : "primary"}
+    icon={fixed ? "anchor" : generated ? "generate" : "draw"}
+    compact
+  >
+    {children}
+  </Callout>;
 }
 
 function EntryData({ v }: { v: FullEntry }) {
   const edit = useContext(EditContext);
-  return (
-    <>
-      <BaseData v={v} />
-      <InfoTag left="sol" right={v.sol} onClick={() => edit.openDrawer(<EntryEditor existing={v} />)} />
-      <InfoTag left="extra" right={v.extra} onClick={() => edit.openDrawer(<EntryEditor existing={v} />)} />
-      <InfoTag left="tag" right={v.tag} onClick={() => edit.openDrawer(<EntryEditor existing={v} />)} />
-      <InfoTag left="ex" right={v.ex} onClick={() => edit.openDrawer(<EntryEditor existing={v} />)} />
-      <InfoSection title="meanings">
-        {v.meanings.map((m, mi) => (
-          <InfoSection title={`[${mi}]`} key={m.hash}>
-            <MeaningData v={m} />
-          </InfoSection>
-        ))}
-        <Divider />
-        <Button
-          intent="warning"
-          text="Add new meaning"
-          icon="add"
-          onClick={() => edit.openDrawer(<MeaningEditor to={v.hash} />)}
-        />
-      </InfoSection>
-      <SectionableData v={v} />
+  return <>
+    <BaseData v={v} />
+    <InfoTag left="sol" right={v.sol} onClick={() => edit.openDrawer(<EntryEditor existing={v} />)} />
+    <InfoTag left="extra" right={v.extra} onClick={() => edit.openDrawer(<EntryEditor existing={v} />)} />
+    <InfoTag left="tag" right={v.tag} onClick={() => edit.openDrawer(<EntryEditor existing={v} />)} />
+    <InfoTag left="ex" right={v.ex} onClick={() => edit.openDrawer(<EntryEditor existing={v} />)} />
+    <InfoSection title="meanings">
+      {v.meanings.map((m, mi) => <InfoSection title={`[${mi}]`} key={m.hash}>
+        <MeaningData v={m} />
+      </InfoSection>)}
       <Divider />
-      <InfoTag left="part" right={v.part === null ? null : Part[v.part]} generated />
-      <InfoTag left="class" right={v.class} generated />
-      <InfoTag left="script" right={<span className="sol">{v.script}</span>} generated />
-      <InfoTag left="ipa" right={v.ipa} generated />
-    </>
-  );
+      <Button
+        intent="warning"
+        text="Add new meaning"
+        icon="add"
+        onClick={() => edit.openDrawer(<MeaningEditor to={v.hash} />)}
+      />
+    </InfoSection>
+    <SectionableData v={v} />
+    <Divider />
+    <InfoTag left="part" right={v.part === null ? null : Part[v.part]} generated />
+    <InfoTag left="class" right={v.class} generated />
+    <InfoTag left="script" right={<span className="sol">{v.script}</span>} generated />
+    <InfoTag left="ipa" right={v.ipa} generated />
+  </>;
 }
 
 function MeaningData({ v }: { v: FullMeaning }) {
   const edit = useContext(EditContext);
-  return (
-    <>
-      <BaseData v={v} />
-      <InfoTag left="eng" right={v.eng} onClick={() => edit.openDrawer(<MeaningEditor existing={v} />)} />
-      <SectionableData v={v} />
-    </>
-  );
+  return <>
+    <BaseData v={v} />
+    <InfoTag left="eng" right={v.eng} onClick={() => edit.openDrawer(<MeaningEditor existing={v} />)} />
+    <SectionableData v={v} />
+  </>;
 }
 
 function SectionData({ v }: { v: FullSection }) {
@@ -157,23 +147,19 @@ function SectionData({ v }: { v: FullSection }) {
     } else if (simple !== undefined) {
       const [title, name] = simple;
       const handler = () => open(<TextSectionEditor as={v.hash} content={v.content} title={title} />);
-      const element = (
-        <Button
-          intent="warning"
-          text={`Edit ${name.toLowerCase()} section`}
-          icon="arrow-right"
-          key={title}
-          onClick={handler}
-        />
-      );
+      const element = <Button
+        intent="warning"
+        text={`Edit ${name.toLowerCase()} section`}
+        icon="arrow-right"
+        key={title}
+        onClick={handler}
+      />;
       return [element, handler];
     } else {
       const handler = () => {};
-      const element = (
-        <Tag large intent="danger">
-          Unknown section {v.title}.
-        </Tag>
-      );
+      const element = <Tag large intent="danger">
+        Unknown section {v.title}.
+      </Tag>;
       return [element, handler];
     }
   }, [edit.openDrawer, v.content, v.hash, v.title]);
@@ -183,14 +169,12 @@ function SectionData({ v }: { v: FullSection }) {
       handler();
     }
   }, [edit.active, v.hash, handler, edit.drawerOpen]);
-  return (
-    <>
-      <BaseData v={v} />
-      <InfoTag left="title" right={v.title} fixed />
-      <InfoTag left="content" right={v.content} fixed />
-      {button}
-    </>
-  );
+  return <>
+    <BaseData v={v} />
+    <InfoTag left="title" right={v.title} fixed />
+    <InfoTag left="content" right={v.content} fixed />
+    {button}
+  </>;
 }
 
 interface Sectionable extends ApiBase {
@@ -198,53 +182,48 @@ interface Sectionable extends ApiBase {
 }
 function SectionableData({ v }: { v: Sectionable }) {
   const edit = useContext(EditContext);
-  return (
-    <>
-      <InfoSection title="sections">
-        {v.sections.map((s, si) => (
-          <InfoSection title={`[${si}]`} key={s.hash}>
-            <SectionData v={s} />
-          </InfoSection>
-        ))}
-        <Divider />
-        <Popover
-          popoverClassName={Classes.POPOVER_CONTENT_SIZING}
-          content={
-            <div>
-              <ControlGroup vertical>
-                <Button
-                  intent="warning"
-                  text="Translation section"
-                  onClick={() => edit.openDrawer(<TranslationSectionEditor to={v.hash} />)}
-                />
-                {SIMPLE_SECTIONS.map(([title, name]) => (
-                  <Button
-                    intent="warning"
-                    text={`${name} section`}
-                    key={title}
-                    onClick={() => edit.openDrawer(<TextSectionEditor to={v.hash} title={title} />)}
-                  />
-                ))}
-              </ControlGroup>
-            </div>
-          }
-          renderTarget={({ isOpen, ...targetProps }) => (
-            <Button intent="warning" text="Create section" icon="add" {...targetProps} />
-          )}
-        />
-      </InfoSection>
-    </>
-  );
+  return <>
+    <InfoSection title="sections">
+      {v.sections.map((s, si) => <InfoSection title={`[${si}]`} key={s.hash}>
+        <SectionData v={s} />
+      </InfoSection>)}
+      <Divider />
+      <Popover
+        popoverClassName={Classes.POPOVER_CONTENT_SIZING}
+        content={
+          <div>
+            <ControlGroup vertical>
+              <Button
+                intent="warning"
+                text="Translation section"
+                onClick={() => edit.openDrawer(<TranslationSectionEditor to={v.hash} />)}
+              />
+              {SIMPLE_SECTIONS.map(([title, name]) => <Button
+                intent="warning"
+                text={`${name} section`}
+                key={title}
+                onClick={() => edit.openDrawer(<TextSectionEditor to={v.hash} title={title} />)}
+              />)}
+            </ControlGroup>
+          </div>
+        }
+        renderTarget={({ isOpen, ...targetProps }) => <Button
+          intent="warning"
+          text="Create section"
+          icon="add"
+          {...targetProps}
+        />}
+      />
+    </InfoSection>
+  </>;
 }
 
 function BaseData({ v }: { v: ApiBase }) {
-  return (
-    <>
-      <InfoTag left="hash" right={v.hash} fixed />
-      <InfoTag left="created at" right={v.created_at} fixed />
-      <InfoTag left="updated at" right={v.updated_at} fixed />
-    </>
-  );
+  return <>
+    <InfoTag left="hash" right={v.hash} fixed />
+    <InfoTag left="created at" right={v.created_at} fixed />
+    <InfoTag left="updated at" right={v.updated_at} fixed />
+  </>;
 }
 
 type SectionEditorProps = {
@@ -280,25 +259,19 @@ function SectionEditor({ to, as, name, form, preview, data }: SectionEditorProps
     });
   };
 
-  return (
-    <div className="inter sidebar">
-      {to && (
-        <p>
-          Adding new {name} section to <Code>{to}</Code>.
-        </p>
-      )}
-      {as && (
-        <p>
-          Editing {name} section <Code>{as}</Code>.
-        </p>
-      )}
-      {form}
-      <Button fill intent="success" text="Submit" onClick={doSubmit} />
-      <Divider />
-      {preview}
-      {as && <Button fill className="bottom" intent="danger" icon="trash" text="Delete entry" onClick={doDelete} />}
-    </div>
-  );
+  return <div className="inter sidebar">
+    {to && <p>
+      Adding new {name} section to <Code>{to}</Code>.
+    </p>}
+    {as && <p>
+      Editing {name} section <Code>{as}</Code>.
+    </p>}
+    {form}
+    <Button fill intent="success" text="Submit" onClick={doSubmit} />
+    <Divider />
+    {preview}
+    {as && <Button fill className="bottom" intent="danger" icon="trash" text="Delete entry" onClick={doDelete} />}
+  </div>;
 }
 
 function TranslationSectionEditor({ to, as, existing }: { to?: string; as?: string; existing?: InterlinearData }) {
@@ -317,14 +290,12 @@ function TranslationSectionEditor({ to, as, existing }: { to?: string; as?: stri
     title: SectionTitle.TRANSLATION,
     content: JSON.stringify(data),
   });
-  const form = (
-    <>
-      <InputGroup onValueChange={setSol} defaultValue={sol} placeholder="Sentence" />
-      <InputGroup onValueChange={setSolSep} defaultValue={solSep} placeholder="Interlinearised sentence" />
-      <InputGroup onValueChange={setEngSep} defaultValue={engSep} placeholder="Interlinearised translation" />
-      <InputGroup onValueChange={setEng} defaultValue={eng} placeholder="Translation" />
-    </>
-  );
+  const form = <>
+    <InputGroup onValueChange={setSol} defaultValue={sol} placeholder="Sentence" />
+    <InputGroup onValueChange={setSolSep} defaultValue={solSep} placeholder="Interlinearised sentence" />
+    <InputGroup onValueChange={setEngSep} defaultValue={engSep} placeholder="Interlinearised translation" />
+    <InputGroup onValueChange={setEng} defaultValue={eng} placeholder="Translation" />
+  </>;
   const preview = <InterlinearGloss data={data} asterisk script />;
 
   return <SectionEditor to={to} as={as} name="translation" form={form} preview={preview} data={createData} />;
@@ -345,17 +316,15 @@ function TextSectionEditor({
   const [content, setContent] = useState(existingContent ?? "");
 
   const createData = () => ({ title, content });
-  const form = (
-    <ControlGroup fill>
-      <TextArea
-        onChange={(e) => setContent(e.currentTarget.value)}
-        value={content}
-        placeholder={`Content for ${title}`}
-        fill
-      />
-      <WordSelect onSelect={(t) => setContent((c) => `${c}[${t.hash}] (“${t.meanings[0]?.eng}”)`)} />
-    </ControlGroup>
-  );
+  const form = <ControlGroup fill>
+    <TextArea
+      onChange={(e) => setContent(e.currentTarget.value)}
+      value={content}
+      placeholder={`Content for ${title}`}
+      fill
+    />
+    <WordSelect onSelect={(t) => setContent((c) => `${c}[${t.hash}] (“${t.meanings[0]?.eng}”)`)} />
+  </ControlGroup>;
   const preview = <RichText text={content} on={edit.page} />;
 
   return <SectionEditor to={to} as={as} name={`${title} text`} form={form} preview={preview} data={createData} />;
@@ -376,17 +345,15 @@ function EntryEditor({ existing }: { existing: FullEntry }) {
     });
   };
 
-  return (
-    <div className="inter">
-      <p>
-        Editing entry <Code>{as}</Code>.
-      </p>
-      <InputGroup onValueChange={setSol} defaultValue={sol} placeholder="Solerian" />
-      <InputGroup onValueChange={setExtra} defaultValue={extra} placeholder="Extra" />
-      <Checkbox onChange={(e) => setObsolete(e.currentTarget.checked)} defaultValue={extra} label="Obsolete" />
-      <Button fill intent="success" text="Submit" onClick={submit} />
-    </div>
-  );
+  return <div className="inter">
+    <p>
+      Editing entry <Code>{as}</Code>.
+    </p>
+    <InputGroup onValueChange={setSol} defaultValue={sol} placeholder="Solerian" />
+    <InputGroup onValueChange={setExtra} defaultValue={extra} placeholder="Extra" />
+    <Checkbox onChange={(e) => setObsolete(e.currentTarget.checked)} defaultValue={extra} label="Obsolete" />
+    <Button fill intent="success" text="Submit" onClick={submit} />
+  </div>;
 }
 
 function MeaningEditor({ to, existing }: { to?: string; existing?: FullMeaning }) {
@@ -406,22 +373,16 @@ function MeaningEditor({ to, existing }: { to?: string; existing?: FullMeaning }
     });
   };
 
-  return (
-    <div className="inter">
-      {to && (
-        <p>
-          Adding new meaning to <Code>{to}</Code>.
-        </p>
-      )}
-      {as && (
-        <p>
-          Editing meaning <Code>{as}</Code>.
-        </p>
-      )}
-      <InputGroup onValueChange={setEng} defaultValue={eng} placeholder="English" />
-      <Button fill intent="success" text="Submit" onClick={submit} />
-    </div>
-  );
+  return <div className="inter">
+    {to && <p>
+      Adding new meaning to <Code>{to}</Code>.
+    </p>}
+    {as && <p>
+      Editing meaning <Code>{as}</Code>.
+    </p>}
+    <InputGroup onValueChange={setEng} defaultValue={eng} placeholder="English" />
+    <Button fill intent="success" text="Submit" onClick={submit} />
+  </div>;
 }
 
 interface EditContextData {
@@ -458,15 +419,13 @@ function EditWordPageContent({ entry, active }: { entry: FullEntry; active: stri
     setOpen(false);
   }, [entry.hash]);
 
-  return (
-    <EditContext.Provider value={{ openDrawer, closeDrawer, drawerOpen: isOpen, page: entry.hash, active }}>
-      <AnchorButton text="Back" icon="arrow-left" href={"#" + entry.link} /> <br />
-      <EntryData v={entry} />
-      <Drawer isOpen={isOpen} onClose={closeDrawer}>
-        {element}
-      </Drawer>
-    </EditContext.Provider>
-  );
+  return <EditContext.Provider value={{ openDrawer, closeDrawer, drawerOpen: isOpen, page: entry.hash, active }}>
+    <AnchorButton text="Back" icon="arrow-left" href={"#" + entry.link} /> <br />
+    <EntryData v={entry} />
+    <Drawer isOpen={isOpen} onClose={closeDrawer}>
+      {element}
+    </Drawer>
+  </EditContext.Provider>;
 }
 
 export default function EditWordPage() {
@@ -482,11 +441,9 @@ export default function EditWordPage() {
     const entry = entries.find((e) => e.hash === hash);
 
     if (entry) {
-      content = (
-        <div className="inter">
-          <EditWordPageContent entry={entry} active={edit} />
-        </div>
-      );
+      content = <div className="inter">
+        <EditWordPageContent entry={entry} active={edit} />
+      </div>;
     } else {
       content = <NonIdealState icon="error" title="Unknown word" description={hash} />; // TODO
     }

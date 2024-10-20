@@ -53,11 +53,9 @@ export function Abbr({ children }: { children: string }): ReactNode {
     if (abbr === undefined) {
       return i;
     } else {
-      return (
-        <abbr key={j} title={abbr} className="il">
-          {i}
-        </abbr>
-      );
+      return <abbr key={j} title={abbr} className="il">
+        {i}
+      </abbr>;
     }
   });
 }
@@ -119,37 +117,31 @@ export function InterlinearGloss({
     parts.push(
       <div className="box" key={i}>
         {eSol && <p className="original">{eSol}</p>}
-        {eEng && (
-          <p>
-            <Abbr>{eEng}</Abbr>
-          </p>
-        )}
+        {eEng && <p>
+          <Abbr>{eEng}</Abbr>
+        </p>}
       </div>,
     );
   }
 
-  const body = (
-    <>
-      {...parts}
-      {soundChange && <p className="bottom">{soundChange.soundChangeSentence(solClean)}</p>}
-      <p className="bottom">{eng}</p>
-    </>
-  );
+  const body = <>
+    {...parts}
+    {soundChange && <p className="bottom">{soundChange.soundChangeSentence(solClean)}</p>}
+    <p className="bottom">{eng}</p>
+  </>;
 
-  return (
-    <div className="interlinear">
-      <p className="original">
-        {sol}
-        {extra}
-      </p>
-      {script && <p className="original sol fit-width">{scriptMultiUnicode(solClean)}</p>}
-      {indent ? (
-        <dl>
-          <dd>{body}</dd>
-        </dl>
-      ) : (
-        body
-      )}
-    </div>
-  );
+  return <div className="interlinear">
+    <p className="original">
+      {sol}
+      {extra}
+    </p>
+    {script && <p className="original sol fit-width">{scriptMultiUnicode(solClean)}</p>}
+    {indent ? (
+      <dl>
+        <dd>{body}</dd>
+      </dl>
+    ) : (
+      body
+    )}
+  </div>;
 }

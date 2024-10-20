@@ -19,39 +19,31 @@ function SectionContent({ entry, section, on }: { entry: FullEntry; section: Ful
   const simple = SIMPLE_SECTIONS.find(([title]) => section.title === title);
   if (section.title === SectionTitle.TRANSLATION) {
     const data = JSON.parse(section.content) as InterlinearData;
-    const extra = user && (
-      <span className="edit">
-        [ <a href={uri`#/edit/${entry.hash}/${section.hash}`}>edit</a> ]
-      </span>
-    );
+    const extra = user && <span className="edit">
+      [ <a href={uri`#/edit/${entry.hash}/${section.hash}`}>edit</a> ]
+    </span>;
     return <InterlinearGloss data={data} asterisk link indent extra={extra} />;
   } else if (simple !== undefined) {
     const [, name, iconProps] = simple;
-    return (
-      <>
-        <H4>
-          {name} <Icon {...iconProps} size={IconSize.LARGE} />
-        </H4>
-        <RichText text={section.content} on={on} />
-      </>
-    );
+    return <>
+      <H4>
+        {name} <Icon {...iconProps} size={IconSize.LARGE} />
+      </H4>
+      <RichText text={section.content} on={on} />
+    </>;
   } else {
-    return (
-      <Tag large intent="danger">
-        Unknown section {section.title}.
-      </Tag>
-    );
+    return <Tag large intent="danger">
+      Unknown section {section.title}.
+    </Tag>;
   }
 }
 
 function WordPageHeader({ entry }: { entry: FullEntry }) {
-  return (
-    <>
-      <H2>{entry.sol}</H2>
-      <p className="sol space-right">{entry.script}</p>
-      <span className="space-right">{entry.ipa}</span>
-    </>
-  );
+  return <>
+    <H2>{entry.sol}</H2>
+    <p className="sol space-right">{entry.script}</p>
+    <span className="space-right">{entry.ipa}</span>
+  </>;
 }
 
 function WordPageContent({ entry, highlighted = false }: { entry: FullEntry; highlighted?: boolean }) {
@@ -76,45 +68,31 @@ function WordPageContent({ entry, highlighted = false }: { entry: FullEntry; hig
     table = <PronounInfo entry={entry} />;
   }
 
-  return (
-    <>
-      <H3 className="meaning" ref={ref}>
-        {highlighted ? <mark>{partHeader}</mark> : partHeader}
-        {user && (
-          <span className="edit">
-            [ <a href={uri`#/edit/${entry.hash}`}>edit</a> ]
-          </span>
-        )}
-      </H3>
+  return <>
+    <H3 className="meaning" ref={ref}>
+      {highlighted ? <mark>{partHeader}</mark> : partHeader}
+      {user && <span className="edit">
+        [ <a href={uri`#/edit/${entry.hash}`}>edit</a> ]
+      </span>}
+    </H3>
 
-      {entry.tag && (
-        <Tag large intent="danger">
-          {entry.tag}
-        </Tag>
-      )}
-      <ol>
-        {entry.meanings.map((m) => (
-          <li key={m.hash}>
-            <p>{m.eng}</p>
-            {m.sections.length > 0 && (
-              <dl>
-                {m.sections.map((s) => (
-                  <dd key={s.hash}>
-                    <SectionContent entry={entry} section={s} on={entry.hash} />
-                  </dd>
-                ))}
-              </dl>
-            )}
-          </li>
-        ))}
-      </ol>
-      {entry.sections.map((s) => (
-        <SectionContent key={s.hash} entry={entry} section={s} on={entry.hash} />
-      ))}
-      {table !== null && <H4>Inflection tables</H4>}
-      {table}
-    </>
-  );
+    {entry.tag && <Tag large intent="danger">
+      {entry.tag}
+    </Tag>}
+    <ol>
+      {entry.meanings.map((m) => <li key={m.hash}>
+        <p>{m.eng}</p>
+        {m.sections.length > 0 && <dl>
+          {m.sections.map((s) => <dd key={s.hash}>
+            <SectionContent entry={entry} section={s} on={entry.hash} />
+          </dd>)}
+        </dl>}
+      </li>)}
+    </ol>
+    {entry.sections.map((s) => <SectionContent key={s.hash} entry={entry} section={s} on={entry.hash} />)}
+    {table !== null && <H4>Inflection tables</H4>}
+    {table}
+  </>;
 }
 
 export default function WordPage() {
@@ -128,25 +106,19 @@ export default function WordPage() {
 
     if (matching.length > 0) {
       const parts = matching.map((i) => partOfSpeechShort(i.extra));
-      content = (
-        <div className="inter word">
-          <nav>
-            <ol>
-              {parts.map((i, j) => (
-                <li key={j}>
-                  <Link to={`/w/${word}/${j + 1}`}>{i}</Link>
-                </li>
-              ))}
-            </ol>
-          </nav>
-          <div className="content">
-            <WordPageHeader entry={matching[0]} /> {/* TODO: Be smarter about this? */}
-            {matching.map((m, i) => (
-              <WordPageContent key={m.hash} entry={m} highlighted={String(i + 1) == num} />
-            ))}
-          </div>
+      content = <div className="inter word">
+        <nav>
+          <ol>
+            {parts.map((i, j) => <li key={j}>
+              <Link to={`/w/${word}/${j + 1}`}>{i}</Link>
+            </li>)}
+          </ol>
+        </nav>
+        <div className="content">
+          <WordPageHeader entry={matching[0]} /> {/* TODO: Be smarter about this? */}
+          {matching.map((m, i) => <WordPageContent key={m.hash} entry={m} highlighted={String(i + 1) == num} />)}
         </div>
-      );
+      </div>;
     } else {
       content = <NonIdealState icon="error" title="Unknown word" description={word} />; // TODO
     }

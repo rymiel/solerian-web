@@ -85,21 +85,19 @@ const router = createHashRouter([
 ]);
 
 function Wrapper() {
-  return (
-    <StrictMode>
-      <ApiVersionProvider>
-        <BlueprintProvider>
-          <LangConfigProvider>
-            <DictionaryProvider>
-              <UserProvider>
-                <RouterProvider router={router} />
-              </UserProvider>
-            </DictionaryProvider>
-          </LangConfigProvider>
-        </BlueprintProvider>
-      </ApiVersionProvider>
-    </StrictMode>
-  );
+  return <StrictMode>
+    <ApiVersionProvider>
+      <BlueprintProvider>
+        <LangConfigProvider>
+          <DictionaryProvider>
+            <UserProvider>
+              <RouterProvider router={router} />
+            </UserProvider>
+          </DictionaryProvider>
+        </LangConfigProvider>
+      </BlueprintProvider>
+    </ApiVersionProvider>
+  </StrictMode>;
 }
 
 createRoot(document.getElementById("root")!).render(<Wrapper />);

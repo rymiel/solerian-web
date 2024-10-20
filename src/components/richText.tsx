@@ -35,18 +35,14 @@ export function RichText({ text, on }: { text: string; on?: string }) {
     }
 
     if (id === on) {
-      return (
-        <b>
-          <i>{label ?? entry.sol}</i>
-        </b>
-      );
+      return <b>
+        <i>{label ?? entry.sol}</i>
+      </b>;
     }
 
-    return (
-      <Link to={entry.link}>
-        <i>{label ?? entry.sol}</i>
-      </Link>
-    );
+    return <Link to={entry.link}>
+      <i>{label ?? entry.sol}</i>
+    </Link>;
   });
 
   return <p>{...highlighted}</p>;

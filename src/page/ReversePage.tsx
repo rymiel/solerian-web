@@ -16,14 +16,12 @@ function terminal(entry: FullEntry) {
     meaning += "; ...";
   }
   const tag = entry.tag === undefined ? undefined : <Tag intent="danger">{entry.tag}</Tag>;
-  return (
-    <>
-      <Link to={entry.link}>
-        <i>{entry.sol}</i>
-      </Link>
-      : {tag} ({entry.extra}) "{meaning}"
-    </>
-  );
+  return <>
+    <Link to={entry.link}>
+      <i>{entry.sol}</i>
+    </Link>
+    : {tag} ({entry.extra}) "{meaning}"
+  </>;
 }
 
 function inflNode(entry: InflEntry) {
@@ -34,44 +32,30 @@ function inflNode(entry: InflEntry) {
   const names = patternNames(part, pattern);
   const className = entry.old ? `old class ${names[1]}` : `pattern ${names[0]}`;
 
-  return (
-    <>
-      <i>{entry.sol}</i>: {entry.old && <Tag intent="warning">old</Tag>} <Abbr>{formName}</Abbr> of{" "}
-      <span title={names[2]}>
-        {className} {partName}
-      </span>{" "}
-      <i>{entry.original.sol}</i>
-      <ul>
-        <li>{terminal(entry.original)}</li>
-      </ul>
-    </>
-  );
+  return <>
+    <i>{entry.sol}</i>: {entry.old && <Tag intent="warning">old</Tag>} <Abbr>{formName}</Abbr> of{" "}
+    <span title={names[2]}>
+      {className} {partName}
+    </span>{" "}
+    <i>{entry.original.sol}</i>
+    <ul>
+      <li>{terminal(entry.original)}</li>
+    </ul>
+  </>;
 }
 
 function echo(original: string, cut: string, children: React.ReactNode[]) {
-  return (
-    <>
-      <i>{original}</i>: echo prefixed form of <i>{cut}</i>
-      <ul>
-        {children.map((i, j) => (
-          <li key={j}>{i}</li>
-        ))}
-      </ul>
-    </>
-  );
+  return <>
+    <i>{original}</i>: echo prefixed form of <i>{cut}</i>
+    <ul>{children.map((i, j) => <li key={j}>{i}</li>)}</ul>
+  </>;
 }
 
 function poss(original: string, cut: string, form: string, old: boolean, children: React.ReactNode[]) {
-  return (
-    <>
-      <i>{original}</i>: {old && <Tag intent="warning">old</Tag>} <Abbr>{form}</Abbr> possessive of <i>{cut}</i>
-      <ul>
-        {children.map((i, j) => (
-          <li key={j}>{i}</li>
-        ))}
-      </ul>
-    </>
-  );
+  return <>
+    <i>{original}</i>: {old && <Tag intent="warning">old</Tag>} <Abbr>{form}</Abbr> possessive of <i>{cut}</i>
+    <ul>{children.map((i, j) => <li key={j}>{i}</li>)}</ul>
+  </>;
 }
 
 const ReverseContent = memo(function ReverseContent({
@@ -151,24 +135,16 @@ const ReverseContent = memo(function ReverseContent({
   }
 
   if (r.length === 0) {
-    return (
-      <ul>
-        <li>
-          <i>{query}</i>:{" "}
-          <Tag intent="danger" large icon="cross-circle">
-            Invalid word
-          </Tag>
-        </li>
-      </ul>
-    );
+    return <ul>
+      <li>
+        <i>{query}</i>:{" "}
+        <Tag intent="danger" large icon="cross-circle">
+          Invalid word
+        </Tag>
+      </li>
+    </ul>;
   } else {
-    return (
-      <ul>
-        {r.map((i, j) => (
-          <li key={j}>{i}</li>
-        ))}
-      </ul>
-    );
+    return <ul>{r.map((i, j) => <li key={j}>{i}</li>)}</ul>;
   }
 });
 
@@ -185,12 +161,10 @@ export default function ReversePage() {
   if (query === undefined) {
     content = <NonIdealState icon="search" />;
   } else if (entries && infl) {
-    content = query.split(/[ -]/).map((i, j) => (
-      <Fragment key={j}>
-        {j > 0 && <Divider />}
-        <ReverseContent infl={infl} raw={entries} query={i} includeOld={includeOld} />
-      </Fragment>
-    ));
+    content = query.split(/[ -]/).map((i, j) => <Fragment key={j}>
+      {j > 0 && <Divider />}
+      <ReverseContent infl={infl} raw={entries} query={i} includeOld={includeOld} />
+    </Fragment>);
   }
 
   let forms = "...";

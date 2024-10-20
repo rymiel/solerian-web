@@ -100,42 +100,36 @@ export default function ValidatePage() {
   if (!user) {
     footer = <NonIdealState icon="error" title="You cannot access this page" />;
   } else if (entries && infl && soundChange) {
-    header = (
-      <Button
-        intent="success"
-        text={`Run validation (${entries.length + infl.length} entries)`}
-        fill
-        disabled={isLoading}
-        loading={isLoading}
-        onClick={() => {
-          setFail(null);
-          setLoading(true);
-          validate(entries, infl, soundChange).then((f) => {
-            setFail(f);
-            setLoading(false);
-          });
-        }}
-      />
-    );
+    header = <Button
+      intent="success"
+      text={`Run validation (${entries.length + infl.length} entries)`}
+      fill
+      disabled={isLoading}
+      loading={isLoading}
+      onClick={() => {
+        setFail(null);
+        setLoading(true);
+        validate(entries, infl, soundChange).then((f) => {
+          setFail(f);
+          setLoading(false);
+        });
+      }}
+    />;
     if (fail !== null && fail.length === 0) {
       footer = <NonIdealState icon="tick-circle" title="All words passed validation" />;
     } else if (fail !== null) {
-      footer = (
-        <ul>
-          {fail.map((f) => {
-            const [e, reason] = f;
-            const key = "hash" in e ? e.hash : `"${e.original.hash}"-${e.form}`;
-            return (
-              <li key={key}>
-                <Link to={`/reverse/${e.sol}`}>
-                  {"hash" in e ? `"${e.sol}"` : `"${e.sol}" (${e.form} of ${e.original.sol})`}
-                </Link>
-                : {reason}
-              </li>
-            );
-          })}
-        </ul>
-      );
+      footer = <ul>
+        {fail.map((f) => {
+          const [e, reason] = f;
+          const key = "hash" in e ? e.hash : `"${e.original.hash}"-${e.form}`;
+          return <li key={key}>
+            <Link to={`/reverse/${e.sol}`}>
+              {"hash" in e ? `"${e.sol}"` : `"${e.sol}" (${e.form} of ${e.original.sol})`}
+            </Link>
+            : {reason}
+          </li>;
+        })}
+      </ul>;
     }
   } else {
     footer = <NonIdealState icon={<Spinner size={SpinnerSize.LARGE} />} />;

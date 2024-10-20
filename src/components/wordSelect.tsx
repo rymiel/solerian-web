@@ -30,32 +30,28 @@ const renderEntry: ItemRenderer<FullEntry> = (entry, { handleClick, handleFocus,
   if (entry.meanings.length > 1) {
     eng += "; ...";
   }
-  return (
-    <MenuItem
-      active={modifiers.active}
-      disabled={modifiers.disabled}
-      key={entry.hash}
-      label={entry.extra}
-      onClick={handleClick}
-      onFocus={handleFocus}
-      roleStructure="listoption"
-      text={`${entry.sol}: ${eng}`}
-    />
-  );
+  return <MenuItem
+    active={modifiers.active}
+    disabled={modifiers.disabled}
+    key={entry.hash}
+    label={entry.extra}
+    onClick={handleClick}
+    onFocus={handleFocus}
+    roleStructure="listoption"
+    text={`${entry.sol}: ${eng}`}
+  />;
 };
 
 export function WordSelect({ onSelect }: { onSelect: (entry: FullEntry) => void }) {
   const { entries } = useContext(Dictionary);
-  return (
-    <Select<FullEntry>
-      items={entries || []}
-      itemPredicate={filterEntry}
-      itemRenderer={renderEntry}
-      noResults={<MenuItem disabled={true} text="No results." roleStructure="listoption" />}
-      onItemSelect={onSelect}
-      disabled={entries === null}
-    >
-      <Button icon="add" intent="primary" fill className="fill-height" disabled={entries === null} />
-    </Select>
-  );
+  return <Select<FullEntry>
+    items={entries || []}
+    itemPredicate={filterEntry}
+    itemRenderer={renderEntry}
+    noResults={<MenuItem disabled={true} text="No results." roleStructure="listoption" />}
+    onItemSelect={onSelect}
+    disabled={entries === null}
+  >
+    <Button icon="add" intent="primary" fill className="fill-height" disabled={entries === null} />
+  </Select>;
 }
