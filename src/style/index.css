@@ -75,9 +75,13 @@ div.inter {
 
 main {
   flex: 1;
-  font-size: 18px;
   overflow: auto;
   padding: 0;
+}
+
+main,
+.bp5-portal {
+  font-size: 18px;
 }
 
 footer {
