@@ -17,7 +17,7 @@ import {
   Tag,
   TextArea,
 } from "@blueprintjs/core";
-import { createContext, ReactElement, useCallback, useContext, useEffect, useState } from "react";
+import { createContext, ReactElement, ReactNode, useCallback, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { InterlinearData, InterlinearGloss } from "components/interlinear";
@@ -247,9 +247,61 @@ function BaseData({ v }: { v: ApiBase }) {
   );
 }
 
-function TranslationSectionEditor({ to, as, existing }: { to?: string; as?: string; existing?: InterlinearData }) {
+type SectionEditorProps = {
+  to?: string;
+  as?: string;
+  name: string;
+  form: ReactNode;
+  preview: ReactNode;
+  data: () => { title: string; content: string };
+};
+function SectionEditor({ to, as, name, form, preview, data }: SectionEditorProps) {
   const edit = useContext(EditContext);
   const dict = useContext(Dictionary);
+
+  if (to === undefined && as === undefined) {
+    throw new Error("One of `as` or `to` must be provided");
+  }
+
+  const doSubmit = () => {
+    apiFetch("/section", "POST", { to, as, ...data() }).then(() => {
+      dict.refresh();
+      edit.closeDrawer();
+    });
+  };
+
+  const doDelete = () => {
+    if (as === undefined) {
+      throw new Error("Cannot delete nonexistent section");
+    }
+    apiFetch(`/section/${as}`, "DELETE").then(() => {
+      dict.refresh();
+      edit.closeDrawer();
+    });
+  };
+
+  return (
+    <div className="inter sidebar">
+      {to && (
+        <p>
+          Adding new {name} section to <Code>{to}</Code>.
+        </p>
+      )}
+      {as && (
+        <p>
+          Editing {name} section <Code>{as}</Code>.
+        </p>
+      )}
+      {form}
+      <Button fill intent="success" text="Submit" onClick={doSubmit} />
+      <Divider />
+      {preview}
+      {as && <Button fill className="bottom" intent="danger" icon="trash" text="Delete entry" onClick={doDelete} />}
+    </div>
+  );
+}
+
+function TranslationSectionEditor({ to, as, existing }: { to?: string; as?: string; existing?: InterlinearData }) {
   const [sol, setSol] = useState(existing?.sol ?? "");
   const [solSep, setSolSep] = useState(existing?.solSep ?? "");
   const [engSep, setEngSep] = useState(existing?.engSep ?? "");
@@ -261,40 +313,21 @@ function TranslationSectionEditor({ to, as, existing }: { to?: string; as?: stri
     eng,
   };
 
-  if (to === undefined && as === undefined) {
-    throw new Error("One of `as` or `to` must be provided");
-  }
-
-  const submit = () => {
-    apiFetch("/section", "POST", { to, as, title: SectionTitle.TRANSLATION, content: JSON.stringify(data) }).then(
-      () => {
-        dict.refresh();
-        edit.closeDrawer();
-      },
-    );
-  };
-
-  return (
-    <div className="inter">
-      {to && (
-        <p>
-          Adding new translation section to <Code>{to}</Code>.
-        </p>
-      )}
-      {as && (
-        <p>
-          Editing translation section <Code>{as}</Code>.
-        </p>
-      )}
+  const createData = () => ({
+    title: SectionTitle.TRANSLATION,
+    content: JSON.stringify(data),
+  });
+  const form = (
+    <>
       <InputGroup onValueChange={setSol} defaultValue={sol} placeholder="Sentence" />
       <InputGroup onValueChange={setSolSep} defaultValue={solSep} placeholder="Interlinearised sentence" />
       <InputGroup onValueChange={setEngSep} defaultValue={engSep} placeholder="Interlinearised translation" />
       <InputGroup onValueChange={setEng} defaultValue={eng} placeholder="Translation" />
-      <Button fill intent="success" text="Submit" onClick={submit} />
-      <Divider />
-      <InterlinearGloss data={data} asterisk script />
-    </div>
+    </>
   );
+  const preview = <InterlinearGloss data={data} asterisk script />;
+
+  return <SectionEditor to={to} as={as} name="translation" form={form} preview={preview} data={createData} />;
 }
 
 function TextSectionEditor({
@@ -309,54 +342,23 @@ function TextSectionEditor({
   content?: string;
 }) {
   const edit = useContext(EditContext);
-  const dict = useContext(Dictionary);
   const [content, setContent] = useState(existingContent ?? "");
 
-  if (to === undefined && as === undefined) {
-    throw new Error("One of `as` or `to` must be provided");
-  }
-
-  const submit = () => {
-    apiFetch("/section", "POST", { to, as, title, content }).then(() => {
-      dict.refresh();
-      edit.closeDrawer();
-    });
-  };
-
-  const delete_ = () => {
-    apiFetch(`/section/${as}`, "DELETE").then(() => {
-      dict.refresh();
-      edit.closeDrawer();
-    });
-  };
-
-  return (
-    <div className="inter sidebar">
-      {to && (
-        <p>
-          Adding new {title} text section to <Code>{to}</Code>.
-        </p>
-      )}
-      {as && (
-        <p>
-          Editing {title} text section <Code>{as}</Code>.
-        </p>
-      )}
-      <ControlGroup fill>
-        <TextArea
-          onChange={(e) => setContent(e.currentTarget.value)}
-          value={content}
-          placeholder={`Content for ${title}`}
-          fill
-        />
-        <WordSelect onSelect={(t) => setContent((c) => `${c}[${t.hash}] (“${t.meanings[0]?.eng}”)`)} />
-      </ControlGroup>
-      <Button fill intent="success" text="Submit" onClick={submit} />
-      <Divider />
-      <RichText text={content} on={edit.page} />
-      {as && <Button fill className="bottom" intent="danger" icon="trash" text="Delete entry" onClick={delete_} />}
-    </div>
+  const createData = () => ({ title, content });
+  const form = (
+    <ControlGroup fill>
+      <TextArea
+        onChange={(e) => setContent(e.currentTarget.value)}
+        value={content}
+        placeholder={`Content for ${title}`}
+        fill
+      />
+      <WordSelect onSelect={(t) => setContent((c) => `${c}[${t.hash}] (“${t.meanings[0]?.eng}”)`)} />
+    </ControlGroup>
   );
+  const preview = <RichText text={content} on={edit.page} />;
+
+  return <SectionEditor to={to} as={as} name={`${title} text`} form={form} preview={preview} data={createData} />;
 }
 
 function EntryEditor({ existing }: { existing: FullEntry }) {
