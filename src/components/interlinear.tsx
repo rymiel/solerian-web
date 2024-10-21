@@ -36,6 +36,8 @@ const ABBREVIATIONS: Record<string, string> = {
   NEG: "negative",
   ADV: "adverb",
   ECHO: "echo (marks that the subject of the sentence hasn't changed)",
+  Q: "polar question",
+  TAG: "tag question",
 
   // old stuff
   M: "masculine",
