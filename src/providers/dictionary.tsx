@@ -71,6 +71,15 @@ export function DictionaryProvider({ children }: PropsWithChildren) {
         return { ...i, link };
       });
       setEntries(sWords);
+      try {
+        localStorage.setItem("entries", JSON.stringify(sWords));
+      } catch (err) {
+        if (err instanceof DOMException) {
+          toastErrorHandler(new Error(`Failed to sync: ${err.name}: ${err.message}`));
+        } else {
+          throw err;
+        }
+      }
     } catch (error) {
       toastErrorHandler(error);
     }
@@ -79,6 +88,21 @@ export function DictionaryProvider({ children }: PropsWithChildren) {
   useEffect(() => {
     refresh();
   }, [refresh]);
+
+  useEffect(() => {
+    const handle = (e: StorageEvent) => {
+      if (e.newValue === null) {
+        return;
+      }
+      if (e.key === "entries") {
+        const entries = JSON.parse(e.newValue) as FullEntry[];
+        console.log(`Synced new entries: ${entries.length} loaded`);
+        setEntries(entries);
+      }
+    };
+    addEventListener("storage", handle);
+    return () => removeEventListener("storage", handle);
+  }, []);
 
   return <Dictionary.Provider value={{ entries, refresh }}>{children}</Dictionary.Provider>;
 }
