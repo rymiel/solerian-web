@@ -71,6 +71,7 @@ export function DictionaryProvider({ children }: PropsWithChildren) {
         return { ...i, link };
       });
       setEntries(sWords);
+
       try {
         localStorage.setItem("entries", JSON.stringify(sWords));
       } catch (err) {
