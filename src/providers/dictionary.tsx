@@ -75,7 +75,7 @@ export function DictionaryProvider({ children }: PropsWithChildren) {
 
       try {
         const newEtag = d.etag ?? "undefined";
-        if (d.etag != etag.current) {
+        if (newEtag != etag.current) {
           console.log(`Broadcasting new dictionary version: ${etag.current} -> ${newEtag}`);
           etag.current = newEtag;
           localStorage.setItem("etag", newEtag);
