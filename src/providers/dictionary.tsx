@@ -1,4 +1,4 @@
-import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useState } from "react";
+import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useRef, useState } from "react";
 
 import { AnyPattern, determinePattern, markStress, Part, partOfExtra } from "lang/extra";
 import { scriptMultiUnicode } from "lang/script";
@@ -41,6 +41,7 @@ export const Dictionary = createContext<DictionaryData>({
 
 export function DictionaryProvider({ children }: PropsWithChildren) {
   const [entries, setEntries] = useState<FullEntry[] | null>(null);
+  const etag = useRef(localStorage.getItem("etag") ?? "undefined");
   const { soundChange } = useContext(LangConfig);
 
   const refresh = useCallback(async () => {
@@ -73,7 +74,12 @@ export function DictionaryProvider({ children }: PropsWithChildren) {
       setEntries(sWords);
 
       try {
-        localStorage.setItem("entries", JSON.stringify(sWords));
+        const newEtag = d.etag ?? "undefined";
+        if (d.etag != etag.current) {
+          console.log(`Broadcasting new dictionary version: ${etag.current} -> ${newEtag}`);
+          etag.current = newEtag;
+          localStorage.setItem("etag", newEtag);
+        }
       } catch (err) {
         if (err instanceof DOMException) {
           toastErrorHandler(new Error(`Failed to sync: ${err.name}: ${err.message}`));
@@ -92,14 +98,18 @@ export function DictionaryProvider({ children }: PropsWithChildren) {
 
   useEffect(() => {
     const handle = (e: StorageEvent) => {
-      if (e.key === "entries" && e.newValue !== null) {
-        const entries = JSON.parse(e.newValue) as FullEntry[];
-        console.log(`Synced new entries: ${entries.length} loaded`);
-        setEntries(entries);
+      if (e.key === "etag" && e.newValue !== etag.current) {
+        console.log(`Synced new dictionary version: ${etag.current} -> ${e.newValue}`);
+        refresh();
       }
     };
     addEventListener("storage", handle);
     return () => removeEventListener("storage", handle);
+  }, [refresh]);
+
+  // TODO: remove me later
+  useEffect(() => {
+    localStorage.removeItem("entries");
   }, []);
 
   return <Dictionary.Provider value={{ entries, refresh }}>{children}</Dictionary.Provider>;

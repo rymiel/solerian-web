@@ -31,6 +31,7 @@ export interface ApiDictionary {
   words: ApiWord[];
   meanings: ApiMeaning[];
   sections: ApiSection[];
+  etag?: string;
 }
 
 export class CustomApiError extends Error {
