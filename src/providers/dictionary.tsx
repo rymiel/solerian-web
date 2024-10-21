@@ -91,10 +91,7 @@ export function DictionaryProvider({ children }: PropsWithChildren) {
 
   useEffect(() => {
     const handle = (e: StorageEvent) => {
-      if (e.newValue === null) {
-        return;
-      }
-      if (e.key === "entries") {
+      if (e.key === "entries" && e.newValue !== null) {
         const entries = JSON.parse(e.newValue) as FullEntry[];
         console.log(`Synced new entries: ${entries.length} loaded`);
         setEntries(entries);
