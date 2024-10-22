@@ -1,11 +1,11 @@
 import { Button, HTMLTable, Icon, InputGroup, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
-import { useContext, useLayoutEffect, useState } from "react";
+import { useCallback, useContext, useLayoutEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
 import { entryHasMatch } from "components/wordSelect";
 import { PARTS_OF_SPEECH } from "lang/extra";
 import { SectionTitle, SIMPLE_SECTIONS } from "page/EditWordPage";
-import { Dictionary } from "providers/dictionary";
+import { Dictionary, FullMeaning } from "providers/dictionary";
 import { User } from "providers/user";
 import { App } from "App";
 
@@ -48,6 +48,25 @@ export default function DictionaryPage() {
     }
   }, [entries]);
 
+  const mergeDefinitions = useCallback((meanings: FullMeaning[]) => {
+    let toBe = false;
+    return meanings.map((m, mi) => {
+      let eng = m.eng;
+      if (eng.startsWith("(")) {
+        const split = m.eng.split(")", 2);
+        eng = (split[1] ?? split[0]).trim();
+      }
+      if (eng.startsWith("to be ")) {
+        if (toBe) {
+          eng = eng.slice(6);
+        } else {
+          toBe = true;
+        }
+      }
+      return (mi === 0 ? "" : "; ") + eng;
+    });
+  }, []);
+
   if (entries) {
     content = <div className="inter">
       <HTMLTable className="margin-auto dictionary" compact striped interactive>
@@ -77,8 +96,7 @@ export default function DictionaryPage() {
                 <td>
                   <a href={"#" + e.link} className="link-fill">
                     <span>
-                      {e.tag && <Tag intent="danger">{e.tag}</Tag>}{" "}
-                      {e.meanings.map((m, mi) => (mi === 0 ? "" : "; ") + m.eng)}
+                      {e.tag && <Tag intent="danger">{e.tag}</Tag>} {mergeDefinitions(e.meanings)}
                       {e.meanings.some((m) => m.sections.some((s) => s.title === SectionTitle.TRANSLATION)) && <Icon
                         icon="label"
                         title="has a translation"
