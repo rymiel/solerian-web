@@ -46,6 +46,19 @@ function WordPageHeader({ entry }: { entry: FullEntry }) {
   </>;
 }
 
+function Meaning({ eng }: { eng: string }) {
+  if (eng.startsWith("(")) {
+    const split = eng.slice(1).split(")", 2);
+    if (split.length === 2) {
+      return <p>
+        <i>({split[0]})</i>
+        {split[1]}
+      </p>;
+    }
+  }
+  return <p>{eng}</p>;
+}
+
 function WordPageContent({ entry, highlighted = false }: { entry: FullEntry; highlighted?: boolean }) {
   const { user } = useContext(User);
   const ref = useRef<HTMLHeadingElement | null>(null);
@@ -81,7 +94,7 @@ function WordPageContent({ entry, highlighted = false }: { entry: FullEntry; hig
     </Tag>}
     <ol>
       {entry.meanings.map((m) => <li key={m.hash}>
-        <p>{m.eng}</p>
+        <Meaning eng={m.eng} />
         {m.sections.length > 0 && <dl>
           {m.sections.map((s) => <dd key={s.hash}>
             <SectionContent entry={entry} section={s} on={entry.hash} />
