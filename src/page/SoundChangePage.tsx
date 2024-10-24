@@ -18,8 +18,9 @@ import { InflEntry, useInflEntries } from "lang/inflEntries";
 import { Change, SoundChangeInstance } from "lang/soundChange";
 import { Dictionary, FullEntry } from "providers/dictionary";
 import { LangConfig } from "providers/langConfig";
+import { useTitle } from "providers/title";
 import { User } from "providers/user";
-import { App, AppToaster } from "App";
+import { AppToaster } from "App";
 
 function intersperse(arr: ReactNode[], w: ReactNode): ReactNode[] {
   const out: ReactNode[] = [];
@@ -213,6 +214,7 @@ export default function SoundChangePage() {
   const { entries } = useContext(Dictionary);
   const { soundChange } = useContext(LangConfig);
   const infl = useInflEntries()?.filter((i) => i.old === false);
+  useTitle("Sound changes");
 
   let content;
 
@@ -226,5 +228,5 @@ export default function SoundChangePage() {
     </div>;
   }
 
-  return App(content, "Sound changes");
+  return content;
 }

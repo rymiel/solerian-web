@@ -2,8 +2,8 @@ import { ControlGroup, InputGroup, NonIdealState, NumericInput } from "@blueprin
 import { useContext, useState } from "react";
 
 import { b10Split, b10ToB12, b12toBijective, constructNumber } from "lang/numbers";
+import { useTitle } from "providers/title";
 import { User } from "providers/user";
-import { App } from "App";
 
 function Content() {
   const [num, setNum] = useState(0);
@@ -25,6 +25,7 @@ function Content() {
 
 export default function NumbersPage() {
   const { user } = useContext(User);
+  useTitle("Numbers");
 
   let content;
 
@@ -36,5 +37,5 @@ export default function NumbersPage() {
     </div>;
   }
 
-  return App(content, "Numbers");
+  return content;
 }

@@ -3,7 +3,7 @@ import { useContext } from "react";
 
 import { Part } from "lang/extra";
 import { Dictionary } from "providers/dictionary";
-import { App } from "App";
+import { useTitle } from "providers/title";
 
 const NOUN_GENDERS: Record<string, string> = {
   "1": "F",
@@ -169,10 +169,8 @@ function Content() {
 }
 
 export default function StatsPage() {
-  return App(
-    <div className="inter">
-      <Content />
-    </div>,
-    "Stats",
-  );
+  useTitle("Stats");
+  return <div className="inter">
+    <Content />
+  </div>;
 }

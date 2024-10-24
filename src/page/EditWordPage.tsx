@@ -1,5 +1,4 @@
 import {
-  AnchorButton,
   Button,
   Callout,
   Checkbox,
@@ -18,16 +17,16 @@ import {
   TextArea,
 } from "@blueprintjs/core";
 import { createContext, ReactElement, ReactNode, useCallback, useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { InterlinearData, InterlinearGloss } from "components/interlinear";
 import { RichText } from "components/richText";
 import { WordSelect } from "components/wordSelect";
 import { Part } from "lang/extra";
 import { Dictionary, FullEntry, FullMeaning, FullSection } from "providers/dictionary";
+import { useTitle } from "providers/title";
 import { User } from "providers/user";
 import { ApiBase, apiFetch, ApiSection } from "api";
-import { App } from "App";
 
 export enum SectionTitle {
   TRANSLATION = "translation",
@@ -408,6 +407,7 @@ const EditContext = createContext<EditContextData>({
 function EditWordPageContent({ entry, active }: { entry: FullEntry; active: string | undefined }) {
   const [isOpen, setOpen] = useState(false);
   const [element, setElement] = useState<React.ReactNode>(null);
+  const navigate = useNavigate();
 
   const openDrawer = useCallback((element: React.ReactNode) => {
     setElement(element);
@@ -415,12 +415,16 @@ function EditWordPageContent({ entry, active }: { entry: FullEntry; active: stri
   }, []);
 
   const closeDrawer = useCallback(() => {
-    document.location.hash = `/edit/${entry.hash}`;
+    navigate(`/edit/${entry.hash}`);
     setOpen(false);
-  }, [entry.hash]);
+  }, [entry.hash, navigate]);
+
+  const back = useCallback(() => {
+    navigate(entry.link);
+  }, [entry.link, navigate]);
 
   return <EditContext.Provider value={{ openDrawer, closeDrawer, drawerOpen: isOpen, page: entry.hash, active }}>
-    <AnchorButton text="Back" icon="arrow-left" href={"#" + entry.link} /> <br />
+    <Button text="Back" icon="arrow-left" onClick={back} /> <br />
     <EntryData v={entry} />
     <Drawer isOpen={isOpen} onClose={closeDrawer}>
       {element}
@@ -432,6 +436,7 @@ export default function EditWordPage() {
   const { entries } = useContext(Dictionary);
   const { hash, edit } = useParams() as { hash: string; edit?: string };
   const { user } = useContext(User);
+  useTitle("Edit");
 
   let content = <NonIdealState icon={<Spinner size={SpinnerSize.LARGE} />} />;
 
@@ -449,5 +454,5 @@ export default function EditWordPage() {
     }
   }
 
-  return App(content, "Edit");
+  return content;
 }

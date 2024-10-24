@@ -19,9 +19,9 @@ import { determinePattern, Part, partOfExtra, PARTS_OF_SPEECH, patternNames, sep
 import { FORM_NAMES, InflectableEntry } from "lang/inflection";
 import { uri } from "lang/util";
 import { Dictionary } from "providers/dictionary";
+import { useTitle } from "providers/title";
 import { User } from "providers/user";
 import { apiFetch } from "api";
-import { App } from "App";
 
 function Editor() {
   const dict = useContext(Dictionary);
@@ -113,6 +113,7 @@ function Editor() {
 
 export default function NewWordPage() {
   const { user } = useContext(User);
+  useTitle("New");
 
   let content;
 
@@ -124,5 +125,5 @@ export default function NewWordPage() {
     </div>;
   }
 
-  return App(content, "New");
+  return content;
 }

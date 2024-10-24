@@ -13,10 +13,11 @@ import {
   Popover,
   Position,
 } from "@blueprintjs/core";
-import { JSX, useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { PropsWithChildren, useContext, useEffect, useState } from "react";
+import { Link, Outlet, ScrollRestoration, useNavigate } from "react-router-dom";
 
 import { ApiVersion } from "providers/apiVersion";
+import { Title } from "providers/title";
 import { User } from "providers/user";
 import { apiFetch, CustomApiError } from "api";
 
@@ -115,30 +116,44 @@ function Menu() {
   </>;
 }
 
-export function App(body: JSX.Element, header?: string, headerElement?: JSX.Element) {
+export function App({ children }: PropsWithChildren) {
   const version = useContext(ApiVersion);
   const user = useContext(User);
-  if (!header) {
+  const navigate = useNavigate();
+  const { title } = useContext(Title);
+  if (!title) {
     document.title = "Solerian";
   } else {
-    document.title = `Solerian | ${header}`;
+    document.title = `Solerian | ${title}`;
   }
+
+  // Migrate old paths
+  useEffect(() => {
+    if (
+      document.location.pathname === "/" &&
+      document.location.hash.startsWith("#/") &&
+      document.location.search === ""
+    ) {
+      const path = document.location.hash.slice(1);
+      history.replaceState(null, "", path);
+      navigate(path);
+    }
+  }, [navigate]);
+
   return <>
+    <ScrollRestoration getKey={(location) => (location.pathname === "/" ? location.pathname : location.key)} />
     <header className={Classes.DARK}>
       <Menu />
       <H1 className="sc">
-        <a href={"#/"}>Solerian</a>
+        <Link to="/">Solerian</Link>
       </H1>
-      {header && <>
+      {title && <>
         <Divider></Divider>
-        <H2 className="sc">{header}</H2>
-        {headerElement && <div className="header-element">{headerElement}</div>}
+        <H2 className="sc">{title}</H2>
       </>}
       <div id="usertext">{user.user ? <Logout /> : <Login />}</div>
     </header>
-    <div id="center">
-      <main id="main">{body}</main>
-    </div>
+    <main id="main">{children ?? <Outlet />}</main>
     <footer className={Classes.DARK}>
       <small>
         <p>

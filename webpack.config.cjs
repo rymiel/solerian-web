@@ -59,6 +59,9 @@ module.exports = (env, argv) => {
       static: path.join(__dirname, "build"),
       hot: true,
       port: 3002,
+      historyApiFallback: {
+        index: "index.html",
+      },
     };
   } else if (argv.mode === "production") {
     config.optimization = {

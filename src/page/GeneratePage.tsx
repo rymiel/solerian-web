@@ -13,8 +13,8 @@ import { useContext, useEffect, useState } from "react";
 import { GenerationInstance } from "lang/generation";
 import { SoundChangeInstance } from "lang/soundChange";
 import { LangConfig } from "providers/langConfig";
+import { useTitle } from "providers/title";
 import { User } from "providers/user";
-import { App } from "App";
 
 import { validateCombined } from "./ValidationPage";
 
@@ -74,6 +74,7 @@ function Content({ soundChange, generation }: { soundChange: SoundChangeInstance
 export default function GeneratePage() {
   const { user } = useContext(User);
   const { soundChange, generation } = useContext(LangConfig);
+  useTitle("Generate");
 
   let content;
 
@@ -87,5 +88,5 @@ export default function GeneratePage() {
     </div>;
   }
 
-  return App(content, "Generate");
+  return content;
 }

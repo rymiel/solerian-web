@@ -1,13 +1,14 @@
 import { Button, HTMLTable, Icon, InputGroup, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
-import { useCallback, useContext, useLayoutEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 
 import { entryHasMatch } from "components/wordSelect";
 import { PARTS_OF_SPEECH } from "lang/extra";
 import { SectionTitle, SIMPLE_SECTIONS } from "page/EditWordPage";
 import { Dictionary, FullMeaning } from "providers/dictionary";
+import { useTitle } from "providers/title";
 import { User } from "providers/user";
-import { App } from "App";
 
 function ExtraCell({ extra, cls }: { extra: string; cls: string | null }) {
   const abbr = PARTS_OF_SPEECH[extra] as string | undefined;
@@ -25,47 +26,33 @@ function ExtraCell({ extra, cls }: { extra: string; cls: string | null }) {
   }
 }
 
+function mergeDefinitions(meanings: FullMeaning[]) {
+  let toBe = false;
+  return meanings.map((m, mi) => {
+    let eng = m.eng;
+    if (eng.startsWith("(")) {
+      const split = m.eng.split(")", 2);
+      eng = (split[1] ?? split[0]).trim();
+    }
+    if (eng.startsWith("to be ")) {
+      if (toBe) {
+        eng = eng.slice(6);
+      } else {
+        toBe = true;
+      }
+    }
+    return (mi === 0 ? "" : "; ") + eng;
+  });
+}
+
 export default function DictionaryPage() {
+  useTitle("Home");
   const { entries } = useContext(Dictionary);
   const navigate = useNavigate();
   const { user } = useContext(User);
   const [search, setSearch] = useState("");
 
   let content = <NonIdealState icon={<Spinner size={SpinnerSize.LARGE} />} />;
-
-  const clickPreserveScroll = (e: React.MouseEvent<HTMLTableRowElement>) => {
-    const target = e.currentTarget.dataset.link;
-    const top = document.getElementById("main")?.scrollTop;
-    history.replaceState({ ...(history.state ?? {}), dictionaryScroll: top }, "");
-    document.location.hash = target ?? "";
-    e.preventDefault();
-  };
-  useLayoutEffect(() => {
-    const main = document.getElementById("main");
-    const scroll = (history.state ?? {}).dictionaryScroll;
-    if (main && entries && scroll) {
-      main.scrollTop = scroll;
-    }
-  }, [entries]);
-
-  const mergeDefinitions = useCallback((meanings: FullMeaning[]) => {
-    let toBe = false;
-    return meanings.map((m, mi) => {
-      let eng = m.eng;
-      if (eng.startsWith("(")) {
-        const split = m.eng.split(")", 2);
-        eng = (split[1] ?? split[0]).trim();
-      }
-      if (eng.startsWith("to be ")) {
-        if (toBe) {
-          eng = eng.slice(6);
-        } else {
-          toBe = true;
-        }
-      }
-      return (mi === 0 ? "" : "; ") + eng;
-    });
-  }, []);
 
   if (entries) {
     content = <div className="inter">
@@ -87,14 +74,14 @@ export default function DictionaryPage() {
         <tbody>
           {entries.map((e, i) =>
             entryHasMatch(search, e) ? (
-              <tr key={e.hash} onClick={clickPreserveScroll} data-link={e.link}>
+              <tr key={e.hash}>
                 <td>
-                  <a href={"#" + e.link} className="link-fill">
+                  <Link to={e.link} className="link-fill">
                     <span>{i + 1}</span>
-                  </a>
+                  </Link>
                 </td>
                 <td>
-                  <a href={"#" + e.link} className="link-fill">
+                  <Link to={e.link} className="link-fill">
                     <span>
                       {e.tag && <Tag intent="danger">{e.tag}</Tag>} {mergeDefinitions(e.meanings)}
                       {e.meanings.some((m) => m.sections.some((s) => s.title === SectionTitle.TRANSLATION)) && <Icon
@@ -107,23 +94,23 @@ export default function DictionaryPage() {
                         ) : undefined,
                       )}
                     </span>
-                  </a>
+                  </Link>
                 </td>
                 <td>
-                  <a href={"#" + e.link} className="link-fill dual">
+                  <Link to={e.link} className="link-fill dual">
                     <i>{e.sol}</i>
                     <span className="sol">{e.script}</span>
-                  </a>
+                  </Link>
                 </td>
                 <td>
-                  <a href={"#" + e.link} className="link-fill">
+                  <Link to={e.link} className="link-fill">
                     <ExtraCell extra={e.extra} cls={e.class} />
-                  </a>
+                  </Link>
                 </td>
                 <td>
-                  <a href={"#" + e.link} className="link-fill">
+                  <Link to={e.link} className="link-fill">
                     <span>{e.ipa}</span>
-                  </a>
+                  </Link>
                 </td>
               </tr>
             ) : undefined,
@@ -141,5 +128,5 @@ export default function DictionaryPage() {
     </div>;
   }
 
-  return App(content, "Home");
+  return content;
 }

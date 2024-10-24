@@ -7,9 +7,10 @@ import { InflEntry, useInflEntries } from "lang/inflEntries";
 import { SoundChangeInstance } from "lang/soundChange";
 import { Dictionary, FullEntry } from "providers/dictionary";
 import { LangConfig } from "providers/langConfig";
+import { useTitle } from "providers/title";
 import { User } from "providers/user";
 import { apiFetch } from "api";
-import { App, toastErrorHandler } from "App";
+import { toastErrorHandler } from "App";
 
 interface MinimalWord {
   sol: string;
@@ -93,6 +94,7 @@ export default function ValidatePage() {
   const infl = useInflEntries()?.filter((i) => i.old === false);
   const [fail, setFail] = useState<Fail[] | null>(null);
   const [isLoading, setLoading] = useState(false);
+  useTitle("Validate");
 
   let header;
   let footer;
@@ -135,11 +137,8 @@ export default function ValidatePage() {
     footer = <NonIdealState icon={<Spinner size={SpinnerSize.LARGE} />} />;
   }
 
-  return App(
-    <div className="inter">
-      {header}
-      {footer}
-    </div>,
-    "Validate",
-  );
+  return <div className="inter">
+    {header}
+    {footer}
+  </div>;
 }

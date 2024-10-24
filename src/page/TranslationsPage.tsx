@@ -5,8 +5,8 @@ import { Link } from "react-router-dom";
 import { InterlinearData, InterlinearGloss } from "components/interlinear";
 import { uri } from "lang/util";
 import { Dictionary, FullEntry } from "providers/dictionary";
+import { useTitle } from "providers/title";
 import { User } from "providers/user";
-import { App } from "App";
 
 import { SectionTitle } from "./EditWordPage";
 
@@ -39,7 +39,7 @@ function Content({ entries }: { entries: FullEntry[] }) {
               script
               extra={
                 user && <span className="edit">
-                  [ <a href={uri`#/edit/${entry.hash}/${section.hash}`}>edit</a> ]
+                  [ <Link to={uri`/edit/${entry.hash}/${section.hash}`}>edit</Link> ]
                 </span>
               }
             />
@@ -52,6 +52,7 @@ function Content({ entries }: { entries: FullEntry[] }) {
 
 export default function TranslationsPage() {
   const { entries } = useContext(Dictionary);
+  useTitle("Translations");
 
   let content = <NonIdealState icon={<Spinner size={SpinnerSize.LARGE} />} />;
 
@@ -61,5 +62,5 @@ export default function TranslationsPage() {
     </div>;
   }
 
-  return App(content, "Translations");
+  return content;
 }

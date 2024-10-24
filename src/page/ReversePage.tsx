@@ -8,7 +8,7 @@ import { applyNormalize, FORM_NAMES, POSS_FORMS, POSS_SUFFIXES } from "lang/infl
 import { InflEntry, useInflEntries } from "lang/inflEntries";
 import { uri } from "lang/util";
 import { Dictionary, FullEntry } from "providers/dictionary";
-import { App } from "App";
+import { useTitle } from "providers/title";
 
 function terminal(entry: FullEntry) {
   let meaning = entry.meanings[0].eng;
@@ -155,6 +155,7 @@ export default function ReversePage() {
   const [search, setSearch] = useState(query ?? "");
   const [includeOld, setIncludeOld] = useState(false);
   const infl = useInflEntries();
+  useTitle("Reverse");
 
   let content: ReactNode = <NonIdealState icon={<Spinner size={SpinnerSize.LARGE} />} />;
 
@@ -186,36 +187,33 @@ export default function ReversePage() {
     forms = `${infl.length} forms, ${estimate} estimated`;
   }
 
-  return App(
-    <div className="inter">
-      <form
-        onSubmit={(e) => {
-          navigate(uri`/reverse/${search}`);
-          e.preventDefault();
-        }}
-      >
-        <ControlGroup fill>
-          <InputGroup
-            placeholder={`Reverse search (${forms})`}
-            onValueChange={(s) => setSearch(s)}
-            value={search}
-            large
-            fill
-            rightElement={
-              <Button
-                icon={includeOld ? "eye-on" : "eye-off"}
-                intent="warning"
-                minimal={true}
-                onClick={() => setIncludeOld((c) => !c)}
-                title="Old forms"
-              />
-            }
-          />
-          <Button icon="arrow-right" intent="primary" type="submit" />
-        </ControlGroup>
-      </form>
-      {content}
-    </div>,
-    "Reverse",
-  );
+  return <div className="inter">
+    <form
+      onSubmit={(e) => {
+        navigate(uri`/reverse/${search}`);
+        e.preventDefault();
+      }}
+    >
+      <ControlGroup fill>
+        <InputGroup
+          placeholder={`Reverse search (${forms})`}
+          onValueChange={(s) => setSearch(s)}
+          value={search}
+          large
+          fill
+          rightElement={
+            <Button
+              icon={includeOld ? "eye-on" : "eye-off"}
+              intent="warning"
+              minimal={true}
+              onClick={() => setIncludeOld((c) => !c)}
+              title="Old forms"
+            />
+          }
+        />
+        <Button icon="arrow-right" intent="primary" type="submit" />
+      </ControlGroup>
+    </form>
+    {content}
+  </div>;
 }
