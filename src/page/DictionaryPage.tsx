@@ -1,5 +1,5 @@
 import { Button, HTMLTable, Icon, InputGroup, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
-import { useContext, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 
@@ -52,17 +52,26 @@ export default function DictionaryPage() {
   const { user } = useContext(User);
   const [search, setSearch] = useState("");
 
+  const handleSearchContainer = useCallback((ref: HTMLDivElement | null) => {
+    if (ref === null) return;
+    ref.style.top = document.querySelector("header")?.getBoundingClientRect().height + "px";
+  }, []);
+
+  const handleAddButton = useCallback((ref: HTMLDivElement | null) => {
+    if (ref === null) return;
+    ref.style.bottom = document.querySelector("footer")?.getBoundingClientRect().height + "px";
+  }, []);
+
   let content = <NonIdealState icon={<Spinner size={SpinnerSize.LARGE} />} />;
 
   if (entries) {
-    content = <div className="inter">
-      <HTMLTable className="margin-auto dictionary" compact striped interactive>
+    content = <div className="inter middle">
+      <div className="around-dictionary" ref={handleSearchContainer}>
+        <InputGroup type="search" placeholder="Search" onValueChange={setSearch} value={search} large />
+      </div>
+
+      <HTMLTable className="dictionary" compact striped interactive>
         <thead>
-          <tr>
-            <td colSpan={5}>
-              <InputGroup type="search" placeholder="Search" onValueChange={setSearch} value={search} />
-            </td>
-          </tr>
           <tr>
             <th>#</th>
             <th>English</th>
@@ -116,15 +125,11 @@ export default function DictionaryPage() {
             ) : undefined,
           )}
         </tbody>
-
-        {user && <tfoot>
-          <tr>
-            <td colSpan={5}>
-              <Button intent="success" text="Add new entry" icon="plus" fill onClick={() => navigate("/new")} />
-            </td>
-          </tr>
-        </tfoot>}
       </HTMLTable>
+
+      {user && <div className="around-dictionary" ref={handleAddButton}>
+        <Button intent="success" text="Add new entry" icon="plus" fill onClick={() => navigate("/new")} />
+      </div>}
     </div>;
   }
 
