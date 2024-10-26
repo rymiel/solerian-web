@@ -63,7 +63,14 @@ function Editor() {
     <p>Creating new entry.</p>
     <ControlGroup vertical className="fit-width">
       <InputGroup onValueChange={setSol} placeholder="Solerian" />
-      <HTMLSelect onChange={(e) => setExtra(e.currentTarget.value)} defaultValue={""} fill>
+      <HTMLSelect
+        onChange={(e) => {
+          setExtra(e.currentTarget.value);
+          setExForms([]);
+        }}
+        defaultValue={""}
+        fill
+      >
         <option value="">Extra</option>
         {Object.entries(PARTS_OF_SPEECH).map(([k, v]) => {
           const p = partOfExtra(k);

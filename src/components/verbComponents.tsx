@@ -1,4 +1,4 @@
-import { Dialog, DialogBody, HTMLTable } from "@blueprintjs/core";
+import { Code, Dialog, DialogBody, HTMLTable, Tag } from "@blueprintjs/core";
 import { useState } from "react";
 
 import { Abbr } from "components/interlinear";
@@ -7,6 +7,7 @@ import { DisplayWord, usePopulateDualInfo } from "lang/display";
 import { Part } from "lang/extra";
 import { FORM_NAMES, formsFromDirect, formsFromEntry, InflectableEntry } from "lang/inflection";
 import { zip } from "lang/util";
+import { toastErrorHandler } from "App";
 
 function VerbTableEntry({ word }: { word: DisplayWord }) {
   return <td>
@@ -20,7 +21,18 @@ function VerbTableEntry({ word }: { word: DisplayWord }) {
 
 function GerundTableEntry({ word }: { word: DisplayWord }) {
   const [isOpen, setOpen] = useState(false);
-  const forms = formsFromDirect(word.sol, true, Part.Noun);
+  let forms;
+  try {
+    forms = formsFromDirect(word.sol, true, Part.Noun);
+  } catch (err) {
+    toastErrorHandler(err);
+
+    return <td>
+      <Tag large intent="danger">
+        Gerund entry for <Code>{word.sol}</Code> failed to render
+      </Tag>
+    </td>;
+  }
 
   return <td>
     <span className="dual">
