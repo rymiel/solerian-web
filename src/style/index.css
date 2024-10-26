@@ -329,13 +329,19 @@ h4 .bp5-icon {
   min-height: 34px;
 }
 
-@media (max-width: 650px) {
+@media (max-width: 690px) {
   .dictionary td .dual .sol {
     display: none;
   }
 
   .dictionary td a.link-fill {
     min-height: 34px;
+  }
+}
+
+@media (max-width: 520px) {
+  .dictionary .pronunciation {
+    display: none;
   }
 }
 

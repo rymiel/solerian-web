@@ -77,7 +77,7 @@ export default function DictionaryPage() {
             <th>English</th>
             <th>Solerian</th>
             <th>Extra</th>
-            <th>Pronunciation</th>
+            <th className="pronunciation">Pronunciation</th>
           </tr>
         </thead>
         <tbody>
@@ -116,7 +116,7 @@ export default function DictionaryPage() {
                     <ExtraCell extra={e.extra} cls={e.class} />
                   </Link>
                 </td>
-                <td>
+                <td className="pronunciation">
                   <Link to={e.link} className="link-fill">
                     <span>{e.ipa}</span>
                   </Link>
