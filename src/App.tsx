@@ -12,6 +12,7 @@ import {
   OverlayToaster,
   Popover,
   Position,
+  Toaster,
 } from "@blueprintjs/core";
 import { PropsWithChildren, useContext, useEffect, useState } from "react";
 import { Link, Outlet, ScrollRestoration, useNavigate } from "react-router-dom";
@@ -21,14 +22,23 @@ import { Title } from "providers/title";
 import { User } from "providers/user";
 import { apiFetch, CustomApiError } from "api";
 
-export const AppToaster = OverlayToaster.createAsync({
-  position: Position.TOP,
-});
+let toasterCache: Promise<Toaster> | null = null;
+export const AppToaster = (): Promise<Toaster> => {
+  if (toasterCache !== null) {
+    return Promise.resolve(toasterCache);
+  }
+  const t = OverlayToaster.createAsync({
+    position: Position.BOTTOM,
+    usePortal: true,
+  });
+  toasterCache = t;
+  return t;
+};
 
 declare const WEB_VERSION: string;
 
 export const toastErrorHandler = async (error: unknown): Promise<string> => {
-  const toaster = await AppToaster;
+  const toaster = await AppToaster();
   if (error instanceof CustomApiError) {
     return toaster.show({ intent: Intent.DANGER, message: `${error.status}: ${error.message}` });
   } else if (error instanceof Error) {

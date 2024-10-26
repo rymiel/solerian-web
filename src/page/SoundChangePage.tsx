@@ -133,7 +133,7 @@ function Content({
   const copyRules = () => {
     navigator.clipboard
       .writeText(JSON.stringify(changes))
-      .then(() => AppToaster.then((toaster) => toaster.show({ intent: "success", message: "Copied to clipboard" })));
+      .then(() => AppToaster().then((toaster) => toaster.show({ intent: "success", message: "Copied to clipboard" })));
   };
 
   const key = (e: FullEntry | InflEntry) => ("hash" in e ? e.hash : `"${e.original.hash}"-${e.form}`);
