@@ -92,7 +92,7 @@ const SOUND_CHANGE_CONFIG: SoundChangeConfig = {
     ["i", "j", "e|é", null],
     ["ij", "e", null, "{C}"],
     ["íj", "é", null, "{C}"],
-    ["jj", "ijj", null, null],
+    ["jj", "ijj", "{C}", null],
     ["ɕj", "ɕ", null, null],
     ["ld", "ll", null, null],
     ["d", "ð", "{V}|\\b", "{V}"],
