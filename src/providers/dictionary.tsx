@@ -16,6 +16,7 @@ export interface FullEntry extends SortableEntry {
   ipa: string;
   class: AnyPattern | null;
   link: string;
+  index: number;
 
   meanings: FullMeaning[];
   sections: FullSection[];
@@ -53,23 +54,23 @@ export function DictionaryProvider({ children }: PropsWithChildren) {
         sections: i.sections.map((s) => d.sections.find((j) => j.hash === s)!),
       }));
       const mWords = d.words
-        .map((i) => {
-          const part = partOfExtra(i.extra);
+        .map((word) => {
+          const part = partOfExtra(word.extra);
           let cls: AnyPattern | null = null;
           if (part !== null) {
-            cls = i.ex !== undefined ? "X" : (determinePattern(i.sol, part) ?? "?");
+            cls = word.ex !== undefined ? "X" : (determinePattern(word.sol, part) ?? "?");
           }
-          const script = scriptMultiUnicode(i.sol);
-          const ipa = soundChange.soundChange(i.sol, markStress(i));
-          const sections = i.sections.map((s) => d.sections.find((j) => j.hash === s)!);
-          const meanings = i.meanings.map((s) => mMeanings.find((j) => j.hash === s)!);
-          return { ...i, class: cls, part, script, ipa, sections, meanings };
+          const script = scriptMultiUnicode(word.sol);
+          const ipa = soundChange.soundChange(word.sol, markStress(word));
+          const sections = word.sections.map((s) => d.sections.find((j) => j.hash === s)!);
+          const meanings = word.meanings.map((s) => mMeanings.find((j) => j.hash === s)!);
+          return { ...word, class: cls, part, script, ipa, sections, meanings };
         })
         .sort(entrySort);
-      const sWords = mWords.map((i) => {
-        const matching = mWords.filter((j) => j.sol === i.sol);
-        const link = matching.length === 1 ? uri`/w/${i.sol}` : uri`/w/${i.sol}/${matching.indexOf(i) + 1}`;
-        return { ...i, link };
+      const sWords = mWords.map((word, idx) => {
+        const matching = mWords.filter((j) => j.sol === word.sol);
+        const link = matching.length === 1 ? uri`/w/${word.sol}` : uri`/w/${word.sol}/${matching.indexOf(word) + 1}`;
+        return { ...word, link, index: idx + 1 };
       });
       setEntries(sWords);
 
