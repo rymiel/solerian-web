@@ -77,8 +77,10 @@ function Content() {
 
       <HTMLTable className="n-left" compact striped>
         <thead>
-          <th>Class</th>
-          <th>Count</th>
+          <tr>
+            <th>Class</th>
+            <th>Count</th>
+          </tr>
         </thead>
         <tbody>
           {Object.keys(nounClassTally)
@@ -94,8 +96,10 @@ function Content() {
       </HTMLTable>
       <HTMLTable className="n-right" compact striped>
         <thead>
-          <th>Gender</th>
-          <th>Count</th>
+          <tr>
+            <th>Gender</th>
+            <th>Count</th>
+          </tr>
         </thead>
         <tbody>
           {Object.keys(NOUN_EXPLANATIONS).map((i) => <tr key={i}>
@@ -112,8 +116,10 @@ function Content() {
       <H4 className="v-header">Verb stats</H4>
       <HTMLTable className="v-left" compact striped>
         <thead>
-          <th>Class</th>
-          <th>Count</th>
+          <tr>
+            <th>Class</th>
+            <th>Count</th>
+          </tr>
         </thead>
         <tbody>
           {Object.keys(verbClassTally)
@@ -126,8 +132,10 @@ function Content() {
       </HTMLTable>
       <HTMLTable className="v-right" compact striped>
         <thead>
-          <th>Base</th>
-          <th>Count</th>
+          <tr>
+            <th>Base</th>
+            <th>Count</th>
+          </tr>
         </thead>
         <tbody>
           {Object.keys(VERB_EXPLANATIONS).map((i) => <tr key={i}>
@@ -144,8 +152,10 @@ function Content() {
       <H4 className="g-header">General stats</H4>
       <HTMLTable className="g-left" compact striped>
         <thead>
-          <th>Extra</th>
-          <th>Count</th>
+          <tr>
+            <th>Extra</th>
+            <th>Count</th>
+          </tr>
         </thead>
         <tbody>
           {Object.keys(extraTally)
