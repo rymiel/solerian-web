@@ -4,7 +4,7 @@ import { AnyPattern, determinePattern, markStress, Part, partOfExtra } from "lan
 import { scriptMultiUnicode } from "lang/script";
 import { uri } from "lang/util";
 import { LangConfig } from "providers/langConfig";
-import { ApiDictionary, apiFetch, ApiMeaning, ApiSection, ApiWord } from "api";
+import { ApiDictionary, apiLangFetch, ApiMeaning, ApiSection, ApiWord } from "api";
 import { toastErrorHandler } from "App";
 
 export interface SortableEntry extends Omit<ApiWord, "meanings" | "sections"> {
@@ -48,7 +48,7 @@ export function DictionaryProvider({ children }: PropsWithChildren) {
   const refresh = useCallback(async () => {
     if (soundChange === null) return;
     try {
-      const d = await apiFetch<ApiDictionary>("/new");
+      const d = await apiLangFetch<ApiDictionary>("/data");
       const mMeanings = d.meanings.map((i) => ({
         ...i,
         sections: i.sections.map((s) => d.sections.find((j) => j.hash === s)!),

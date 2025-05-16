@@ -42,18 +42,25 @@ export class CustomApiError extends Error {
   }
 }
 
-const API_SUFFIX = "/api/v0";
-export const API =
-  document.location.hostname === "localhost"
-    ? `http://localhost:3000${API_SUFFIX}`
-    : `https://solerian-api.rymiel.space${API_SUFFIX}`;
+export const GENERAL_API_SUFFIX = "/api/v0";
+export const LANG_API_SUFFIX = "/api/v1/solerian";
+
+export const API_BASE =
+  document.location.hostname === "localhost" ? `http://localhost:3000` : `https://solerian-api.rymiel.space`;
 
 declare const WEB_VERSION: string;
 
 type HTTPMethod = "GET" | "POST" | "DELETE";
 type Body = FormData | Record<string, string | undefined> | string;
 
-export async function apiFetch<T>(endpoint: string, method?: HTTPMethod, body?: Body): Promise<T> {
+export async function apiGeneralFetch<T>(endpoint: string, method?: HTTPMethod, body?: Body): Promise<T> {
+  return apiBaseFetch(API_BASE + GENERAL_API_SUFFIX + endpoint, method, body);
+}
+export async function apiLangFetch<T>(endpoint: string, method?: HTTPMethod, body?: Body): Promise<T> {
+  return apiBaseFetch(API_BASE + LANG_API_SUFFIX + endpoint, method, body);
+}
+
+async function apiBaseFetch<T>(endpoint: string, method?: HTTPMethod, body?: Body): Promise<T> {
   const headers = new Headers();
   const key = localStorage.getItem("token");
   let formBody;
@@ -77,7 +84,7 @@ export async function apiFetch<T>(endpoint: string, method?: HTTPMethod, body?: 
     }
   }
   method ??= "GET";
-  const response = await fetch(API + endpoint, { method, body: formBody, headers, credentials: "include" });
+  const response = await fetch(endpoint, { method, body: formBody, headers, credentials: "include" });
   const text = await response.text();
   try {
     return JSON.parse(text) as T;

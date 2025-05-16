@@ -26,7 +26,7 @@ import { Part } from "lang/extra";
 import { Dictionary, FullEntry, FullMeaning, FullSection } from "providers/dictionary";
 import { useTitle } from "providers/title";
 import { User } from "providers/user";
-import { ApiBase, apiFetch, ApiSection } from "api";
+import { ApiBase, apiLangFetch, ApiSection } from "api";
 
 export enum SectionTitle {
   TRANSLATION = "translation",
@@ -242,7 +242,7 @@ function SectionEditor({ to, as, name, form, preview, data }: SectionEditorProps
   }
 
   const doSubmit = () => {
-    apiFetch("/section", "POST", { to, as, ...data() }).then(() => {
+    apiLangFetch("/section", "POST", { to, as, ...data() }).then(() => {
       dict.refresh();
       edit.closeDrawer();
     });
@@ -252,7 +252,7 @@ function SectionEditor({ to, as, name, form, preview, data }: SectionEditorProps
     if (as === undefined) {
       throw new Error("Cannot delete nonexistent section");
     }
-    apiFetch(`/section/${as}`, "DELETE").then(() => {
+    apiLangFetch(`/section/${as}`, "DELETE").then(() => {
       dict.refresh();
       edit.closeDrawer();
     });
@@ -338,7 +338,7 @@ function EntryEditor({ existing }: { existing: FullEntry }) {
   const as = existing.hash;
 
   const submit = () => {
-    apiFetch("/entry", "POST", { as, sol, extra, tag: isObsolete ? "obsolete" : undefined }).then(() => {
+    apiLangFetch("/entry", "POST", { as, sol, extra, tag: isObsolete ? "obsolete" : undefined }).then(() => {
       dict.refresh();
       edit.closeDrawer();
     });
@@ -366,7 +366,7 @@ function MeaningEditor({ to, existing }: { to?: string; existing?: FullMeaning }
   }
 
   const submit = () => {
-    apiFetch("/meaning", "POST", { to, as, eng }).then(() => {
+    apiLangFetch("/meaning", "POST", { to, as, eng }).then(() => {
       dict.refresh();
       edit.closeDrawer();
     });

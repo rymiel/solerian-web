@@ -21,7 +21,7 @@ import { uri } from "lang/util";
 import { Dictionary } from "providers/dictionary";
 import { useTitle } from "providers/title";
 import { User } from "providers/user";
-import { apiFetch } from "api";
+import { apiLangFetch } from "api";
 
 function Editor() {
   const dict = useContext(Dictionary);
@@ -53,7 +53,7 @@ function Editor() {
 
   const submit = () => {
     const ex = exForms.length === 0 ? undefined : exForms.join(",");
-    apiFetch<string>("/entry", "POST", { sol, extra, eng, ex }).then((id) => {
+    apiLangFetch<string>("/entry", "POST", { sol, extra, eng, ex }).then((id) => {
       dict.refresh();
       navigate(uri`/edit/${id}`);
     });

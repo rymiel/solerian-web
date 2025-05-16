@@ -9,7 +9,7 @@ import { Dictionary, FullEntry } from "providers/dictionary";
 import { LangConfig } from "providers/langConfig";
 import { useTitle } from "providers/title";
 import { User } from "providers/user";
-import { apiFetch } from "api";
+import { apiLangFetch } from "api";
 import { toastErrorHandler } from "App";
 
 interface MinimalWord {
@@ -32,7 +32,7 @@ async function validateRemote<T extends MinimalWord>(list: T[], soundChange: Sou
   const fail: Fail<T>[] = [];
   const lookup: Lookup[] = list.map((i) => [i.sol, soundChange.ipaWithoutSoundChange(i.sol)]);
   try {
-    const failIdx = await apiFetch<number[]>("/validate", "POST", JSON.stringify(lookup));
+    const failIdx = await apiLangFetch<number[]>("/validate", "POST", JSON.stringify(lookup));
     failIdx.forEach((f) => {
       const e = list[f];
       if (e.sol.includes("-")) {

@@ -20,7 +20,7 @@ import { Link, Outlet, ScrollRestoration, useNavigate } from "react-router-dom";
 import { ApiVersion } from "providers/apiVersion";
 import { Title } from "providers/title";
 import { User } from "providers/user";
-import { apiFetch, CustomApiError } from "api";
+import { apiGeneralFetch, CustomApiError } from "api";
 
 let toasterCache: Promise<Toaster> | null = null;
 export const AppToaster = (): Promise<Toaster> => {
@@ -53,7 +53,7 @@ function Login() {
   const [secret, setSecret] = useState("");
   const user = useContext(User);
   const login = () => {
-    apiFetch("/login", "POST", { username, secret }).then(() => user.update());
+    apiGeneralFetch("/login", "POST", { username, secret }).then(() => user.update());
   };
 
   return <Popover
@@ -73,7 +73,7 @@ function Login() {
 function Logout() {
   const user = useContext(User);
   const signout = () => {
-    apiFetch("/logout", "POST").then(() => user.update());
+    apiGeneralFetch("/logout", "POST").then(() => user.update());
   };
 
   return <Popover

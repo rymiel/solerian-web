@@ -1,6 +1,6 @@
 import { createContext, PropsWithChildren, useEffect, useState } from "react";
 
-import { apiFetch, ApiUser } from "api";
+import { apiGeneralFetch, ApiUser } from "api";
 import { toastErrorHandler } from "App";
 
 interface UserData {
@@ -19,7 +19,7 @@ export function UserProvider({ children }: PropsWithChildren) {
   const [user, setUser] = useState<ApiUser | null>(null);
   const update = async () => {
     try {
-      const u = await apiFetch<ApiUser | null>("/me");
+      const u = await apiGeneralFetch<ApiUser | null>("/me");
       setUser(u);
 
       try {
