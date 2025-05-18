@@ -12,6 +12,7 @@
     "plugin:@blueprintjs/recommended",
     "plugin:deprecation/recommended"
   ],
+  "ignorePatterns": "webpack.config.cjs",
   "settings": {
     "react": {
       "version": "detect"

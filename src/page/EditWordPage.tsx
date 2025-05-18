@@ -26,7 +26,7 @@ import { Part } from "lang/extra";
 import { Dictionary, FullEntry, FullMeaning, FullSection } from "providers/dictionary";
 import { useTitle } from "providers/title";
 import { User } from "providers/user";
-import { ApiBase, apiLangFetch, ApiSection } from "api";
+import { ApiBase, apiLangFetch, ApiSection, LANGUAGE } from "api";
 
 export enum SectionTitle {
   TRANSLATION = "translation",
@@ -348,7 +348,7 @@ function EntryEditor({ existing }: { existing: FullEntry }) {
     <p>
       Editing entry <Code>{as}</Code>.
     </p>
-    <InputGroup onValueChange={setSol} defaultValue={sol} placeholder="Solerian" />
+    <InputGroup onValueChange={setSol} defaultValue={sol} placeholder={LANGUAGE} />
     <InputGroup onValueChange={setExtra} defaultValue={extra} placeholder="Extra" />
     <Checkbox onChange={(e) => setObsolete(e.currentTarget.checked)} defaultValue={extra} label="Obsolete" />
     <Button fill intent="success" text="Submit" onClick={submit} />

@@ -9,6 +9,7 @@ import { SectionTitle, SIMPLE_SECTIONS } from "page/EditWordPage";
 import { Dictionary, FullEntry, FullMeaning } from "providers/dictionary";
 import { useTitle } from "providers/title";
 import { User } from "providers/user";
+import { LANGUAGE } from "api";
 
 function ExtraCell({ extra, cls }: { extra: string; cls: string | null }) {
   const abbr = PARTS_OF_SPEECH[extra] as string | undefined;
@@ -119,7 +120,7 @@ export default function DictionaryPage() {
         <tr>
           <th>#</th>
           <th>English</th>
-          <th>Solerian</th>
+          <th>{LANGUAGE}</th>
           <th>Extra</th>
           <th className="pronunciation">Pronunciation</th>
         </tr>

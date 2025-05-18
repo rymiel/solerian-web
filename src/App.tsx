@@ -20,7 +20,7 @@ import { Link, Outlet, ScrollRestoration, useNavigate } from "react-router-dom";
 import { ApiVersion } from "providers/apiVersion";
 import { Title } from "providers/title";
 import { User } from "providers/user";
-import { apiGeneralFetch, CustomApiError } from "api";
+import { apiGeneralFetch, CustomApiError, LANGUAGE } from "api";
 
 let toasterCache: Promise<Toaster> | null = null;
 export const AppToaster = (): Promise<Toaster> => {
@@ -132,9 +132,9 @@ export function App({ children }: PropsWithChildren) {
   const navigate = useNavigate();
   const { title } = useContext(Title);
   if (!title) {
-    document.title = "Solerian";
+    document.title = LANGUAGE;
   } else {
-    document.title = `Solerian | ${title}`;
+    document.title = `${LANGUAGE} | ${title}`;
   }
 
   // Migrate old paths
@@ -155,7 +155,7 @@ export function App({ children }: PropsWithChildren) {
     <header className={Classes.DARK}>
       <Menu />
       <H1 className="sc">
-        <Link to="/">Solerian</Link>
+        <Link to="/">{LANGUAGE}</Link>
       </H1>
       {title && <>
         <Divider></Divider>
@@ -167,7 +167,7 @@ export function App({ children }: PropsWithChildren) {
     <footer className={Classes.DARK}>
       <small>
         <p>
-          <span className="sc">Solerian</span> by rymiel, web version {WEB_VERSION}
+          <span className="sc">{LANGUAGE}</span> by rymiel, web version {WEB_VERSION}
           {version && `, api version ${version}`}
         </p>
       </small>

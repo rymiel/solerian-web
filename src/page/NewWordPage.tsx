@@ -21,7 +21,7 @@ import { uri } from "lang/util";
 import { Dictionary } from "providers/dictionary";
 import { useTitle } from "providers/title";
 import { User } from "providers/user";
-import { apiLangFetch } from "api";
+import { apiLangFetch, LANGUAGE } from "api";
 
 function Editor() {
   const dict = useContext(Dictionary);
@@ -62,7 +62,7 @@ function Editor() {
   return <div className="inter">
     <p>Creating new entry.</p>
     <ControlGroup vertical className="fit-width">
-      <InputGroup onValueChange={setSol} placeholder="Solerian" />
+      <InputGroup onValueChange={setSol} placeholder={LANGUAGE} />
       <HTMLSelect
         onChange={(e) => {
           setExtra(e.currentTarget.value);

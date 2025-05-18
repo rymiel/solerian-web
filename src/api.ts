@@ -1,3 +1,5 @@
+export const LANGUAGE = "Solerian";
+
 export interface ApiUser {
   name: string;
 }
