@@ -10,6 +10,7 @@ import {
   Tag,
   TextArea,
 } from "@blueprintjs/core";
+import { useTitle } from "conlang-web-components";
 import { ReactNode, useContext, useState } from "react";
 import reactStringReplace from "react-string-replace";
 
@@ -18,7 +19,6 @@ import { InflEntry, useInflEntries } from "lang/inflEntries";
 import { Change, SoundChangeInstance } from "lang/soundChange";
 import { Dictionary, FullEntry } from "providers/dictionary";
 import { LangConfig } from "providers/langConfig";
-import { useTitle } from "providers/title";
 import { User } from "providers/user";
 import { AppToaster } from "App";
 

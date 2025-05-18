@@ -1,4 +1,5 @@
 import { BlueprintProvider } from "@blueprintjs/core";
+import { ConlangProvider } from "conlang-web-components";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -18,15 +19,12 @@ import WordPage from "page/WordPage";
 import { ApiVersionProvider } from "providers/apiVersion";
 import { Dictionary, DictionaryProvider } from "providers/dictionary";
 import { LangConfig, LangConfigProvider } from "providers/langConfig";
-import { TitleProvider } from "providers/title";
 import { UserProvider } from "providers/user";
 import { App } from "App";
 
 import "@blueprintjs/core/lib/css/blueprint.css";
 import "@blueprintjs/popover2/lib/css/blueprint-popover2.css";
 import "./style/index.css";
-
-import { SharedProvider } from "conlang-web-components";
 
 const router = createBrowserRouter([
   {
@@ -99,19 +97,17 @@ const router = createBrowserRouter([
 function Wrapper() {
   return <StrictMode>
     <ApiVersionProvider>
-      <TitleProvider>
-        <BlueprintProvider>
-          <LangConfigProvider>
-            <DictionaryProvider>
-              <UserProvider>
-                <SharedProvider dictionary={Dictionary} langConfig={LangConfig}>
-                  <RouterProvider router={router} />
-                </SharedProvider>
-              </UserProvider>
-            </DictionaryProvider>
-          </LangConfigProvider>
-        </BlueprintProvider>
-      </TitleProvider>
+      <BlueprintProvider>
+        <LangConfigProvider>
+          <DictionaryProvider>
+            <UserProvider>
+              <ConlangProvider dictionary={Dictionary} lang={LangConfig}>
+                <RouterProvider router={router} />
+              </ConlangProvider>
+            </UserProvider>
+          </DictionaryProvider>
+        </LangConfigProvider>
+      </BlueprintProvider>
     </ApiVersionProvider>
   </StrictMode>;
 }

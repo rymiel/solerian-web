@@ -8,12 +8,12 @@ import {
   SpinnerSize,
   Tag,
 } from "@blueprintjs/core";
+import { useTitle } from "conlang-web-components";
 import { useContext, useEffect, useState } from "react";
 
 import { GenerationInstance } from "lang/generation";
 import { SoundChangeInstance } from "lang/soundChange";
 import { LangConfig } from "providers/langConfig";
-import { useTitle } from "providers/title";
 import { User } from "providers/user";
 
 import { validateCombined } from "./ValidationPage";

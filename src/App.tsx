@@ -14,11 +14,11 @@ import {
   Position,
   Toaster,
 } from "@blueprintjs/core";
+import { Title } from "conlang-web-components";
 import { PropsWithChildren, useContext, useEffect, useState } from "react";
 import { Link, Outlet, ScrollRestoration, useNavigate } from "react-router-dom";
 
 import { ApiVersion } from "providers/apiVersion";
-import { Title } from "providers/title";
 import { User } from "providers/user";
 import { apiGeneralFetch, CustomApiError, LANGUAGE } from "api";
 

@@ -1,10 +1,9 @@
 import { NonIdealState, Spinner, SpinnerSize } from "@blueprintjs/core";
-import { InterlinearData, InterlinearGloss, uri } from "conlang-web-components";
+import { InterlinearData, InterlinearGloss, uri, useTitle } from "conlang-web-components";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 
 import { Dictionary, FullEntry } from "providers/dictionary";
-import { useTitle } from "providers/title";
 import { User } from "providers/user";
 
 import { SectionTitle } from "./EditWordPage";

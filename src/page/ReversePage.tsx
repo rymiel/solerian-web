@@ -1,5 +1,5 @@
 import { Button, ControlGroup, Divider, InputGroup, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
-import { Abbr, uri } from "conlang-web-components";
+import { Abbr, uri, useTitle } from "conlang-web-components";
 import { Fragment, memo, ReactNode, useContext, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
@@ -7,7 +7,6 @@ import { Part, patternNames } from "lang/extra";
 import { applyNormalize, FORM_NAMES, POSS_FORMS, POSS_SUFFIXES } from "lang/inflection";
 import { InflEntry, useInflEntries } from "lang/inflEntries";
 import { Dictionary, FullEntry } from "providers/dictionary";
-import { useTitle } from "providers/title";
 
 function terminal(entry: FullEntry) {
   let meaning = entry.meanings[0].eng;

@@ -1,8 +1,8 @@
 import { ControlGroup, InputGroup, NonIdealState, NumericInput } from "@blueprintjs/core";
+import { useTitle } from "conlang-web-components";
 import { useContext, useState } from "react";
 
 import { b10Split, b10ToB12, b12toBijective, constructNumber } from "lang/numbers";
-import { useTitle } from "providers/title";
 import { User } from "providers/user";
 
 function Content() {

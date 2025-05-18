@@ -1,4 +1,5 @@
 import { Button, NonIdealState, Spinner, SpinnerSize } from "@blueprintjs/core";
+import { useTitle } from "conlang-web-components";
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -7,7 +8,6 @@ import { InflEntry, useInflEntries } from "lang/inflEntries";
 import { SoundChangeInstance } from "lang/soundChange";
 import { Dictionary, FullEntry } from "providers/dictionary";
 import { LangConfig } from "providers/langConfig";
-import { useTitle } from "providers/title";
 import { User } from "providers/user";
 import { apiLangFetch } from "api";
 import { toastErrorHandler } from "App";

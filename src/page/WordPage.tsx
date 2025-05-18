@@ -1,5 +1,5 @@
 import { H2, H3, H4, Icon, IconSize, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
-import { InterlinearData, InterlinearGloss, RichText, uri } from "conlang-web-components";
+import { InterlinearData, InterlinearGloss, RichText, uri, useTitle } from "conlang-web-components";
 import { useContext, useEffect, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 
@@ -9,7 +9,6 @@ import { VerbInfo } from "components/verbComponents";
 import { Part, partOfSpeechShort, PARTS_OF_SPEECH } from "lang/extra";
 import { SectionTitle, SIMPLE_SECTIONS } from "page/EditWordPage";
 import { Dictionary, FullEntry, FullSection } from "providers/dictionary";
-import { useTitle } from "providers/title";
 import { User } from "providers/user";
 
 function SectionContent({ entry, section, on }: { entry: FullEntry; section: FullSection; on: string }) {

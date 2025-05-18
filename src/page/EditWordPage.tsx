@@ -16,13 +16,12 @@ import {
   Tag,
   TextArea,
 } from "@blueprintjs/core";
-import { InterlinearData, InterlinearGloss, RichText, WordSelect } from "conlang-web-components";
+import { InterlinearData, InterlinearGloss, RichText, useTitle, WordSelect } from "conlang-web-components";
 import { createContext, ReactElement, ReactNode, useCallback, useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { Part } from "lang/extra";
 import { Dictionary, FullEntry, FullMeaning, FullSection } from "providers/dictionary";
-import { useTitle } from "providers/title";
 import { User } from "providers/user";
 import { ApiBase, apiLangFetch, ApiSection, LANGUAGE } from "api";
 
