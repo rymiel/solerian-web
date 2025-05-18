@@ -1,12 +1,11 @@
 import { BlueprintProvider } from "@blueprintjs/core";
-import { ConlangProvider } from "conlang-web-components";
+import { ConlangProvider, ErrorPage } from "conlang-web-components";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import DictionaryPage from "page/DictionaryPage";
 import EditWordPage from "page/EditWordPage";
-import ErrorPage from "page/ErrorPage";
 import GeneratePage from "page/GeneratePage";
 import NewWordPage from "page/NewWordPage";
 import NumbersPage from "page/NumbersPage";
