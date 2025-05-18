@@ -1,6 +1,7 @@
+import { ApiUser } from "conlang-web-components";
 import { createContext, PropsWithChildren, useEffect, useState } from "react";
 
-import { apiGeneralFetch, ApiUser } from "api";
+import { API } from "api";
 import { toastErrorHandler } from "App";
 
 interface UserData {
@@ -19,7 +20,7 @@ export function UserProvider({ children }: PropsWithChildren) {
   const [user, setUser] = useState<ApiUser | null>(null);
   const update = async () => {
     try {
-      const u = await apiGeneralFetch<ApiUser | null>("/me");
+      const u = await API.general<ApiUser | null>("/me");
       setUser(u);
 
       try {

@@ -14,13 +14,13 @@ import {
   Position,
   Toaster,
 } from "@blueprintjs/core";
-import { Title } from "conlang-web-components";
+import { CustomApiError, Title } from "conlang-web-components";
 import { PropsWithChildren, useContext, useEffect, useState } from "react";
 import { Link, Outlet, ScrollRestoration, useNavigate } from "react-router-dom";
 
 import { ApiVersion } from "providers/apiVersion";
 import { User } from "providers/user";
-import { apiGeneralFetch, CustomApiError, LANGUAGE } from "api";
+import { API, LANGUAGE } from "api";
 
 let toasterCache: Promise<Toaster> | null = null;
 export const AppToaster = (): Promise<Toaster> => {
@@ -53,7 +53,7 @@ function Login() {
   const [secret, setSecret] = useState("");
   const user = useContext(User);
   const login = () => {
-    apiGeneralFetch("/login", "POST", { username, secret }).then(() => user.update());
+    API.general("/login", "POST", { username, secret }).then(() => user.update());
   };
 
   return <Popover
@@ -73,7 +73,7 @@ function Login() {
 function Logout() {
   const user = useContext(User);
   const signout = () => {
-    apiGeneralFetch("/logout", "POST").then(() => user.update());
+    API.general("/logout", "POST").then(() => user.update());
   };
 
   return <Popover

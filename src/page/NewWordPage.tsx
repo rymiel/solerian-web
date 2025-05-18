@@ -20,7 +20,7 @@ import { determinePattern, Part, partOfExtra, PARTS_OF_SPEECH, patternNames, sep
 import { FORM_NAMES, InflectableEntry } from "lang/inflection";
 import { Dictionary } from "providers/dictionary";
 import { User } from "providers/user";
-import { apiLangFetch, LANGUAGE } from "api";
+import { API, LANGUAGE } from "api";
 
 function Editor() {
   const dict = useContext(Dictionary);
@@ -52,7 +52,7 @@ function Editor() {
 
   const submit = () => {
     const ex = exForms.length === 0 ? undefined : exForms.join(",");
-    apiLangFetch<string>("/entry", "POST", { sol, extra, eng, ex }).then((id) => {
+    API.lang<string>("/entry", "POST", { sol, extra, eng, ex }).then((id) => {
       dict.refresh();
       navigate(uri`/edit/${id}`);
     });

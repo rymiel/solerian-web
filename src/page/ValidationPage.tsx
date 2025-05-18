@@ -9,7 +9,7 @@ import { SoundChangeInstance } from "lang/soundChange";
 import { Dictionary, FullEntry } from "providers/dictionary";
 import { LangConfig } from "providers/langConfig";
 import { User } from "providers/user";
-import { apiLangFetch } from "api";
+import { API } from "api";
 import { toastErrorHandler } from "App";
 
 interface MinimalWord {
@@ -32,7 +32,7 @@ async function validateRemote<T extends MinimalWord>(list: T[], soundChange: Sou
   const fail: Fail<T>[] = [];
   const lookup: Lookup[] = list.map((i) => [i.sol, soundChange.ipaWithoutSoundChange(i.sol)]);
   try {
-    const failIdx = await apiLangFetch<number[]>("/validate", "POST", JSON.stringify(lookup));
+    const failIdx = await API.lang<number[]>("/validate", "POST", JSON.stringify(lookup));
     failIdx.forEach((f) => {
       const e = list[f];
       if (e.sol.includes("-")) {

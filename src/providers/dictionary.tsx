@@ -1,10 +1,10 @@
-import { uri } from "conlang-web-components";
+import { ApiDictionary, ApiMeaning, ApiSection, ApiWord, uri } from "conlang-web-components";
 import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useRef, useState } from "react";
 
 import { AnyPattern, determinePattern, markStress, Part, partOfExtra } from "lang/extra";
 import { scriptMultiUnicode } from "lang/script";
 import { LangConfig } from "providers/langConfig";
-import { ApiDictionary, apiLangFetch, ApiMeaning, ApiSection, ApiWord } from "api";
+import { API } from "api";
 import { toastErrorHandler } from "App";
 
 export interface SortableEntry extends Omit<ApiWord, "meanings" | "sections"> {
@@ -48,7 +48,7 @@ export function DictionaryProvider({ children }: PropsWithChildren) {
   const refresh = useCallback(async () => {
     if (soundChange === null) return;
     try {
-      const d = await apiLangFetch<ApiDictionary>("/data");
+      const d = await API.lang<ApiDictionary>("/data");
       const mMeanings = d.meanings.map((i) => ({
         ...i,
         sections: i.sections.map((s) => d.sections.find((j) => j.hash === s)!),
