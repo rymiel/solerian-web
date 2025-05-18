@@ -1,7 +1,7 @@
 import { Dialog, DialogBody, HTMLTable, Tag } from "@blueprintjs/core";
+import { Abbr, zip } from "conlang-web-components";
 import { useState } from "react";
 
-import { Abbr } from "components/interlinear";
 import { DisplayWord, usePopulateDualInfo } from "lang/display";
 import { Part } from "lang/extra";
 import {
@@ -12,7 +12,6 @@ import {
   POSS_FORMS,
   POSS_SUFFIXES,
 } from "lang/inflection";
-import { zip } from "lang/util";
 
 function PossTableEntry({ word }: { word: DisplayWord }) {
   return <td>

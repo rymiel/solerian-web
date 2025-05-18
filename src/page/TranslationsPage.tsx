@@ -1,9 +1,8 @@
 import { NonIdealState, Spinner, SpinnerSize } from "@blueprintjs/core";
+import { InterlinearData, InterlinearGloss, uri } from "conlang-web-components";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 
-import { InterlinearData, InterlinearGloss } from "components/interlinear";
-import { uri } from "lang/util";
 import { Dictionary, FullEntry } from "providers/dictionary";
 import { useTitle } from "providers/title";
 import { User } from "providers/user";

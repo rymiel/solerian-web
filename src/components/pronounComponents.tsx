@@ -1,10 +1,9 @@
 import { HTMLTable } from "@blueprintjs/core";
+import { Abbr, zip } from "conlang-web-components";
 
-import { Abbr } from "components/interlinear";
 import { DisplayWord, usePopulateDualInfo } from "lang/display";
 import { Part } from "lang/extra";
 import { FORM_NAMES, formsFromEntry, InflectableEntry } from "lang/inflection";
-import { zip } from "lang/util";
 
 function PronounTableEntry({ word }: { word: DisplayWord }) {
   return <td>

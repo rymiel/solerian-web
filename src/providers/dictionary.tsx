@@ -1,9 +1,8 @@
-import { SharedDictionaryProvider } from "conlang-web-components";
+import { uri } from "conlang-web-components";
 import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useRef, useState } from "react";
 
 import { AnyPattern, determinePattern, markStress, Part, partOfExtra } from "lang/extra";
 import { scriptMultiUnicode } from "lang/script";
-import { uri } from "lang/util";
 import { LangConfig } from "providers/langConfig";
 import { ApiDictionary, apiLangFetch, ApiMeaning, ApiSection, ApiWord } from "api";
 import { toastErrorHandler } from "App";
@@ -114,9 +113,7 @@ export function DictionaryProvider({ children }: PropsWithChildren) {
     localStorage.removeItem("entries");
   }, []);
 
-  return <Dictionary.Provider value={{ entries, refresh }}>
-    <SharedDictionaryProvider sourceContext={Dictionary}>{children}</SharedDictionaryProvider>
-  </Dictionary.Provider>;
+  return <Dictionary.Provider value={{ entries, refresh }}>{children}</Dictionary.Provider>;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

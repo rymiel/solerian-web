@@ -16,8 +16,8 @@ import TranslationsPage from "page/TranslationsPage";
 import ValidatePage from "page/ValidationPage";
 import WordPage from "page/WordPage";
 import { ApiVersionProvider } from "providers/apiVersion";
-import { DictionaryProvider } from "providers/dictionary";
-import { LangConfigProvider } from "providers/langConfig";
+import { Dictionary, DictionaryProvider } from "providers/dictionary";
+import { LangConfig, LangConfigProvider } from "providers/langConfig";
 import { TitleProvider } from "providers/title";
 import { UserProvider } from "providers/user";
 import { App } from "App";
@@ -25,6 +25,8 @@ import { App } from "App";
 import "@blueprintjs/core/lib/css/blueprint.css";
 import "@blueprintjs/popover2/lib/css/blueprint-popover2.css";
 import "./style/index.css";
+
+import { SharedProvider } from "conlang-web-components";
 
 const router = createBrowserRouter([
   {
@@ -102,7 +104,9 @@ function Wrapper() {
           <LangConfigProvider>
             <DictionaryProvider>
               <UserProvider>
-                <RouterProvider router={router} />
+                <SharedProvider dictionary={Dictionary} langConfig={LangConfig}>
+                  <RouterProvider router={router} />
+                </SharedProvider>
               </UserProvider>
             </DictionaryProvider>
           </LangConfigProvider>

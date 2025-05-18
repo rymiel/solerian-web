@@ -1,21 +1,32 @@
 import { createContext, PropsWithChildren, useEffect, useState } from "react";
 
 import { GenerationConfig, GenerationInstance } from "lang/generation";
+import { scriptMultiUnicode } from "lang/script";
 import { SoundChangeConfig, SoundChangeInstance } from "lang/soundChange";
 
 interface LangConfigData {
   soundChange: SoundChangeInstance | null;
   generation: GenerationInstance | null;
+  ipa: (sentence: string) => string;
+  script: (sentence: string) => string;
 }
 
 export const LangConfig = createContext<LangConfigData>({
   soundChange: null,
   generation: null,
+  ipa: () => {
+    throw new Error("No LangConfig context provided");
+  },
+  script: () => {
+    throw new Error("No LangConfig context provided");
+  },
 });
 
 export function LangConfigProvider({ children }: PropsWithChildren) {
   const [soundChange, setSoundChange] = useState<SoundChangeInstance | null>(null);
   const [generation, setGeneration] = useState<GenerationInstance | null>(null);
+  const ipa = (sentence: string) => (soundChange && soundChange.soundChangeSentence(sentence)) ?? "...";
+  const script = scriptMultiUnicode;
 
   // TODO: actual api
 
@@ -24,7 +35,7 @@ export function LangConfigProvider({ children }: PropsWithChildren) {
     setGeneration(new GenerationInstance(GENERATION_CONFIG));
   }, []);
 
-  return <LangConfig.Provider value={{ soundChange, generation }}>{children}</LangConfig.Provider>;
+  return <LangConfig.Provider value={{ soundChange, generation, ipa, script }}>{children}</LangConfig.Provider>;
 }
 
 const SOUND_CHANGE_CONFIG: SoundChangeConfig = {

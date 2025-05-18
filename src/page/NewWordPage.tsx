@@ -9,6 +9,7 @@ import {
   NonIdealState,
   Tag,
 } from "@blueprintjs/core";
+import { uri } from "conlang-web-components";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -17,7 +18,6 @@ import { PronounInfo } from "components/pronounComponents";
 import { VerbInfo } from "components/verbComponents";
 import { determinePattern, Part, partOfExtra, PARTS_OF_SPEECH, patternNames, separateRoot } from "lang/extra";
 import { FORM_NAMES, InflectableEntry } from "lang/inflection";
-import { uri } from "lang/util";
 import { Dictionary } from "providers/dictionary";
 import { useTitle } from "providers/title";
 import { User } from "providers/user";

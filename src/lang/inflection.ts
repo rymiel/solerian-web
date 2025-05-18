@@ -1,5 +1,6 @@
+import { gsub, sub, SubMap } from "conlang-web-components";
+
 import { markStress, Part, Patterns, SeparatedRoot, separateRoot } from "lang/extra";
-import { gsub, sub, SubMap } from "lang/util";
 
 export const FORM_NAMES = {
   [Part.Noun]: ["nom_sg", "acc_sg", "gen_sg", "nom_pl", "acc_pl", "gen_pl"] as const,
