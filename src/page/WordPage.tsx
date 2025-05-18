@@ -1,11 +1,11 @@
 import { H2, H3, H4, Icon, IconSize, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
+import { RichText } from "conlang-web-components";
 import { useContext, useEffect, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 
 import { InterlinearData, InterlinearGloss } from "components/interlinear";
 import { NounInfo } from "components/nounComponents";
 import { PronounInfo } from "components/pronounComponents";
-import { RichText } from "components/richText";
 import { VerbInfo } from "components/verbComponents";
 import { Part, partOfSpeechShort, PARTS_OF_SPEECH } from "lang/extra";
 import { uri } from "lang/util";

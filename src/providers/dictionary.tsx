@@ -1,3 +1,4 @@
+import { SharedDictionaryProvider } from "conlang-web-components";
 import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useRef, useState } from "react";
 
 import { AnyPattern, determinePattern, markStress, Part, partOfExtra } from "lang/extra";
@@ -113,7 +114,9 @@ export function DictionaryProvider({ children }: PropsWithChildren) {
     localStorage.removeItem("entries");
   }, []);
 
-  return <Dictionary.Provider value={{ entries, refresh }}>{children}</Dictionary.Provider>;
+  return <Dictionary.Provider value={{ entries, refresh }}>
+    <SharedDictionaryProvider sourceContext={Dictionary}>{children}</SharedDictionaryProvider>
+  </Dictionary.Provider>;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
