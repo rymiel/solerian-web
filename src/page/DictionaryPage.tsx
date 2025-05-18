@@ -3,13 +3,13 @@ import { useCallback, useContext, useState } from "react";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 
-import { entryHasMatch } from "components/wordSelect";
 import { PARTS_OF_SPEECH } from "lang/extra";
 import { SectionTitle, SIMPLE_SECTIONS } from "page/EditWordPage";
 import { Dictionary, FullEntry, FullMeaning } from "providers/dictionary";
 import { useTitle } from "providers/title";
 import { User } from "providers/user";
 import { LANGUAGE } from "api";
+import { entryHasMatch } from "conlang-web-components";
 
 function ExtraCell({ extra, cls }: { extra: string; cls: string | null }) {
   const abbr = PARTS_OF_SPEECH[extra] as string | undefined;
