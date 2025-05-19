@@ -15,10 +15,10 @@ import StatsPage from "page/StatsPage";
 import TranslationsPage from "page/TranslationsPage";
 import ValidatePage from "page/ValidationPage";
 import WordPage from "page/WordPage";
-import { ApiVersionProvider } from "providers/apiVersion";
 import { Dictionary, DictionaryProvider } from "providers/dictionary";
 import { LangConfig, LangConfigProvider } from "providers/langConfig";
 import { UserProvider } from "providers/user";
+import { API } from "api";
 import { App } from "App";
 
 import "@blueprintjs/core/lib/css/blueprint.css";
@@ -95,19 +95,17 @@ const router = createBrowserRouter([
 
 function Wrapper() {
   return <StrictMode>
-    <ApiVersionProvider>
-      <BlueprintProvider>
-        <LangConfigProvider>
-          <DictionaryProvider>
-            <UserProvider>
-              <ConlangProvider dictionary={Dictionary} lang={LangConfig}>
-                <RouterProvider router={router} />
-              </ConlangProvider>
-            </UserProvider>
-          </DictionaryProvider>
-        </LangConfigProvider>
-      </BlueprintProvider>
-    </ApiVersionProvider>
+    <BlueprintProvider>
+      <LangConfigProvider>
+        <DictionaryProvider>
+          <UserProvider>
+            <ConlangProvider dictionary={Dictionary} lang={LangConfig} api={API}>
+              <RouterProvider router={router} />
+            </ConlangProvider>
+          </UserProvider>
+        </DictionaryProvider>
+      </LangConfigProvider>
+    </BlueprintProvider>
   </StrictMode>;
 }
 
