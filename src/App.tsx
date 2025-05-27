@@ -95,6 +95,7 @@ const PRIVATE_MENU_LINKS = [
   ["/numbers", "Numbers"],
   ["/sound_changes", "Sound Changes"],
   ["/generate", "Generate"],
+  ["/config", "Config"],
 ];
 
 function Menu() {

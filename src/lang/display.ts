@@ -10,11 +10,11 @@ export interface DisplayWord {
 }
 
 export function usePopulateDualInfo() {
-  const { soundChange } = useContext(LangConfig);
+  const lang = useContext(LangConfig);
 
   return (word: string, markStress = true) => ({
     sol: word,
     script: scriptMultiUnicode(word),
-    ipa: soundChange ? soundChange.soundChange(word, markStress) : "[ ... ]",
+    ipa: lang ? lang.soundChange.soundChange(word, markStress) : "[ ... ]",
   });
 }

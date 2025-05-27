@@ -90,7 +90,7 @@ async function validate(raw: FullEntry[], infl: InflEntry[], soundChange: SoundC
 export default function ValidatePage() {
   const { user } = useContext(User);
   const { entries } = useContext(Dictionary);
-  const { soundChange } = useContext(LangConfig);
+  const lang = useContext(LangConfig);
   const infl = useInflEntries()?.filter((i) => i.old === false);
   const [fail, setFail] = useState<Fail[] | null>(null);
   const [isLoading, setLoading] = useState(false);
@@ -101,7 +101,7 @@ export default function ValidatePage() {
 
   if (!user) {
     footer = <NonIdealState icon="error" title="You cannot access this page" />;
-  } else if (entries && infl && soundChange) {
+  } else if (entries && infl && lang) {
     header = <Button
       intent="success"
       text={`Run validation (${entries.length + infl.length} entries)`}
@@ -111,7 +111,7 @@ export default function ValidatePage() {
       onClick={() => {
         setFail(null);
         setLoading(true);
-        validate(entries, infl, soundChange).then((f) => {
+        validate(entries, infl, lang.soundChange).then((f) => {
           setFail(f);
           setLoading(false);
         });

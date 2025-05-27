@@ -212,7 +212,7 @@ function Content({
 export default function SoundChangePage() {
   const { user } = useContext(User);
   const { entries } = useContext(Dictionary);
-  const { soundChange } = useContext(LangConfig);
+  const lang = useContext(LangConfig);
   const infl = useInflEntries()?.filter((i) => i.old === false);
   useTitle("Sound changes");
 
@@ -220,11 +220,11 @@ export default function SoundChangePage() {
 
   if (!user) {
     content = <NonIdealState icon="error" title="You cannot access this page" />;
-  } else if (entries === null || infl === undefined || soundChange === null) {
+  } else if (entries === null || infl === undefined || lang === null) {
     content = <NonIdealState icon={<Spinner size={SpinnerSize.LARGE} />} />;
   } else {
     content = <div className="inter">
-      <Content rawEntries={entries} inflEntries={infl} soundChange={soundChange} />
+      <Content rawEntries={entries} inflEntries={infl} soundChange={lang.soundChange} />
     </div>;
   }
 

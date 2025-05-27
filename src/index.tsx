@@ -4,6 +4,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
+import ConfigPage from "page/ConfigPage";
 import DictionaryPage from "page/DictionaryPage";
 import EditWordPage from "page/EditWordPage";
 import GeneratePage from "page/GeneratePage";
@@ -15,14 +16,16 @@ import StatsPage from "page/StatsPage";
 import TranslationsPage from "page/TranslationsPage";
 import ValidatePage from "page/ValidationPage";
 import WordPage from "page/WordPage";
-import { Dictionary, DictionaryProvider } from "providers/dictionary";
-import { LangConfig, LangConfigProvider } from "providers/langConfig";
+import { DataProvider } from "providers/data";
+import { Dictionary } from "providers/dictionary";
+import { LangConfig } from "providers/langConfig";
 import { UserProvider } from "providers/user";
 import { API } from "api";
 import { App } from "App";
 
 import "@blueprintjs/core/lib/css/blueprint.css";
 import "@blueprintjs/popover2/lib/css/blueprint-popover2.css";
+import "conlang-web-components/src/style.css";
 import "./style/index.css";
 
 const router = createBrowserRouter([
@@ -89,6 +92,10 @@ const router = createBrowserRouter([
         path: "/translations",
         element: <TranslationsPage />,
       },
+      {
+        path: "/config",
+        element: <ConfigPage />,
+      },
     ],
   },
 ]);
@@ -96,15 +103,13 @@ const router = createBrowserRouter([
 function Wrapper() {
   return <StrictMode>
     <BlueprintProvider>
-      <LangConfigProvider>
-        <DictionaryProvider>
-          <UserProvider>
-            <ConlangProvider dictionary={Dictionary} lang={LangConfig} api={API}>
-              <RouterProvider router={router} />
-            </ConlangProvider>
-          </UserProvider>
-        </DictionaryProvider>
-      </LangConfigProvider>
+      <DataProvider>
+        <UserProvider>
+          <ConlangProvider dictionary={Dictionary} lang={LangConfig} api={API}>
+            <RouterProvider router={router} />
+          </ConlangProvider>
+        </UserProvider>
+      </DataProvider>
     </BlueprintProvider>
   </StrictMode>;
 }

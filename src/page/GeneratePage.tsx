@@ -8,10 +8,9 @@ import {
   SpinnerSize,
   Tag,
 } from "@blueprintjs/core";
-import { useTitle } from "conlang-web-components";
+import { GenerationInstance, useTitle } from "conlang-web-components";
 import { useContext, useEffect, useState } from "react";
 
-import { GenerationInstance } from "lang/generation";
 import { SoundChangeInstance } from "lang/soundChange";
 import { LangConfig } from "providers/langConfig";
 import { User } from "providers/user";
@@ -73,18 +72,18 @@ function Content({ soundChange, generation }: { soundChange: SoundChangeInstance
 
 export default function GeneratePage() {
   const { user } = useContext(User);
-  const { soundChange, generation } = useContext(LangConfig);
+  const lang = useContext(LangConfig);
   useTitle("Generate");
 
   let content;
 
   if (!user) {
     content = <NonIdealState icon="error" title="You cannot access this page" />;
-  } else if (soundChange === null || generation === null) {
+  } else if (lang === null) {
     content = <NonIdealState icon={<Spinner size={SpinnerSize.LARGE} />} />;
   } else {
     content = <div className="inter">
-      <Content soundChange={soundChange} generation={generation} />
+      <Content soundChange={lang.soundChange} generation={lang.generation} />
     </div>;
   }
 
