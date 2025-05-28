@@ -1,14 +1,4 @@
-import {
-  Button,
-  Checkbox,
-  Classes,
-  ControlGroup,
-  FormGroup,
-  HTMLSelect,
-  InputGroup,
-  NonIdealState,
-  Tag,
-} from "@blueprintjs/core";
+import { Button, Checkbox, Classes, ControlGroup, FormGroup, HTMLSelect, InputGroup, Tag } from "@blueprintjs/core";
 import { uri, useTitle } from "conlang-web-components";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -19,7 +9,6 @@ import { VerbInfo } from "components/verbComponents";
 import { determinePattern, Part, partOfExtra, PARTS_OF_SPEECH, patternNames, separateRoot } from "lang/extra";
 import { FORM_NAMES, InflectableEntry } from "lang/inflection";
 import { Dictionary } from "providers/dictionary";
-import { User } from "providers/user";
 import { API, LANGUAGE } from "api";
 
 function Editor() {
@@ -118,18 +107,9 @@ function Editor() {
 }
 
 export default function NewWordPage() {
-  const { user } = useContext(User);
   useTitle("New");
 
-  let content;
-
-  if (!user) {
-    content = <NonIdealState icon="error" title="You cannot access this page" />;
-  } else {
-    content = <div className="inter">
-      <Editor />
-    </div>;
-  }
-
-  return content;
+  return <div className="inter">
+    <Editor />
+  </div>;
 }

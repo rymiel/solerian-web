@@ -1,15 +1,12 @@
 import { NonIdealState, Spinner, SpinnerSize } from "@blueprintjs/core";
-import { InterlinearData, InterlinearGloss, uri, useTitle } from "conlang-web-components";
+import { InterlinearData, InterlinearGloss, uri, UserOnly, useTitle } from "conlang-web-components";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 
+import { SectionTitle } from "page/EditWordPage";
 import { Dictionary, FullEntry } from "providers/dictionary";
-import { User } from "providers/user";
-
-import { SectionTitle } from "./EditWordPage";
 
 function Content({ entries }: { entries: FullEntry[] }) {
-  const { user } = useContext(User);
   const examples = entries.flatMap((e) =>
     e.meanings
       .map((m, mi) => {
@@ -36,9 +33,11 @@ function Content({ entries }: { entries: FullEntry[] }) {
               indent
               script
               extra={
-                user && <span className="edit">
-                  [ <Link to={uri`/edit/${entry.hash}/${section.hash}`}>edit</Link> ]
-                </span>
+                <UserOnly>
+                  <span className="edit">
+                    [ <Link to={uri`/edit/${entry.hash}/${section.hash}`}>edit</Link> ]
+                  </span>
+                </UserOnly>
               }
             />
           </dd>)}

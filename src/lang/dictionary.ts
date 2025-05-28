@@ -1,10 +1,9 @@
 import { ApiData, uri } from "conlang-web-components";
 
+import { AnyPattern, determinePattern, markStress, partOfExtra } from "lang/extra";
+import { scriptMultiUnicode } from "lang/script";
 import { FullEntry, SortableEntry } from "providers/dictionary";
 import { LangConfigData } from "providers/langConfig";
-
-import { AnyPattern, determinePattern, markStress, partOfExtra } from "./extra";
-import { scriptMultiUnicode } from "./script";
 
 type ApiDictionary = Pick<ApiData, "words" | "meanings" | "sections">;
 

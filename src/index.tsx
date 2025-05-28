@@ -1,5 +1,5 @@
 import { BlueprintProvider } from "@blueprintjs/core";
-import { ConlangProvider, ErrorPage } from "conlang-web-components";
+import { ConlangProvider, ErrorPage, UserOnly } from "conlang-web-components";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -19,9 +19,8 @@ import WordPage from "page/WordPage";
 import { DataProvider } from "providers/data";
 import { Dictionary } from "providers/dictionary";
 import { LangConfig } from "providers/langConfig";
-import { UserProvider } from "providers/user";
 import { API } from "api";
-import { App } from "App";
+import { App, toastErrorHandler } from "App";
 
 import "@blueprintjs/core/lib/css/blueprint.css";
 import "@blueprintjs/popover2/lib/css/blueprint-popover2.css";
@@ -50,15 +49,21 @@ const router = createBrowserRouter([
       },
       {
         path: "/edit/:hash",
-        element: <EditWordPage />,
+        element: <UserOnly error>
+          <EditWordPage />
+        </UserOnly>,
       },
       {
         path: "/edit/:hash/:edit",
-        element: <EditWordPage />,
+        element: <UserOnly error>
+          <EditWordPage />
+        </UserOnly>,
       },
       {
         path: "/new",
-        element: <NewWordPage />,
+        element: <UserOnly error>
+          <NewWordPage />
+        </UserOnly>,
       },
       {
         path: "/reverse",
@@ -70,11 +75,15 @@ const router = createBrowserRouter([
       },
       {
         path: "/validate",
-        element: <ValidatePage />,
+        element: <UserOnly error>
+          <ValidatePage />
+        </UserOnly>,
       },
       {
         path: "/numbers",
-        element: <NumbersPage />,
+        element: <UserOnly error>
+          <NumbersPage />
+        </UserOnly>,
       },
       {
         path: "/stats",
@@ -82,11 +91,15 @@ const router = createBrowserRouter([
       },
       {
         path: "/sound_changes",
-        element: <SoundChangePage />,
+        element: <UserOnly error>
+          <SoundChangePage />
+        </UserOnly>,
       },
       {
         path: "/generate",
-        element: <GeneratePage />,
+        element: <UserOnly error>
+          <GeneratePage />
+        </UserOnly>,
       },
       {
         path: "/translations",
@@ -94,7 +107,9 @@ const router = createBrowserRouter([
       },
       {
         path: "/config",
-        element: <ConfigPage />,
+        element: <UserOnly error>
+          <ConfigPage />
+        </UserOnly>,
       },
     ],
   },
@@ -104,11 +119,9 @@ function Wrapper() {
   return <StrictMode>
     <BlueprintProvider>
       <DataProvider>
-        <UserProvider>
-          <ConlangProvider dictionary={Dictionary} lang={LangConfig} api={API}>
-            <RouterProvider router={router} />
-          </ConlangProvider>
-        </UserProvider>
+        <ConlangProvider dictionary={Dictionary} lang={LangConfig} api={API} error={toastErrorHandler}>
+          <RouterProvider router={router} />
+        </ConlangProvider>
       </DataProvider>
     </BlueprintProvider>
   </StrictMode>;

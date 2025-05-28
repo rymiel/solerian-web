@@ -30,7 +30,6 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { Part } from "lang/extra";
 import { Dictionary, FullEntry, FullMeaning, FullSection } from "providers/dictionary";
-import { User } from "providers/user";
 import { API, LANGUAGE } from "api";
 
 export enum SectionTitle {
@@ -440,14 +439,11 @@ function EditWordPageContent({ entry, active }: { entry: FullEntry; active: stri
 export default function EditWordPage() {
   const { entries } = useContext(Dictionary);
   const { hash, edit } = useParams() as { hash: string; edit?: string };
-  const { user } = useContext(User);
   useTitle("Edit");
 
   let content = <NonIdealState icon={<Spinner size={SpinnerSize.LARGE} />} />;
 
-  if (!user) {
-    content = <NonIdealState icon="error" title="You cannot access this page" />;
-  } else if (entries) {
+  if (entries) {
     const entry = entries.find((e) => e.hash === hash);
 
     if (entry) {

@@ -8,7 +8,6 @@ import { InflEntry, useInflEntries } from "lang/inflEntries";
 import { SoundChangeInstance } from "lang/soundChange";
 import { Dictionary, FullEntry } from "providers/dictionary";
 import { LangConfig } from "providers/langConfig";
-import { User } from "providers/user";
 import { API } from "api";
 import { toastErrorHandler } from "App";
 
@@ -88,7 +87,6 @@ async function validate(raw: FullEntry[], infl: InflEntry[], soundChange: SoundC
 }
 
 export default function ValidatePage() {
-  const { user } = useContext(User);
   const { entries } = useContext(Dictionary);
   const lang = useContext(LangConfig);
   const infl = useInflEntries()?.filter((i) => i.old === false);
@@ -99,9 +97,7 @@ export default function ValidatePage() {
   let header;
   let footer;
 
-  if (!user) {
-    footer = <NonIdealState icon="error" title="You cannot access this page" />;
-  } else if (entries && infl && lang) {
+  if (entries && infl && lang) {
     header = <Button
       intent="success"
       text={`Run validation (${entries.length + infl.length} entries)`}

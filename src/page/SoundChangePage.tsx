@@ -19,7 +19,6 @@ import { InflEntry, useInflEntries } from "lang/inflEntries";
 import { Change, SoundChangeInstance } from "lang/soundChange";
 import { Dictionary, FullEntry } from "providers/dictionary";
 import { LangConfig } from "providers/langConfig";
-import { User } from "providers/user";
 import { AppToaster } from "App";
 
 function intersperse(arr: ReactNode[], w: ReactNode): ReactNode[] {
@@ -210,7 +209,6 @@ function Content({
 }
 
 export default function SoundChangePage() {
-  const { user } = useContext(User);
   const { entries } = useContext(Dictionary);
   const lang = useContext(LangConfig);
   const infl = useInflEntries()?.filter((i) => i.old === false);
@@ -218,9 +216,7 @@ export default function SoundChangePage() {
 
   let content;
 
-  if (!user) {
-    content = <NonIdealState icon="error" title="You cannot access this page" />;
-  } else if (entries === null || infl === undefined || lang === null) {
+  if (entries === null || infl === undefined || lang === null) {
     content = <NonIdealState icon={<Spinner size={SpinnerSize.LARGE} />} />;
   } else {
     content = <div className="inter">

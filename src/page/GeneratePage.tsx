@@ -12,10 +12,8 @@ import { GenerationInstance, useTitle } from "conlang-web-components";
 import { useContext, useEffect, useState } from "react";
 
 import { SoundChangeInstance } from "lang/soundChange";
+import { validateCombined } from "page/ValidationPage";
 import { LangConfig } from "providers/langConfig";
-import { User } from "providers/user";
-
-import { validateCombined } from "./ValidationPage";
 
 function Content({ soundChange, generation }: { soundChange: SoundChangeInstance; generation: GenerationInstance }) {
   const [current, setCurrent] = useState("");
@@ -71,15 +69,12 @@ function Content({ soundChange, generation }: { soundChange: SoundChangeInstance
 }
 
 export default function GeneratePage() {
-  const { user } = useContext(User);
   const lang = useContext(LangConfig);
   useTitle("Generate");
 
   let content;
 
-  if (!user) {
-    content = <NonIdealState icon="error" title="You cannot access this page" />;
-  } else if (lang === null) {
+  if (lang === null) {
     content = <NonIdealState icon={<Spinner size={SpinnerSize.LARGE} />} />;
   } else {
     content = <div className="inter">

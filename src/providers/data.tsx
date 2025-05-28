@@ -3,11 +3,10 @@ import { PropsWithChildren, useCallback, useEffect, useRef, useState } from "rea
 
 import { transformConfig } from "lang/config";
 import { transformDictionary } from "lang/dictionary";
+import { Dictionary, FullEntry } from "providers/dictionary";
 import { LangConfig, LangConfigData } from "providers/langConfig";
 import { API } from "api";
 import { toastErrorHandler } from "App";
-
-import { Dictionary, FullEntry } from "./dictionary";
 
 export function DataProvider({ children }: PropsWithChildren) {
   const [entries, setEntries] = useState<FullEntry[] | null>(null);

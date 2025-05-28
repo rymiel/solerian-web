@@ -1,9 +1,8 @@
-import { ControlGroup, InputGroup, NonIdealState, NumericInput } from "@blueprintjs/core";
+import { ControlGroup, InputGroup, NumericInput } from "@blueprintjs/core";
 import { useTitle } from "conlang-web-components";
-import { useContext, useState } from "react";
+import { useState } from "react";
 
 import { b10Split, b10ToB12, b12toBijective, constructNumber } from "lang/numbers";
-import { User } from "providers/user";
 
 function Content() {
   const [num, setNum] = useState(0);
@@ -24,18 +23,9 @@ function Content() {
 }
 
 export default function NumbersPage() {
-  const { user } = useContext(User);
   useTitle("Numbers");
 
-  let content;
-
-  if (!user) {
-    content = <NonIdealState icon="error" title="You cannot access this page" />;
-  } else {
-    content = <div className="inter">
-      <Content />
-    </div>;
-  }
-
-  return content;
+  return <div className="inter">
+    <Content />
+  </div>;
 }

@@ -1,5 +1,5 @@
 import { Button, HTMLTable, Icon, InputGroup, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
-import { entryHasMatch, useTitle } from "conlang-web-components";
+import { entryHasMatch, UserOnly, useTitle } from "conlang-web-components";
 import { useCallback, useContext, useState } from "react";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 import { PARTS_OF_SPEECH } from "lang/extra";
 import { SectionTitle, SIMPLE_SECTIONS } from "page/EditWordPage";
 import { Dictionary, FullEntry, FullMeaning } from "providers/dictionary";
-import { User } from "providers/user";
 import { LANGUAGE } from "api";
 
 function ExtraCell({ extra, cls }: { extra: string; cls: string | null }) {
@@ -92,7 +91,6 @@ export default function DictionaryPage() {
   useTitle("Home");
   const { entries } = useContext(Dictionary);
   const navigate = useNavigate();
-  const { user } = useContext(User);
   const [search, setSearch] = useState("");
 
   const handleSearchContainer = useCallback((ref: HTMLDivElement | null) => {
@@ -129,8 +127,10 @@ export default function DictionaryPage() {
       </tbody>
     </HTMLTable>
 
-    {user && <div className="around-dictionary" ref={handleAddButton}>
-      <Button intent="success" text="Add new entry" icon="plus" fill onClick={() => navigate("/new")} />
-    </div>}
+    <UserOnly>
+      <div className="around-dictionary" ref={handleAddButton}>
+        <Button intent="success" text="Add new entry" icon="plus" fill onClick={() => navigate("/new")} />
+      </div>
+    </UserOnly>
   </div>;
 }

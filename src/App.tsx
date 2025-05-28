@@ -14,11 +14,10 @@ import {
   Position,
   Toaster,
 } from "@blueprintjs/core";
-import { ApiVersion, CustomApiError, Title } from "conlang-web-components";
+import { ApiVersion, CustomApiError, Title, User, UserOnly } from "conlang-web-components";
 import { PropsWithChildren, useContext, useEffect, useState } from "react";
 import { Link, Outlet, ScrollRestoration, useNavigate } from "react-router-dom";
 
-import { User } from "providers/user";
 import { API, LANGUAGE } from "api";
 
 let toasterCache: Promise<Toaster> | null = null;
@@ -100,7 +99,6 @@ const PRIVATE_MENU_LINKS = [
 
 function Menu() {
   const [isOpen, setOpen] = useState(false);
-  const { user } = useContext(User);
 
   return <>
     <Icon className="menu" icon="menu" size={36} onClick={() => setOpen(true)} />
@@ -113,14 +111,16 @@ function Menu() {
             </Link>
           </li>)}
         </ul>
-        {user && <Divider />}
-        {user && <ul>
-          {PRIVATE_MENU_LINKS.map(([slug, name]) => <li key={slug}>
-            <Link to={slug} onClick={() => setOpen(false)}>
-              {name}
-            </Link>
-          </li>)}
-        </ul>}
+        <UserOnly>
+          <Divider />
+          <ul>
+            {PRIVATE_MENU_LINKS.map(([slug, name]) => <li key={slug}>
+              <Link to={slug} onClick={() => setOpen(false)}>
+                {name}
+              </Link>
+            </li>)}
+          </ul>
+        </UserOnly>
       </nav>
     </Drawer>
   </>;

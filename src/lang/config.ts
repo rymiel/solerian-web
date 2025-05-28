@@ -1,9 +1,8 @@
 import { ApiConfig, GenerationConfig, GenerationInstance } from "conlang-web-components";
 
+import { scriptMultiUnicode } from "lang/script";
+import { SoundChangeConfig, SoundChangeInstance } from "lang/soundChange";
 import { LangConfigData } from "providers/langConfig";
-
-import { scriptMultiUnicode } from "./script";
-import { SoundChangeConfig, SoundChangeInstance } from "./soundChange";
 
 export function transformConfig(config: ApiConfig): LangConfigData {
   const soundChange = new SoundChangeInstance(SOUND_CHANGE_CONFIG);
