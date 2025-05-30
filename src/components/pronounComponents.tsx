@@ -9,7 +9,7 @@ function PronounTableEntry({ word }: { word: DisplayWord }) {
   return <td>
     <span className="dual">
       <i>{word.sol}</i>
-      <span className="sol">{word.script}</span>
+      <span lang="x-sol">{word.script}</span>
     </span>
     <p>{word.ipa}</p>
   </td>;

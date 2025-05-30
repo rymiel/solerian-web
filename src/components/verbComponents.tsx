@@ -12,7 +12,7 @@ function VerbTableEntry({ word }: { word: DisplayWord }) {
   return <td>
     <span className="dual">
       <i>{word.sol}</i>
-      <span className="sol">{word.script}</span>
+      <span lang="x-sol">{word.script}</span>
     </span>
     <p>{word.ipa}</p>
   </td>;
@@ -38,7 +38,7 @@ function GerundTableEntry({ word }: { word: DisplayWord }) {
       <a onClick={() => setOpen(true)}>
         <i>{word.sol}</i>
       </a>
-      <span className="sol">{word.script}</span>
+      <span lang="x-sol">{word.script}</span>
     </span>
     <p>{word.ipa}</p>
     <Dialog

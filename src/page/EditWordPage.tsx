@@ -123,7 +123,7 @@ function EntryData({ v }: { v: FullEntry }) {
     <Divider />
     <InfoTag left="part" right={v.part === null ? null : Part[v.part]} generated />
     <InfoTag left="class" right={v.class} generated />
-    <InfoTag left="script" right={<span className="sol">{v.script}</span>} generated />
+    <InfoTag left="script" right={<span lang="x-sol">{v.script}</span>} generated />
     <InfoTag left="ipa" right={v.ipa} generated />
   </>;
 }

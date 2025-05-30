@@ -1,6 +1,6 @@
 {
   "name": "solerian-web",
-  "version": "0.4.9",
+  "version": "0.4.10",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -16,7 +16,7 @@
     "@blueprintjs/select": "^5.2.3",
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.0",
-    "conlang-web-components": "gitlab:rymiel/conlang-web-components#acdec2b4ada0b3d831d369c3e94ad02124f7d76c",
+    "conlang-web-components": "gitlab:rymiel/conlang-web-components#af16654abf8636bc7a5358c3675f48d4d99175c6",
     "html-webpack-plugin": "^5.6.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

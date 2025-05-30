@@ -119,7 +119,7 @@ function Wrapper() {
   return <StrictMode>
     <BlueprintProvider>
       <DataProvider>
-        <ConlangProvider dictionary={Dictionary} lang={LangConfig} api={API} error={toastErrorHandler}>
+        <ConlangProvider dictionary={Dictionary} lang={LangConfig} api={API} error={toastErrorHandler} tag="x-sol">
           <RouterProvider router={router} />
         </ConlangProvider>
       </DataProvider>

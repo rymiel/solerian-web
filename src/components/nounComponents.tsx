@@ -17,7 +17,7 @@ function PossTableEntry({ word }: { word: DisplayWord }) {
   return <td>
     <span className="dual">
       <i>{word.sol}</i>
-      <span className="sol">{word.script}</span>
+      <span lang="x-sol">{word.script}</span>
     </span>
     <p>{word.ipa}</p>
   </td>;
@@ -42,7 +42,7 @@ function NounTableEntry({ word, stress, old }: { word: DisplayWord; stress: bool
       ) : (
         <i>{word.sol}</i>
       )}
-      <span className="sol">{word.script}</span>
+      <span lang="x-sol">{word.script}</span>
     </span>
     <p>{word.ipa}</p>
     {stress && <Dialog

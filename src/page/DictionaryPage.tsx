@@ -71,7 +71,7 @@ function DictionaryRow({ entry }: { entry: FullEntry }) {
     <td>
       <Link to={e.link} className="link-fill dual">
         <i>{e.sol}</i>
-        <span className="sol">{e.script}</span>
+        <span lang="x-sol">{e.script}</span>
       </Link>
     </td>
     <td>
