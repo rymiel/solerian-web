@@ -1,13 +1,10 @@
 import {
   Button,
-  Callout,
   Checkbox,
   Classes,
   Code,
-  CompoundTag,
   ControlGroup,
   Divider,
-  Drawer,
   InputGroup,
   NonIdealState,
   Popover,
@@ -19,14 +16,19 @@ import {
 import {
   ApiBase,
   ApiSection,
+  BaseData,
+  EditWordPageContent,
+  InfoSection,
+  InfoTag,
   InterlinearData,
   InterlinearGloss,
   RichText,
+  useEditContext,
   useTitle,
   WordSelect,
 } from "conlang-web-components";
-import { createContext, ReactElement, ReactNode, useCallback, useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { ReactElement, ReactNode, useCallback, useContext, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 import { Part } from "lang/extra";
 import { Dictionary, FullEntry, FullMeaning, FullSection } from "providers/dictionary";
@@ -47,60 +49,8 @@ export const SIMPLE_SECTIONS = [
   [SectionTitle.COORDINATE, "Coordinate terms", { icon: "compass" }],
 ] as const;
 
-function InfoTag({
-  left,
-  right,
-  onClick,
-  fixed = false,
-  generated = false,
-}: {
-  left: string;
-  right: React.ReactNode;
-  onClick?: () => void;
-  fixed?: boolean;
-  generated?: boolean;
-}) {
-  const editable = !fixed && !generated;
-  return <>
-    <CompoundTag
-      leftContent={left}
-      intent={fixed ? "danger" : generated ? "success" : "primary"}
-      icon={fixed ? "anchor" : generated ? "generate" : "draw"}
-      interactive={editable}
-      onClick={onClick}
-      rightIcon={editable ? "edit" : undefined}
-      large
-    >
-      {right === null ? <i>(null)</i> : right === undefined ? <i>(undefined)</i> : right}
-    </CompoundTag>
-    <br />
-  </>;
-}
-
-function InfoSection({
-  title,
-  children,
-  fixed = false,
-  generated = false,
-}: {
-  title: string;
-  children: React.ReactNode;
-  fixed?: boolean;
-  generated?: boolean;
-}) {
-  return <Callout
-    title={title}
-    className="edit-section"
-    intent={fixed ? "danger" : generated ? "success" : "primary"}
-    icon={fixed ? "anchor" : generated ? "generate" : "draw"}
-    compact
-  >
-    {children}
-  </Callout>;
-}
-
 function EntryData({ v }: { v: FullEntry }) {
-  const edit = useContext(EditContext);
+  const edit = useEditContext();
   return <>
     <BaseData v={v} />
     <InfoTag left="sol" right={v.sol} onClick={() => edit.openDrawer(<EntryEditor existing={v} />)} />
@@ -129,7 +79,7 @@ function EntryData({ v }: { v: FullEntry }) {
 }
 
 function MeaningData({ v }: { v: FullMeaning }) {
-  const edit = useContext(EditContext);
+  const edit = useEditContext();
   return <>
     <BaseData v={v} />
     <InfoTag left="eng" right={v.eng} onClick={() => edit.openDrawer(<MeaningEditor existing={v} />)} />
@@ -138,7 +88,7 @@ function MeaningData({ v }: { v: FullMeaning }) {
 }
 
 function SectionData({ v }: { v: FullSection }) {
-  const edit = useContext(EditContext);
+  const edit = useEditContext();
   const sectionDataEditorButton = useCallback((): readonly [ReactElement, () => void] => {
     const open = edit.openDrawer;
     const simple = SIMPLE_SECTIONS.find(([title]) => v.title === title);
@@ -184,7 +134,7 @@ interface Sectionable extends ApiBase {
   sections: ApiSection[];
 }
 function SectionableData({ v }: { v: Sectionable }) {
-  const edit = useContext(EditContext);
+  const edit = useEditContext();
   return <>
     <InfoSection title="sections">
       {v.sections.map((s, si) => <InfoSection title={`[${si}]`} key={s.hash}>
@@ -221,14 +171,6 @@ function SectionableData({ v }: { v: Sectionable }) {
   </>;
 }
 
-function BaseData({ v }: { v: ApiBase }) {
-  return <>
-    <InfoTag left="hash" right={v.hash} fixed />
-    <InfoTag left="created at" right={v.created_at} fixed />
-    <InfoTag left="updated at" right={v.updated_at} fixed />
-  </>;
-}
-
 type SectionEditorProps = {
   to?: string;
   as?: string;
@@ -238,7 +180,7 @@ type SectionEditorProps = {
   data: () => { title: string; content: string };
 };
 function SectionEditor({ to, as, name, form, preview, data }: SectionEditorProps) {
-  const edit = useContext(EditContext);
+  const edit = useEditContext();
   const dict = useContext(Dictionary);
 
   if (to === undefined && as === undefined) {
@@ -315,7 +257,7 @@ function TextSectionEditor({
   title: SectionTitle;
   content?: string;
 }) {
-  const edit = useContext(EditContext);
+  const edit = useEditContext();
   const [content, setContent] = useState(existingContent ?? "");
 
   const createData = () => ({ title, content });
@@ -334,7 +276,7 @@ function TextSectionEditor({
 }
 
 function EntryEditor({ existing }: { existing: FullEntry }) {
-  const edit = useContext(EditContext);
+  const edit = useEditContext();
   const dict = useContext(Dictionary);
   const [sol, setSol] = useState(existing.sol);
   const [extra, setExtra] = useState(existing.extra);
@@ -360,7 +302,7 @@ function EntryEditor({ existing }: { existing: FullEntry }) {
 }
 
 function MeaningEditor({ to, existing }: { to?: string; existing?: FullMeaning }) {
-  const edit = useContext(EditContext);
+  const edit = useEditContext();
   const dict = useContext(Dictionary);
   const [eng, setEng] = useState(existing?.eng ?? "");
   const as = existing?.hash;
@@ -388,54 +330,6 @@ function MeaningEditor({ to, existing }: { to?: string; existing?: FullMeaning }
   </div>;
 }
 
-interface EditContextData {
-  openDrawer: (element: React.ReactNode) => void;
-  closeDrawer: () => void;
-  drawerOpen: boolean;
-  page: string;
-  active: string | undefined;
-}
-
-const EditContext = createContext<EditContextData>({
-  openDrawer: () => {
-    throw new Error("No edit drawer context provided");
-  },
-  closeDrawer: () => {
-    throw new Error("No edit drawer context provided");
-  },
-  drawerOpen: false,
-  page: "",
-  active: undefined,
-});
-
-function EditWordPageContent({ entry, active }: { entry: FullEntry; active: string | undefined }) {
-  const [isOpen, setOpen] = useState(false);
-  const [element, setElement] = useState<React.ReactNode>(null);
-  const navigate = useNavigate();
-
-  const openDrawer = useCallback((element: React.ReactNode) => {
-    setElement(element);
-    setOpen(true);
-  }, []);
-
-  const closeDrawer = useCallback(() => {
-    navigate(`/edit/${entry.hash}`);
-    setOpen(false);
-  }, [entry.hash, navigate]);
-
-  const back = useCallback(() => {
-    navigate(entry.link);
-  }, [entry.link, navigate]);
-
-  return <EditContext.Provider value={{ openDrawer, closeDrawer, drawerOpen: isOpen, page: entry.hash, active }}>
-    <Button text="Back" icon="arrow-left" onClick={back} /> <br />
-    <EntryData v={entry} />
-    <Drawer isOpen={isOpen} onClose={closeDrawer}>
-      {element}
-    </Drawer>
-  </EditContext.Provider>;
-}
-
 export default function EditWordPage() {
   const { entries } = useContext(Dictionary);
   const { hash, edit } = useParams() as { hash: string; edit?: string };
@@ -448,7 +342,9 @@ export default function EditWordPage() {
 
     if (entry) {
       content = <div className="inter">
-        <EditWordPageContent entry={entry} active={edit} />
+        <EditWordPageContent entry={entry} active={edit}>
+          <EntryData v={entry} />
+        </EditWordPageContent>
       </div>;
     } else {
       content = <NonIdealState icon="error" title="Unknown word" description={hash} />; // TODO
