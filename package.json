@@ -11,12 +11,11 @@
     "lint": "eslint --ext '.ts,.tsx' --max-warnings 0 -- ./"
   },
   "dependencies": {
-    "@blueprintjs/core": "^5.12.0",
-    "@blueprintjs/popover2": "^2.1.4",
-    "@blueprintjs/select": "^5.2.3",
+    "@blueprintjs/core": "^6.0.0",
+    "@blueprintjs/select": "^6.0.0",
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.0",
-    "conlang-web-components": "gitlab:rymiel/conlang-web-components#baffa4a010f81198328f7eb004c59ece1f779e1e",
+    "conlang-web-components": "gitlab:rymiel/conlang-web-components#19e3718cc3359d05e3ae5d1084125b597b7727c8",
     "html-webpack-plugin": "^5.6.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

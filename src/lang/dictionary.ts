@@ -20,7 +20,7 @@ export function transformDictionary(lang: LangConfigData, d: ApiDictionary): Ful
         cls = word.ex !== undefined ? "X" : (determinePattern(word.sol, part) ?? "?");
       }
       const script = scriptMultiUnicode(word.sol);
-      const ipa = lang.soundChange.soundChange(word.sol, markStress(word));
+      const ipa = lang.soundChange.soundChange(word.sol, { markStress: markStress(word) });
       const sections = word.sections.map((s) => d.sections.find((j) => j.hash === s)!);
       const meanings = word.meanings.map((s) => mMeanings.find((j) => j.hash === s)!);
       return { ...word, class: cls, part, script, ipa, sections, meanings };

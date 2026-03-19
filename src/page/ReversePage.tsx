@@ -62,8 +62,8 @@ const ReverseContent = memo(function ReverseContent({
   query,
   includeOld,
 }: {
-  infl: InflEntry[];
-  raw: FullEntry[];
+  infl: readonly InflEntry[];
+  raw: readonly FullEntry[];
   query: string;
   includeOld: boolean;
 }) {

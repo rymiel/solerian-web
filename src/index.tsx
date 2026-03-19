@@ -20,11 +20,10 @@ import ValidatePage from "page/ValidationPage";
 import WordPage from "page/WordPage";
 import { Dictionary } from "providers/dictionary";
 import { LangConfig } from "providers/langConfig";
-import { API } from "api";
-import { App, toastErrorHandler } from "App";
+import { API, LANGUAGE } from "api";
+import { App, toastErrorHandler, toastSuccessHandler } from "App";
 
 import "@blueprintjs/core/lib/css/blueprint.css";
-import "@blueprintjs/popover2/lib/css/blueprint-popover2.css";
 import "conlang-web-components/src/style.css";
 import "./style/index.css";
 
@@ -126,12 +125,18 @@ function Wrapper() {
         transformConfig={transformConfig}
         api={API}
         error={toastErrorHandler}
+        success={toastSuccessHandler}
         tag="x-sol"
+        language={LANGUAGE}
       >
         <RouterProvider router={router} />
       </ConlangProvider>
     </BlueprintProvider>
   </StrictMode>;
+}
+
+if (document.location.hostname === "localhost") {
+  document.getElementById("root")!.classList.add("localhost");
 }
 
 createRoot(document.getElementById("root")!).render(<Wrapper />);

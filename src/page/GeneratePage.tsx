@@ -8,10 +8,9 @@ import {
   SpinnerSize,
   Tag,
 } from "@blueprintjs/core";
-import { GenerationInstance, useTitle } from "conlang-web-components";
+import { GenerationInstance, SoundChangeInstance, useTitle } from "conlang-web-components";
 import { useContext, useEffect, useState } from "react";
 
-import { SoundChangeInstance } from "lang/soundChange";
 import { validateCombined } from "page/ValidationPage";
 import { LangConfig } from "providers/langConfig";
 
@@ -49,7 +48,7 @@ function Content({ soundChange, generation }: { soundChange: SoundChangeInstance
     </ControlGroup>
     <Divider />
     <p>{current !== "" ? current : "..."}</p>
-    <p>{current !== "" ? soundChange.soundChange(current, false) : "..."}</p>
+    <p>{current !== "" ? soundChange.soundChange(current, { markStress: false }) : "..."}</p>
     <p>
       {isValid === undefined ? (
         <Tag intent="warning">Checking validity...</Tag>

@@ -107,6 +107,8 @@ export default function DictionaryPage() {
     return <NonIdealState icon={<Spinner size={SpinnerSize.LARGE} />} />;
   }
 
+  console.log(Object.fromEntries(entries.map(e => [e.hash, e.ipa] as const)));
+
   return <div className="inter middle">
     <div className="around-dictionary" ref={handleSearchContainer}>
       <InputGroup type="search" placeholder="Search" onValueChange={setSearch} value={search} large />

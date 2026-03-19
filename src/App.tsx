@@ -20,18 +20,19 @@ import { Link, Outlet, ScrollRestoration, useNavigate } from "react-router-dom";
 
 import { API, LANGUAGE } from "api";
 
-let toasterCache: Promise<Toaster> | null = null;
-export const AppToaster = (): Promise<Toaster> => {
-  if (toasterCache !== null) {
-    return Promise.resolve(toasterCache);
-  }
-  const t = OverlayToaster.createAsync({
-    position: Position.TOP,
-    usePortal: true,
-  });
-  toasterCache = t;
-  return t;
-};
+export const AppToaster = (() => {
+  let promise: Promise<Toaster> | null = null;
+
+  return () => {
+    if (!promise) {
+      promise = OverlayToaster.create({
+        position: Position.TOP,
+        usePortal: true,
+      });
+    }
+    return promise;
+  };
+})();
 
 declare const WEB_VERSION: string;
 
@@ -44,6 +45,12 @@ export const toastErrorHandler = async (error: unknown): Promise<string> => {
   } else {
     return toaster.show({ intent: Intent.DANGER, message: `unknown error ${error}` });
   }
+};
+
+export const toastSuccessHandler = async (message: string): Promise<string> => {
+  console.info(message);
+  const toaster = await AppToaster();
+  return toaster.show({ intent: Intent.SUCCESS, message });
 };
 
 function Login() {

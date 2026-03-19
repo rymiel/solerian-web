@@ -15,6 +15,6 @@ export function usePopulateDualInfo() {
   return (word: string, markStress = true) => ({
     sol: word,
     script: scriptMultiUnicode(word),
-    ipa: lang ? lang.soundChange.soundChange(word, markStress) : "[ ... ]",
+    ipa: lang ? lang.soundChange.soundChange(word, { markStress }) : "[ ... ]",
   });
 }

@@ -1,11 +1,10 @@
 import { Button, NonIdealState, Spinner, SpinnerSize } from "@blueprintjs/core";
-import { useTitle } from "conlang-web-components";
+import { SoundChangeInstance, useTitle } from "conlang-web-components";
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { applyDestress, applyNormalize } from "lang/inflection";
 import { InflEntry, useInflEntries } from "lang/inflEntries";
-import { SoundChangeInstance } from "lang/soundChange";
 import { Dictionary, FullEntry } from "providers/dictionary";
 import { LangConfig } from "providers/langConfig";
 import { API } from "api";
@@ -17,7 +16,7 @@ interface MinimalWord {
 type Fail<T extends MinimalWord = FullEntry | InflEntry> = [entry: T, reason: string];
 type Lookup = [word: string, ipa: string];
 
-async function validateLocal<T extends MinimalWord>(list: T[]): Promise<Fail<T>[]> {
+async function validateLocal<T extends MinimalWord>(list: readonly T[]): Promise<readonly Fail<T>[]> {
   const fail: Fail<T>[] = [];
   list.forEach((e) => {
     if (e.sol.includes("aa") || e.sol.includes("rr")) {
@@ -27,7 +26,10 @@ async function validateLocal<T extends MinimalWord>(list: T[]): Promise<Fail<T>[
   return fail;
 }
 
-async function validateRemote<T extends MinimalWord>(list: T[], soundChange: SoundChangeInstance): Promise<Fail<T>[]> {
+async function validateRemote<T extends MinimalWord>(
+  list: readonly T[],
+  soundChange: SoundChangeInstance,
+): Promise<readonly Fail<T>[]> {
   const fail: Fail<T>[] = [];
   const lookup: Lookup[] = list.map((i) => [i.sol, soundChange.ipaWithoutSoundChange(i.sol)]);
   try {
@@ -52,7 +54,11 @@ export async function validateCombined<T extends MinimalWord>(
   return (await Promise.all([validateLocal(list), validateRemote(list, soundChange)])).flat();
 }
 
-async function validate(raw: FullEntry[], infl: InflEntry[], soundChange: SoundChangeInstance): Promise<Fail[]> {
+async function validate(
+  raw: readonly FullEntry[],
+  infl: readonly InflEntry[],
+  soundChange: SoundChangeInstance,
+): Promise<readonly Fail[]> {
   const fail: Fail[] = [];
 
   raw.forEach((entry) => {
@@ -90,7 +96,7 @@ export default function ValidatePage() {
   const { entries } = useContext(Dictionary);
   const lang = useContext(LangConfig);
   const infl = useInflEntries()?.filter((i) => i.old === false);
-  const [fail, setFail] = useState<Fail[] | null>(null);
+  const [fail, setFail] = useState<readonly Fail[] | null>(null);
   const [isLoading, setLoading] = useState(false);
   useTitle("Validate");
 

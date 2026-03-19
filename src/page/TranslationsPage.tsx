@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { SectionTitle } from "page/EditWordPage";
 import { Dictionary, FullEntry } from "providers/dictionary";
 
-function Content({ entries }: { entries: FullEntry[] }) {
+function Content({ entries }: { entries: readonly FullEntry[] }) {
   const examples = entries.flatMap((e) =>
     e.meanings
       .map((m, mi) => {
