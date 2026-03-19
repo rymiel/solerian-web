@@ -1,5 +1,5 @@
 import { Button, Checkbox, Classes, ControlGroup, FormGroup, HTMLSelect, InputGroup, Tag } from "@blueprintjs/core";
-import { uri, useTitle } from "conlang-web-components";
+import { ApiMeaning, ApiWord, uri, useTitle } from "conlang-web-components";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -39,12 +39,15 @@ function Editor() {
     }
   }, [part, showEx]);
 
-  const submit = () => {
+  const submit = async () => {
     const ex = exForms.length === 0 ? undefined : exForms.join(",");
-    API.lang<string>("/entry", "POST", { sol, extra, eng, ex }).then((id) => {
-      dict.refresh();
-      navigate(uri`/edit/${id}`);
-    });
+    const w = await API.lang<ApiWord>("/word", "POST", {}, { sol, extra, eng, ex });
+    const meanings = eng
+      .split(";")
+      .map((m) => API.lang<ApiMeaning>("/meaning", "POST", { to: w.hash }, { eng: m.trim() }));
+    await Promise.all(meanings);
+    dict.refresh();
+    navigate(uri`/edit/${w.hash}`);
   };
 
   return <div className="inter">

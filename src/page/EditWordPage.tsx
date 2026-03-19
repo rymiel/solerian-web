@@ -188,7 +188,7 @@ function SectionEditor({ to, as, name, form, preview, data }: SectionEditorProps
   }
 
   const doSubmit = () => {
-    API.lang("/section", "POST", { to, as, ...data() }).then(() => {
+    API.lang("/section", "POST", { to, as }, data()).then(() => {
       dict.refresh();
       edit.closeDrawer();
     });
@@ -284,7 +284,7 @@ function EntryEditor({ existing }: { existing: FullEntry }) {
   const as = existing.hash;
 
   const submit = () => {
-    API.lang("/entry", "POST", { as, sol, extra, tag: isObsolete ? "obsolete" : undefined }).then(() => {
+    API.lang("/word", "POST", { as }, { sol, extra, tag: isObsolete ? "obsolete" : undefined }).then(() => {
       dict.refresh();
       edit.closeDrawer();
     });
@@ -312,7 +312,7 @@ function MeaningEditor({ to, existing }: { to?: string; existing?: FullMeaning }
   }
 
   const submit = () => {
-    API.lang("/meaning", "POST", { to, as, eng }).then(() => {
+    API.lang("/meaning", "POST", { to, as }, { eng }).then(() => {
       dict.refresh();
       edit.closeDrawer();
     });
