@@ -1,5 +1,5 @@
 import { NonIdealState, Spinner, SpinnerSize } from "@blueprintjs/core";
-import { InterlinearData, InterlinearGloss, uri, UserOnly, useTitle } from "conlang-web-components";
+import { InterlinearGloss, uri, UserOnly, useTitle } from "conlang-web-components";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 
@@ -27,8 +27,7 @@ function Content({ entries }: { entries: readonly FullEntry[] }) {
         <dl>
           {sections.map((section) => <dd key={section.hash}>
             <InterlinearGloss
-              data={JSON.parse(section.content) as InterlinearData}
-              asterisk
+              data={section.content}
               link
               indent
               script

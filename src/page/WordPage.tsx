@@ -1,5 +1,5 @@
 import { H2, H3, H4, Icon, IconSize, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
-import { InterlinearData, InterlinearGloss, RichText, uri, UserOnly, useTitle } from "conlang-web-components";
+import { InterlinearGloss, RichText, uri, UserOnly, useTitle } from "conlang-web-components";
 import { useContext, useEffect, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 
@@ -13,13 +13,12 @@ import { Dictionary, FullEntry, FullSection } from "providers/dictionary";
 function SectionContent({ entry, section, on }: { entry: FullEntry; section: FullSection; on: string }) {
   const simple = SIMPLE_SECTIONS.find(([title]) => section.title === title);
   if (section.title === SectionTitle.TRANSLATION) {
-    const data = JSON.parse(section.content) as InterlinearData;
     const extra = <UserOnly>
       <span className="edit">
         [ <Link to={uri`/edit/${entry.hash}/${section.hash}`}>edit</Link> ]
       </span>
     </UserOnly>;
-    return <InterlinearGloss data={data} asterisk link indent extra={extra} />;
+    return <InterlinearGloss data={section.content} link indent extra={extra} />;
   } else if (simple !== undefined) {
     const [, name, iconProps] = simple;
     return <>

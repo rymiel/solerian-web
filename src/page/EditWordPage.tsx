@@ -20,14 +20,14 @@ import {
   EditWordPageContent,
   InfoSection,
   InfoTag,
-  InterlinearData,
-  InterlinearGloss,
   RichText,
+  SectionEditor,
+  TranslationSectionEditor,
   useEditContext,
   useTitle,
   WordSelect,
 } from "conlang-web-components";
-import { ReactElement, ReactNode, useCallback, useContext, useEffect, useState } from "react";
+import { ReactElement, useCallback, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { Part } from "lang/extra";
@@ -93,8 +93,7 @@ function SectionData({ v }: { v: FullSection }) {
     const open = edit.openDrawer;
     const simple = SIMPLE_SECTIONS.find(([title]) => v.title === title);
     if (v.title === SectionTitle.TRANSLATION) {
-      const data = JSON.parse(v.content) as InterlinearData;
-      const handler = () => open(<TranslationSectionEditor as={v.hash} existing={data} />);
+      const handler = () => open(<TranslationSectionEditor as={v.hash} existing={v.content} />);
       const element = <Button intent="warning" text="Edit translation section" icon="arrow-right" onClick={handler} />;
       return [element, handler];
     } else if (simple !== undefined) {
@@ -169,81 +168,6 @@ function SectionableData({ v }: { v: Sectionable }) {
       />
     </InfoSection>
   </>;
-}
-
-type SectionEditorProps = {
-  to?: string;
-  as?: string;
-  name: string;
-  form: ReactNode;
-  preview: ReactNode;
-  data: () => { title: string; content: string };
-};
-function SectionEditor({ to, as, name, form, preview, data }: SectionEditorProps) {
-  const edit = useEditContext();
-  const dict = useContext(Dictionary);
-
-  if (to === undefined && as === undefined) {
-    throw new Error("One of `as` or `to` must be provided");
-  }
-
-  const doSubmit = () => {
-    API.lang("/section", "POST", { to, as }, data()).then(() => {
-      dict.refresh();
-      edit.closeDrawer();
-    });
-  };
-
-  const doDelete = () => {
-    if (as === undefined) {
-      throw new Error("Cannot delete nonexistent section");
-    }
-    API.lang(`/section/${as}`, "DELETE").then(() => {
-      dict.refresh();
-      edit.closeDrawer();
-    });
-  };
-
-  return <div className="inter sidebar">
-    {to && <p>
-      Adding new {name} section to <Code>{to}</Code>.
-    </p>}
-    {as && <p>
-      Editing {name} section <Code>{as}</Code>.
-    </p>}
-    {form}
-    <Button fill intent="success" text="Submit" onClick={doSubmit} />
-    <Divider />
-    {preview}
-    {as && <Button fill className="bottom" intent="danger" icon="trash" text="Delete entry" onClick={doDelete} />}
-  </div>;
-}
-
-function TranslationSectionEditor({ to, as, existing }: { to?: string; as?: string; existing?: InterlinearData }) {
-  const [sol, setSol] = useState(existing?.sol ?? "");
-  const [solSep, setSolSep] = useState(existing?.solSep ?? "");
-  const [engSep, setEngSep] = useState(existing?.engSep ?? "");
-  const [eng, setEng] = useState(existing?.eng ?? "“”");
-  const data: InterlinearData = {
-    sol,
-    solSep,
-    engSep,
-    eng,
-  };
-
-  const createData = () => ({
-    title: SectionTitle.TRANSLATION,
-    content: JSON.stringify(data),
-  });
-  const form = <>
-    <InputGroup onValueChange={setSol} defaultValue={sol} placeholder="Sentence" />
-    <InputGroup onValueChange={setSolSep} defaultValue={solSep} placeholder="Interlinearised sentence" />
-    <InputGroup onValueChange={setEngSep} defaultValue={engSep} placeholder="Interlinearised translation" />
-    <InputGroup onValueChange={setEng} defaultValue={eng} placeholder="Translation" />
-  </>;
-  const preview = <InterlinearGloss data={data} asterisk script />;
-
-  return <SectionEditor to={to} as={as} name="translation" form={form} preview={preview} data={createData} />;
 }
 
 function TextSectionEditor({
