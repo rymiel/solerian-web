@@ -43,15 +43,14 @@ table.bp6-html-table.bp6-compact.dictionary td.dual * {
   }
 }
 
-.stats {
+.stats.classes {
   display: grid;
   grid-template-areas:
-    "nh nh d1 vh vh d2 gh"
-    "nl nr d1 vl vr d2 gl";
+    "nh nh d1 vh vh"
+    "nl nr d1 vl vr";
   grid-column-gap: 1rem;
   grid-row-gap: 0px;
   width: fit-content;
-  padding-bottom: 0;
 }
 
 .stats .n-header {
@@ -79,16 +78,5 @@ table.bp6-html-table.bp6-compact.dictionary td.dual * {
 }
 .stats .v-right {
   grid-area: vr;
-  height: fit-content;
-}
-.stats .divider-2 {
-  grid-area: d2;
-}
-.stats .g-header {
-  grid-area: gh;
-  text-align: center;
-}
-.stats .g-left {
-  grid-area: gl;
   height: fit-content;
 }
