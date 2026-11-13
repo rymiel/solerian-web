@@ -1,5 +1,5 @@
 import { Button, NonIdealState, Spinner, SpinnerSize } from "@blueprintjs/core";
-import { SoundChangeInstance, useTitle } from "conlang-web-components";
+import { SoundChangeInstance, uri, useTitle } from "conlang-web-components";
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -127,7 +127,7 @@ export default function ValidatePage() {
           const [e, reason] = f;
           const key = "hash" in e ? e.hash : `"${e.original.hash}"-${e.form}`;
           return <li key={key}>
-            <Link to={`/reverse/${e.sol}`}>
+            <Link to={uri`/reverse/${e.sol}`}>
               {"hash" in e ? `"${e.sol}"` : `"${e.sol}" (${e.form} of ${e.original.sol})`}
             </Link>
             : {reason}
