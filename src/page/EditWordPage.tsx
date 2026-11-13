@@ -24,25 +24,45 @@ import {
   SectionEditor,
   TranslationSectionEditor,
   useEditContext,
+  useLanguageTag,
   useTitle,
   WordSelect,
 } from "conlang-web-components";
-import { ReactElement, useCallback, useContext, useEffect, useState } from "react";
+import { PropsWithChildren, ReactElement, useCallback, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { SectionTitle, SIMPLE_SECTIONS } from "common/sections";
-import { Part } from "lang/extra";
+import { EXTRA_EDIT_FIELDS, generatedFields } from "lang/entry";
 import { Dictionary, FullEntry, FullMeaning, FullSection } from "providers/dictionary";
 import { API, LANGUAGE } from "api";
 
 function EntryData({ v }: { v: FullEntry }) {
   const edit = useEditContext();
+  const dict = useContext(Dictionary);
+  const tag = useLanguageTag();
+
+  const doDelete = () => {
+    API.lang(`/word/${v.hash}`, "DELETE").then(() => {
+      dict.refresh();
+      edit.closeDrawer();
+    });
+  };
+
+  const doEdit = () => edit.openDrawer(<EntryEditor existing={v} />);
+
   return <>
     <BaseData v={v} />
-    <InfoTag left="sol" right={v.sol} onClick={() => edit.openDrawer(<EntryEditor existing={v} />)} />
-    <InfoTag left="extra" right={v.extra} onClick={() => edit.openDrawer(<EntryEditor existing={v} />)} />
-    <InfoTag left="tag" right={v.tag} onClick={() => edit.openDrawer(<EntryEditor existing={v} />)} />
-    <InfoTag left="ex" right={v.ex} onClick={() => edit.openDrawer(<EntryEditor existing={v} />)} />
+    <InfoTag left="sol" right={v.sol} onClick={doEdit} />
+    <InfoTag left="extra" right={v.extra} onClick={doEdit} />
+    <InfoTag left="tag" right={v.tag} onClick={doEdit} />
+    <InfoTag left="ex" right={v.ex} onClick={doEdit} />
+    <InfoTag left="gloss" right={v.gloss} onClick={doEdit} />
+    {generatedFields(v).map(([left, right]) => <InfoTag key={left} left={left} right={right} generated />)}
+    <InfoTag left="disp" right={v.disp} generated />
+    <InfoTag left="ipa" right={v.ipa} generated />
+    {v.phon !== undefined && <InfoTag left="phon" right={v.phon} generated />}
+    {v.script !== undefined && <InfoTag left="script" right={<span lang={tag}>{v.script}</span>} generated />}
+    {v.class !== undefined && <InfoTag left="class" right={v.class} generated />}
     <InfoSection title="meanings">
       {v.meanings.map((m, mi) => <InfoSection title={`[${mi}]`} key={m.hash}>
         <MeaningData v={m} />
@@ -56,11 +76,7 @@ function EntryData({ v }: { v: FullEntry }) {
       />
     </InfoSection>
     <SectionableData v={v} />
-    <Divider />
-    <InfoTag left="part" right={v.part === null ? null : Part[v.part]} generated />
-    <InfoTag left="class" right={v.class} generated />
-    <InfoTag left="script" right={<span lang="x-sol">{v.script}</span>} generated />
-    <InfoTag left="ipa" right={v.ipa} generated />
+    <Button intent="danger" icon="trash" text="Delete entry" onClick={doDelete} />
   </>;
 }
 
@@ -96,7 +112,7 @@ function SectionData({ v }: { v: FullSection }) {
       return [element, handler];
     } else {
       const handler = () => {};
-      const element = <Tag large intent="danger">
+      const element = <Tag size="large" intent="danger">
         Unknown section {v.title}.
       </Tag>;
       return [element, handler];
@@ -157,6 +173,43 @@ function SectionableData({ v }: { v: Sectionable }) {
   </>;
 }
 
+function TelephoneGameHelper({ children, onSelect }: PropsWithChildren<{ onSelect: (s: string) => void }>) {
+  const [rein, setRein] = useState(false);
+  const [langName, setLangName] = useState("");
+  const [word, setWord] = useState("");
+  const [author, setAuthor] = useState("");
+  const [link, setLink] = useState("");
+
+  const linkRe = /^.*reddit\.com\/r\/conlangs\/comments\/(\w+)\/biweekly_telephone_game_v3_(\d+)\/(\w+).*$/;
+  const linkSub = link.replace(linkRe, "https://old.reddit.com/r/conlangs/comments/$1/-/$3/?context=10000");
+  const match = link.match(linkRe);
+  const n = match?.[2];
+
+  const authorLink = `https://old.reddit.com/u/${author}`;
+  const base = `${langName} "${word}" by [/u/${author}](${authorLink}), via [Telephone Game #${n}](${linkSub})`;
+  const template = rein
+    ? `Originally from ${base}. Reinterpreted as a native word.`
+    : `From ${base}. Taken as a loanword`;
+
+  return <Popover
+    interactionKind="click"
+    popoverClassName={`${Classes.POPOVER_CONTENT_SIZING} telephone`}
+    placement="bottom"
+    content={
+      <div>
+        <RichText text={template} />
+        <InputGroup value={langName} onValueChange={setLangName} placeholder="Language name" />
+        <InputGroup value={word} onValueChange={setWord} placeholder="Word" />
+        <InputGroup value={author} onValueChange={setAuthor} placeholder="Author" />
+        <InputGroup value={link} onValueChange={setLink} placeholder="Link" />
+        <Checkbox label="Reinterpret as native" checked={rein} onChange={(e) => setRein(e.currentTarget.checked)} />
+        <Button className={Classes.POPOVER_DISMISS} intent="success" text="Apply" onClick={() => onSelect(template)} />
+      </div>
+    }
+    renderTarget={({ isOpen, ...targetProps }) => <div {...targetProps}>{children}</div>}
+  />;
+}
+
 function TextSectionEditor({
   to,
   as,
@@ -171,19 +224,25 @@ function TextSectionEditor({
   const edit = useEditContext();
   const [content, setContent] = useState(existingContent ?? "");
 
-  const createData = () => ({ title, content });
+  const data = () => ({ title, content });
   const form = <ControlGroup fill>
     <TextArea
       onChange={(e) => setContent(e.currentTarget.value)}
       value={content}
       placeholder={`Content for ${title}`}
       fill
+      rows={4}
     />
-    <WordSelect onSelect={(t) => setContent((c) => `${c}[${t.hash}] (“${t.meanings[0]?.eng}”)`)} />
   </ControlGroup>;
+  const buttons = <>
+    <WordSelect onSelect={(t) => setContent((c) => `${c}[${t.hash}] (“${t.meanings[0]?.eng}”)`)} />
+    <TelephoneGameHelper onSelect={(t) => setContent((c) => c + t)}>
+      <Button icon="book" intent="primary" />
+    </TelephoneGameHelper>
+  </>;
   const preview = <RichText text={content} on={edit.page} />;
 
-  return <SectionEditor to={to} as={as} name={`${title} text`} form={form} preview={preview} data={createData} />;
+  return <SectionEditor name={`${title} text`} {...{ to, as, form, preview, data, buttons }} />;
 }
 
 function EntryEditor({ existing }: { existing: FullEntry }) {
@@ -192,11 +251,19 @@ function EntryEditor({ existing }: { existing: FullEntry }) {
   const [sol, setSol] = useState(existing.sol);
   const [extra, setExtra] = useState(existing.extra);
   const [isObsolete, setObsolete] = useState(existing.tag === "obsolete");
+  const [gloss, setGloss] = useState(existing.gloss);
+  const [fields, setFields] = useState(() => EXTRA_EDIT_FIELDS.map(([key]) => existing[key]));
   const as = existing.hash;
 
   const submit = () => {
-    const tag = isObsolete ? "obsolete" : existing.tag === "obsolete" ? undefined : existing.tag;
-    const data = { sol, extra, tag, ex: existing.ex, gloss: existing.gloss };
+    const data = {
+      sol,
+      extra,
+      tag: isObsolete ? "obsolete" : existing.tag === "obsolete" ? undefined : existing.tag,
+      ex: existing.ex,
+      gloss: gloss === "" ? undefined : gloss,
+      ...Object.fromEntries(EXTRA_EDIT_FIELDS.map(([key], i) => [key, fields[i] === "" ? undefined : fields[i]])),
+    };
     API.lang("/word", "POST", { as }, data).then(() => {
       dict.refresh();
       edit.closeDrawer();
@@ -209,6 +276,13 @@ function EntryEditor({ existing }: { existing: FullEntry }) {
     </p>
     <InputGroup onValueChange={setSol} defaultValue={sol} placeholder={LANGUAGE} />
     <InputGroup onValueChange={setExtra} defaultValue={extra} placeholder="Extra" />
+    <InputGroup onValueChange={setGloss} defaultValue={gloss} placeholder="Gloss" />
+    {EXTRA_EDIT_FIELDS.map(([key, placeholder], i) => <InputGroup
+      key={key}
+      onValueChange={(value) => setFields((f) => f.map((old, j) => (j === i ? value : old)))}
+      defaultValue={fields[i]}
+      placeholder={placeholder}
+    />)}
     <Checkbox onChange={(e) => setObsolete(e.currentTarget.checked)} defaultChecked={isObsolete} label="Obsolete" />
     <Button fill intent="success" text="Submit" onClick={submit} />
   </div>;
