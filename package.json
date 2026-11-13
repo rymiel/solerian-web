@@ -15,12 +15,11 @@
     "@blueprintjs/select": "^6.0.0",
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.0",
-    "conlang-web-components": "gitlab:rymiel/conlang-web-components#f1780ee08b4bfee014b3f68dc4423b5ef01be64d",
+    "conlang-web-components": "gitlab:rymiel/conlang-web-components#11ff41b6d5be703cbad73c83a56d0edec2cc0166",
     "html-webpack-plugin": "^5.6.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.23.0",
-    "react-string-replace": "^1.1.1",
     "ts-loader": "^9.2.6",
     "typescript": "^5.4.5"
   },
@@ -37,8 +36,11 @@
     "prettier-no-jsx-parens": "^3.4.0",
     "style-loader": "^4.0.0",
     "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^5.0.4"
+    "webpack-dev-server": "^5.2.0"
   },
   "author": "Emilia Kond",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "allowScripts": {
+    "gitlab:rymiel/conlang-web-components": true
+  }
 }
