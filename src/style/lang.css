@@ -13,6 +13,8 @@ table.bp6-html-table td[lang="x-sol"] {
 
 .dual {
   display: flex;
+  width: 100%;
+  align-items: center;
 }
 
 .dual [lang="x-sol"] {

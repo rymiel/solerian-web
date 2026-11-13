@@ -1,14 +1,17 @@
-import { H2, H3, H4, Icon, IconSize, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
-import { InterlinearGloss, RichText, uri, UserOnly, useTitle } from "conlang-web-components";
-import { useContext, useEffect, useRef } from "react";
+import { Button, H2, H3, H4, Icon, IconSize, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
+import { InterlinearGloss, RichText, uri, useLanguageTag, UserOnly, useTitle } from "conlang-web-components";
+// TODO: technically not properly exported, needs more permanent API after refactor is complete.
+import { coalesceInterlinearData } from "conlang-web-components/build/components/interlinear";
+import { Fragment, ReactElement, useContext, useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
+import { partName, shortPartName, StatusTags } from "common/display";
 import { SectionTitle, SIMPLE_SECTIONS } from "common/sections";
-import { NounInfo } from "components/nounComponents";
-import { PronounInfo } from "components/pronounComponents";
-import { VerbInfo } from "components/verbComponents";
-import { Part, partOfSpeechShort, PARTS_OF_SPEECH } from "lang/extra";
+import { useExamples } from "common/translations";
+import { EntryContent } from "lang/entry";
+import { useReverseLookup } from "lang/reverse";
 import { Dictionary, FullEntry, FullSection } from "providers/dictionary";
+import { LangConfig } from "providers/langConfig";
 
 function SectionContent({ entry, section, on }: { entry: FullEntry; section: FullSection; on: string }) {
   const simple = SIMPLE_SECTIONS.find(([title]) => section.title === title);
@@ -28,18 +31,20 @@ function SectionContent({ entry, section, on }: { entry: FullEntry; section: Ful
       <RichText text={section.content} on={on} />
     </>;
   } else {
-    return <Tag large intent="danger">
+    return <Tag size="large" intent="danger">
       Unknown section {section.title}.
     </Tag>;
   }
 }
 
 function WordPageHeader({ entry }: { entry: FullEntry }) {
+  const tag = useLanguageTag();
   return <>
-    <H2>{entry.sol}</H2>
-    <p className="space-right" lang="x-sol">
+    <H2>{entry.disp}</H2>
+    {entry.phon !== undefined && <span className="space-right">{entry.phon}</span>}
+    {entry.script !== undefined && <p className="space-right" lang={tag}>
       {entry.script}
-    </p>
+    </p>}
     <span className="space-right">{entry.ipa}</span>
   </>;
 }
@@ -51,7 +56,57 @@ function Meaning({ prefix, eng }: { prefix?: string; eng: string }) {
   </p>;
 }
 
+// TODO: move to its own page?
+function useTranslationUsages(entry: FullEntry, entries: readonly FullEntry[]): ReactElement[] {
+  const { lookup } = useReverseLookup(entries);
+  const examples = useExamples(entries);
+  if (lookup === null) return [];
+  const translations = examples.flatMap((e) => e.sections.map((s, i) => [e, s, i + 1] as const));
+  const relevant = translations.filter(([_, s]) => {
+    const { srcParts } = coalesceInterlinearData(s.content);
+    // TODO: use srcWords instead for multi-word matches?
+    return srcParts.some((w) => lookup(w).entries.includes(entry));
+  });
+  return relevant.map(([e, s, i]) => <Link to={uri`/translations/${s.hash}`} key={s.hash}>
+    {e.entry.disp} {e.nth}. {i}.
+  </Link>);
+}
+
+function useEtymologyUsages(entry: FullEntry, entries: readonly FullEntry[]): ReactElement[] {
+  const etymologies = entries.flatMap((e) =>
+    e.sections.filter((s) => s.title === SectionTitle.ETYMOLOGY).map((s) => [e, s] as const),
+  );
+  const relevant = etymologies.filter(([_, s]) => s.content.includes(entry.hash));
+  return relevant.map(([e, s]) => <Link to={e.link} key={s.hash}>
+    {e.disp} etym.
+  </Link>);
+}
+
+function LookupInfo({ entry, entries }: { entry: FullEntry; entries: readonly FullEntry[] }) {
+  const translationUsages = useTranslationUsages(entry, entries);
+  const etymologyUsages = useEtymologyUsages(entry, entries);
+  const total = translationUsages.length + etymologyUsages.length;
+  return <>
+    <span>
+      {total} usage{total === 1 ? "" : "s"} found:
+    </span>
+    {translationUsages.map((i, j) => <Fragment key={j}> {i};</Fragment>)}
+    {etymologyUsages.map((i, j) => <Fragment key={j}> {i};</Fragment>)}
+  </>;
+}
+
+function LookupButton({ entry }: { entry: FullEntry }) {
+  const { entries } = useContext(Dictionary);
+  const [run, setRun] = useState(false);
+  return run === false || entries === null ? (
+    <Button text="Find usages" intent="primary" onClick={() => setRun(true)} />
+  ) : (
+    <LookupInfo entry={entry} entries={entries} />
+  );
+}
+
 function WordPageContent({ entry, highlighted = false }: { entry: FullEntry; highlighted?: boolean }) {
+  const lang = useContext(LangConfig);
   const ref = useRef<HTMLHeadingElement | null>(null);
 
   useEffect(() => {
@@ -60,17 +115,7 @@ function WordPageContent({ entry, highlighted = false }: { entry: FullEntry; hig
     }
   }, [highlighted]);
 
-  const partHeader = (PARTS_OF_SPEECH[entry.extra] ?? entry.extra).replace("%", entry.class ?? "?");
-  const part = entry.part;
-  let table = null;
-
-  if (part === Part.Noun) {
-    table = <NounInfo entry={entry} />;
-  } else if (part === Part.Verb) {
-    table = <VerbInfo entry={entry} />;
-  } else if (part === Part.Pronoun) {
-    table = <PronounInfo entry={entry} />;
-  }
+  const partHeader = partName(lang?.parts ?? {}, entry.extra, entry.class);
 
   return <>
     <H3 className="meaning" ref={ref}>
@@ -82,7 +127,8 @@ function WordPageContent({ entry, highlighted = false }: { entry: FullEntry; hig
       </UserOnly>
     </H3>
 
-    {entry.tag && <Tag large intent="danger">
+    <StatusTags entry={entry} />
+    {entry.tag && <Tag size="large" intent="danger">
       {entry.tag}
     </Tag>}
     <ol>
@@ -96,13 +142,16 @@ function WordPageContent({ entry, highlighted = false }: { entry: FullEntry; hig
       </li>)}
     </ol>
     {entry.sections.map((s) => <SectionContent key={s.hash} entry={entry} section={s} on={entry.hash} />)}
-    {table !== null && <H4>Inflection tables</H4>}
-    {table}
+    <EntryContent entry={entry} />
+    <UserOnly>
+      <LookupButton entry={entry} />
+    </UserOnly>
   </>;
 }
 
 export default function WordPage() {
   const { entries } = useContext(Dictionary);
+  const lang = useContext(LangConfig);
   const { word, num } = useParams() as { word: string; num?: string };
   useTitle(word);
 
@@ -112,7 +161,7 @@ export default function WordPage() {
     const matching = entries.filter((e) => e.sol === word);
 
     if (matching.length > 0) {
-      const parts = matching.map((i) => partOfSpeechShort(i.extra));
+      const parts = matching.map((i) => shortPartName(lang?.parts ?? {}, i.extra));
       content = <div className="inter word">
         <nav>
           <ol>
