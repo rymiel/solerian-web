@@ -41,11 +41,10 @@ function Editor() {
 
   const submit = async () => {
     const ex = exForms.length === 0 ? undefined : exForms.join(",");
-    const w = await API.lang<ApiWord>("/word", "POST", {}, { sol, extra, eng, ex });
-    const meanings = eng
-      .split(";")
-      .map((m) => API.lang<ApiMeaning>("/meaning", "POST", { to: w.hash }, { eng: m.trim() }));
-    await Promise.all(meanings);
+    const w = await API.lang<ApiWord>("/word", "POST", {}, { sol, extra, ex });
+    for (const meaning of eng.split(";")) {
+      await API.lang<ApiMeaning>("/meaning", "POST", { to: w.hash }, { eng: meaning.trim() });
+    }
     dict.refresh();
     navigate(uri`/edit/${w.hash}`);
   };
