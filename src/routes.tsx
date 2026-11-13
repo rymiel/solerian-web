@@ -2,18 +2,9 @@ import { UserOnly } from "conlang-web-components";
 import { RouteObject } from "react-router-dom";
 
 import NumbersPage from "page/NumbersPage";
-import ReversePage from "page/ReversePage";
 import ValidatePage from "page/ValidationPage";
 
 export const SITE_ROUTES: RouteObject[] = [
-  {
-    path: "/reverse",
-    element: <ReversePage />,
-  },
-  {
-    path: "/reverse/:query",
-    element: <ReversePage />,
-  },
   {
     path: "/validate",
     element: <UserOnly error>
