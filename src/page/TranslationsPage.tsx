@@ -1,45 +1,64 @@
 import { NonIdealState, Spinner, SpinnerSize } from "@blueprintjs/core";
 import { InterlinearGloss, uri, UserOnly, useTitle } from "conlang-web-components";
-import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { useContext, useEffect, useRef } from "react";
+import { Link, useParams } from "react-router-dom";
 
-import { SectionTitle } from "common/sections";
-import { Dictionary, FullEntry } from "providers/dictionary";
+import { useExamples } from "common/translations";
+import { Dictionary, FullEntry, FullSection } from "providers/dictionary";
+import { LangConfig } from "providers/langConfig";
 
-function Content({ entries }: { entries: readonly FullEntry[] }) {
-  const examples = entries.flatMap((e) =>
-    e.meanings
-      .map((m, mi) => {
-        const s = m.sections.filter((s) => s.title === SectionTitle.TRANSLATION);
-        if (s.length === 0) return null;
-        return [e, mi + 1, s] as const;
-      })
-      .filter((i) => i !== null),
-  );
+function Translation({
+  entry,
+  section,
+  highlighted,
+}: {
+  entry: FullEntry;
+  section: FullSection;
+  highlighted: boolean;
+}) {
+  const lang = useContext(LangConfig);
+  const ref = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    if (highlighted) {
+      ref.current?.scrollIntoView();
+    }
+  }, [highlighted]);
+
+  return <dd id={section.hash} className={`translation ${highlighted ? "focus" : ""}`} ref={ref}>
+    <InterlinearGloss
+      data={section.content}
+      link
+      indent
+      script={lang?.hasScript}
+      extra={
+        <UserOnly>
+          <span className="edit">
+            [ <Link to={uri`/edit/${entry.hash}/${section.hash}`}>edit</Link> ]
+          </span>
+        </UserOnly>
+      }
+    />
+  </dd>;
+}
+
+function Content({ entries, query }: { entries: readonly FullEntry[]; query: string | undefined }) {
+  const examples = useExamples(entries);
 
   return <>
     <p>This page lists all translations from all words with examples sentences in the dictionary.</p>
     <ul>
-      {examples.map(([entry, nth, sections]) => <li key={`${entry.hash}-${nth}`}>
+      {examples.map(({ entry, nth, sections }) => <li key={`${entry.hash}-${nth}`}>
         <p>
-          <Link to={entry.link}>{entry.sol}</Link> ({nth})
+          <Link to={entry.link}>{entry.disp}</Link> ({nth})
         </p>
         <dl>
-          {sections.map((section) => <dd key={section.hash}>
-            <InterlinearGloss
-              data={section.content}
-              link
-              indent
-              script
-              extra={
-                <UserOnly>
-                  <span className="edit">
-                    [ <Link to={uri`/edit/${entry.hash}/${section.hash}`}>edit</Link> ]
-                  </span>
-                </UserOnly>
-              }
-            />
-          </dd>)}
+          {sections.map((section) => <Translation
+            key={section.hash}
+            entry={entry}
+            section={section}
+            highlighted={query === section.hash}
+          />)}
         </dl>
       </li>)}
     </ul>
@@ -48,13 +67,14 @@ function Content({ entries }: { entries: readonly FullEntry[] }) {
 
 export default function TranslationsPage() {
   const { entries } = useContext(Dictionary);
+  const { query } = useParams();
   useTitle("Translations");
 
   let content = <NonIdealState icon={<Spinner size={SpinnerSize.LARGE} />} />;
 
   if (entries) {
     content = <div className="inter">
-      <Content entries={entries} />
+      <Content entries={entries} query={query} />
     </div>;
   }
 

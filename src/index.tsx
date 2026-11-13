@@ -10,22 +10,22 @@ import ConfigPage from "page/ConfigPage";
 import DictionaryPage from "page/DictionaryPage";
 import EditWordPage from "page/EditWordPage";
 import GeneratePage from "page/GeneratePage";
+import IdPage from "page/IdPage";
 import NewWordPage from "page/NewWordPage";
-import NumbersPage from "page/NumbersPage";
-import ReversePage from "page/ReversePage";
 import SoundChangePage from "page/SoundChangePage";
 import StatsPage from "page/StatsPage";
 import TranslationsPage from "page/TranslationsPage";
-import ValidatePage from "page/ValidationPage";
 import WordPage from "page/WordPage";
 import { Dictionary } from "providers/dictionary";
 import { LangConfig } from "providers/langConfig";
-import { API, LANGUAGE } from "api";
+import { API, LANGUAGE, LANGUAGE_TAG } from "api";
 import { App, toastErrorHandler, toastSuccessHandler } from "App";
+import { SITE_ROUTES } from "routes";
 
 import "@blueprintjs/core/lib/css/blueprint.css";
 import "conlang-web-components/src/style.css";
 import "./style/index.css";
+import "./style/lang.css";
 
 const router = createBrowserRouter([
   {
@@ -48,6 +48,10 @@ const router = createBrowserRouter([
         element: <WordPage />,
       },
       {
+        path: "/id/:hash",
+        element: <IdPage />,
+      },
+      {
         path: "/edit/:hash",
         element: <UserOnly error>
           <EditWordPage />
@@ -66,24 +70,12 @@ const router = createBrowserRouter([
         </UserOnly>,
       },
       {
-        path: "/reverse",
-        element: <ReversePage />,
+        path: "/translations",
+        element: <TranslationsPage />,
       },
       {
-        path: "/reverse/:query",
-        element: <ReversePage />,
-      },
-      {
-        path: "/validate",
-        element: <UserOnly error>
-          <ValidatePage />
-        </UserOnly>,
-      },
-      {
-        path: "/numbers",
-        element: <UserOnly error>
-          <NumbersPage />
-        </UserOnly>,
+        path: "/translations/:query",
+        element: <TranslationsPage />,
       },
       {
         path: "/stats",
@@ -102,15 +94,12 @@ const router = createBrowserRouter([
         </UserOnly>,
       },
       {
-        path: "/translations",
-        element: <TranslationsPage />,
-      },
-      {
         path: "/config",
         element: <UserOnly error>
           <ConfigPage />
         </UserOnly>,
       },
+      ...SITE_ROUTES,
     ],
   },
 ]);
@@ -126,7 +115,7 @@ function Wrapper() {
         api={API}
         error={toastErrorHandler}
         success={toastSuccessHandler}
-        tag="x-sol"
+        tag={LANGUAGE_TAG}
         language={LANGUAGE}
       >
         <RouterProvider router={router} />

@@ -1,32 +1,23 @@
-import {
-  NonIdealState,
-  Spinner,
-  SpinnerSize,
-} from "@blueprintjs/core";
-import { SoundChangePage as Content, useTitle } from "conlang-web-components";
+import { NonIdealState, Spinner, SpinnerSize } from "@blueprintjs/core";
+import { Change, SoundChangePage as Content, useTitle } from "conlang-web-components";
 import { useContext } from "react";
 
-import { useInflEntries } from "lang/inflEntries";
-import { Change } from "lang/soundChange";
 import { Dictionary } from "providers/dictionary";
 import { LangConfig } from "providers/langConfig";
 
-// TODO: bring back InflEntry support
-
 export default function SoundChangePage() {
   const { entries } = useContext(Dictionary);
-  const lang = useContext(LangConfig);
-  const infl = useInflEntries()?.filter((i) => i.old === false);
+  const config = useContext(LangConfig);
   useTitle("Sound changes");
 
   let content;
 
-  if (entries === null || infl === undefined || lang === null) {
+  if (entries === null || config === null) {
     content = <NonIdealState icon={<Spinner size={SpinnerSize.LARGE} />} />;
   } else {
-    const makeLocal = (changes: readonly Change[]) => lang.soundChange.copyWithChanges(changes);
+    const makeLocal = (changes: readonly Change[]) => config.soundChange.copyWithChanges(changes);
     content = <div className="inter">
-      <Content entries={entries} makeLocal={makeLocal} soundChange={lang.soundChange} />
+      <Content entries={entries} soundChange={config.soundChange} makeLocal={makeLocal} />
     </div>;
   }
 

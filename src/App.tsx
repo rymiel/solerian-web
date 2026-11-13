@@ -16,6 +16,7 @@ import { PropsWithChildren, useContext, useEffect, useState } from "react";
 import { Link, Outlet, ScrollRestoration, useNavigate } from "react-router-dom";
 
 import { LANGUAGE } from "api";
+import { MENU_LINKS, PRIVATE_MENU_LINKS } from "routes";
 
 export const AppToaster = (() => {
   let promise: Promise<Toaster> | null = null;
@@ -35,6 +36,7 @@ declare const WEB_VERSION: string;
 declare const CWC_VERSION: string;
 
 export const toastErrorHandler = async (error: unknown): Promise<string> => {
+  console.error(error);
   const toaster = await AppToaster();
   if (error instanceof CustomApiError) {
     return toaster.show({ intent: Intent.DANGER, message: `${error.status}: ${error.message}` });
@@ -50,21 +52,6 @@ export const toastSuccessHandler = async (message: string): Promise<string> => {
   const toaster = await AppToaster();
   return toaster.show({ intent: Intent.SUCCESS, message });
 };
-
-const MENU_LINKS = [
-  ["/", "Home"],
-  ["/reverse", "Reverse"],
-  ["/stats", "Stats"],
-  ["/translations", "Translations"],
-] as const;
-
-const PRIVATE_MENU_LINKS = [
-  ["/validate", "Validate"],
-  ["/numbers", "Numbers"],
-  ["/sound_changes", "Sound Changes"],
-  ["/generate", "Generate"],
-  ["/config", "Config"],
-];
 
 function Menu() {
   const [isOpen, setOpen] = useState(false);
