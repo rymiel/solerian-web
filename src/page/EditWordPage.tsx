@@ -208,7 +208,9 @@ function EntryEditor({ existing }: { existing: FullEntry }) {
   const as = existing.hash;
 
   const submit = () => {
-    API.lang("/word", "POST", { as }, { sol, extra, tag: isObsolete ? "obsolete" : undefined }).then(() => {
+    const tag = isObsolete ? "obsolete" : existing.tag === "obsolete" ? undefined : existing.tag;
+    const data = { sol, extra, tag, ex: existing.ex, gloss: existing.gloss };
+    API.lang("/word", "POST", { as }, data).then(() => {
       dict.refresh();
       edit.closeDrawer();
     });
@@ -220,7 +222,7 @@ function EntryEditor({ existing }: { existing: FullEntry }) {
     </p>
     <InputGroup onValueChange={setSol} defaultValue={sol} placeholder={LANGUAGE} />
     <InputGroup onValueChange={setExtra} defaultValue={extra} placeholder="Extra" />
-    <Checkbox onChange={(e) => setObsolete(e.currentTarget.checked)} defaultValue={extra} label="Obsolete" />
+    <Checkbox onChange={(e) => setObsolete(e.currentTarget.checked)} defaultChecked={isObsolete} label="Obsolete" />
     <Button fill intent="success" text="Submit" onClick={submit} />
   </div>;
 }
