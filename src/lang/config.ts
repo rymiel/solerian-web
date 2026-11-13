@@ -1,20 +1,23 @@
 import {
   ApiConfig,
   configOrEmpty,
+  DEFAULT_GENERATION,
   DEFAULT_KEY_VALUE,
   DEFAULT_SOUND_CHANGE,
-  GenerationConfig,
   GenerationInstance,
   SoundChangeInstance,
 } from "conlang-web-components";
 
+import { PARTS_OF_SPEECH } from "lang/extra";
 import { scriptMultiUnicode } from "lang/script";
 import { LegacySoundChangeConfig, LegacySoundChangeInstance } from "lang/soundChange";
 import { LangConfigData } from "providers/langConfig";
 
 import { applyKnownStress } from "./inflection";
 
-export function transformConfig(config: ApiConfig): LangConfigData {
+export interface LangConfigFields {}
+
+function languageConfig(config: ApiConfig) {
   const legacySoundChange = new LegacySoundChangeInstance(LEGACY_SOUND_CHANGE_CONFIG);
   const soundChange = new SoundChangeInstance(
     configOrEmpty(config.sound_change, DEFAULT_SOUND_CHANGE),
@@ -47,13 +50,19 @@ export function transformConfig(config: ApiConfig): LangConfigData {
       return legacySoundChange.syllabify(word, markStress);
     },
   );
-  const generation = new GenerationInstance(config.generation as GenerationConfig);
-  const abbreviations = configOrEmpty(config.abbr, DEFAULT_KEY_VALUE);
-  const parts = configOrEmpty(config.parts, DEFAULT_KEY_VALUE);
-  const ipa = (sentence: string) => soundChange.soundChangeSentence(sentence);
   const script = scriptMultiUnicode;
+  const hasScript = true;
+  return { soundChange, script, hasScript };
+}
 
-  return { soundChange, generation, abbreviations, parts, ipa, script, config };
+export function transformConfig(config: ApiConfig): LangConfigData {
+  const generation = new GenerationInstance(configOrEmpty(config.generation, DEFAULT_GENERATION));
+  const abbreviations = configOrEmpty(config.abbr, DEFAULT_KEY_VALUE);
+  const parts = configOrEmpty(config.parts, PARTS_OF_SPEECH);
+  const lang = languageConfig(config);
+  const ipa = (sentence: string) => lang.soundChange.soundChangeSentence(sentence);
+
+  return { ...lang, generation, abbreviations, parts, ipa, config };
 }
 
 const LEGACY_SOUND_CHANGE_CONFIG: LegacySoundChangeConfig = {

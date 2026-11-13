@@ -3,11 +3,11 @@ import { InterlinearGloss, RichText, uri, UserOnly, useTitle } from "conlang-web
 import { useContext, useEffect, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 
+import { SectionTitle, SIMPLE_SECTIONS } from "common/sections";
 import { NounInfo } from "components/nounComponents";
 import { PronounInfo } from "components/pronounComponents";
 import { VerbInfo } from "components/verbComponents";
 import { Part, partOfSpeechShort, PARTS_OF_SPEECH } from "lang/extra";
-import { SectionTitle, SIMPLE_SECTIONS } from "page/EditWordPage";
 import { Dictionary, FullEntry, FullSection } from "providers/dictionary";
 
 function SectionContent({ entry, section, on }: { entry: FullEntry; section: FullSection; on: string }) {
@@ -37,22 +37,18 @@ function SectionContent({ entry, section, on }: { entry: FullEntry; section: Ful
 function WordPageHeader({ entry }: { entry: FullEntry }) {
   return <>
     <H2>{entry.sol}</H2>
-    <p className="space-right" lang="x-sol">{entry.script}</p>
+    <p className="space-right" lang="x-sol">
+      {entry.script}
+    </p>
     <span className="space-right">{entry.ipa}</span>
   </>;
 }
 
-function Meaning({ eng }: { eng: string }) {
-  if (eng.startsWith("(")) {
-    const split = eng.slice(1).split(")", 2);
-    if (split.length === 2) {
-      return <p>
-        <i>({split[0]})</i>
-        {split[1]}
-      </p>;
-    }
-  }
-  return <p>{eng}</p>;
+function Meaning({ prefix, eng }: { prefix?: string; eng: string }) {
+  return <p>
+    {prefix && <i>({prefix}) </i>}
+    {eng}
+  </p>;
 }
 
 function WordPageContent({ entry, highlighted = false }: { entry: FullEntry; highlighted?: boolean }) {
@@ -91,7 +87,7 @@ function WordPageContent({ entry, highlighted = false }: { entry: FullEntry; hig
     </Tag>}
     <ol>
       {entry.meanings.map((m) => <li key={m.hash}>
-        <Meaning eng={m.eng} />
+        <Meaning prefix={m.prefix} eng={m.eng} />
         {m.sections.length > 0 && <dl>
           {m.sections.map((s) => <dd key={s.hash}>
             <SectionContent entry={entry} section={s} on={entry.hash} />

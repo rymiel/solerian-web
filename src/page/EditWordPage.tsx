@@ -30,24 +30,10 @@ import {
 import { ReactElement, useCallback, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
+import { SectionTitle, SIMPLE_SECTIONS } from "common/sections";
 import { Part } from "lang/extra";
 import { Dictionary, FullEntry, FullMeaning, FullSection } from "providers/dictionary";
 import { API, LANGUAGE } from "api";
-
-export enum SectionTitle {
-  TRANSLATION = "translation",
-  USAGE = "usage",
-  ETYMOLOGY = "etymology",
-  INSTEAD = "instead",
-  COORDINATE = "coordinate",
-}
-
-export const SIMPLE_SECTIONS = [
-  [SectionTitle.USAGE, "Usage note", { icon: "info-sign" }],
-  [SectionTitle.ETYMOLOGY, "Etymology", { icon: "book" }],
-  [SectionTitle.INSTEAD, "Use instead", { icon: "flow-end", intent: "danger" }],
-  [SectionTitle.COORDINATE, "Coordinate terms", { icon: "compass" }],
-] as const;
 
 function EntryData({ v }: { v: FullEntry }) {
   const edit = useEditContext();
@@ -82,6 +68,7 @@ function MeaningData({ v }: { v: FullMeaning }) {
   const edit = useEditContext();
   return <>
     <BaseData v={v} />
+    <InfoTag left="prefix" right={v.prefix} onClick={() => edit.openDrawer(<MeaningEditor existing={v} />)} />
     <InfoTag left="eng" right={v.eng} onClick={() => edit.openDrawer(<MeaningEditor existing={v} />)} />
     <SectionableData v={v} />
   </>;
@@ -230,29 +217,43 @@ function EntryEditor({ existing }: { existing: FullEntry }) {
 function MeaningEditor({ to, existing }: { to?: string; existing?: FullMeaning }) {
   const edit = useEditContext();
   const dict = useContext(Dictionary);
-  const [eng, setEng] = useState(existing?.eng ?? "");
+  const [rest, setRest] = useState(existing?.eng ?? "");
+  const [prefix, setPrefix] = useState(existing?.prefix ?? "");
   const as = existing?.hash;
 
   if (to === undefined && as === undefined) {
     throw new Error("One of `as` or `to` must be provided");
   }
 
-  const submit = () => {
+  const doSubmit = () => {
+    const eng = prefix === undefined || prefix === "" ? rest : `(${prefix}) ${rest}`;
     API.lang("/meaning", "POST", { to, as }, { eng }).then(() => {
       dict.refresh();
       edit.closeDrawer();
     });
   };
 
-  return <div className="inter">
+  const doDelete = () => {
+    if (as === undefined) {
+      throw new Error("Cannot delete nonexistent section");
+    }
+    API.lang(`/meaning/${as}`, "DELETE").then(() => {
+      dict.refresh();
+      edit.closeDrawer();
+    });
+  };
+
+  return <div className="inter sidebar">
     {to && <p>
       Adding new meaning to <Code>{to}</Code>.
     </p>}
     {as && <p>
       Editing meaning <Code>{as}</Code>.
     </p>}
-    <InputGroup onValueChange={setEng} defaultValue={eng} placeholder="English" />
-    <Button fill intent="success" text="Submit" onClick={submit} />
+    <InputGroup onValueChange={setPrefix} defaultValue={prefix} placeholder="Prefix" />
+    <InputGroup onValueChange={setRest} defaultValue={rest} placeholder="English" />
+    <Button fill intent="success" text="Submit" onClick={doSubmit} />
+    {as && <Button fill className="bottom" intent="danger" icon="trash" text="Delete entry" onClick={doDelete} />}
   </div>;
 }
 

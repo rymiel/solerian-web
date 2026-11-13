@@ -3,7 +3,7 @@ import { InterlinearGloss, uri, UserOnly, useTitle } from "conlang-web-component
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 
-import { SectionTitle } from "page/EditWordPage";
+import { SectionTitle } from "common/sections";
 import { Dictionary, FullEntry } from "providers/dictionary";
 
 function Content({ entries }: { entries: readonly FullEntry[] }) {

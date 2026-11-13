@@ -1,13 +1,19 @@
 import { ApiMeaning, ApiSection, ApiWord } from "conlang-web-components";
 import { createContext } from "react";
 
-import { AnyPattern, Part } from "lang/extra";
+import { LangEntryFields } from "lang/dictionary";
 
-export interface FullEntry extends Omit<ApiWord, "meanings" | "sections"> {
-  part: Part | null;
-  script: string;
+export interface OptionalEntryFields {
+  /** Phonemic IPA transcription (broad) / ... / */
+  phon?: string;
+  script?: string;
+  class?: string | null;
+}
+
+export interface FullEntry extends Omit<ApiWord, "meanings" | "sections">, LangEntryFields {
+  disp: string;
+  /** Phonetic IPA transcription (narrow) [ ... ] */
   ipa: string;
-  class: AnyPattern | null;
   link: string;
   index: number;
 
@@ -16,6 +22,7 @@ export interface FullEntry extends Omit<ApiWord, "meanings" | "sections"> {
 }
 
 export interface FullMeaning extends Omit<ApiMeaning, "sections"> {
+  prefix?: string;
   sections: FullSection[];
 }
 

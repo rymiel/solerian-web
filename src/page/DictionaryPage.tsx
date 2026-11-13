@@ -1,12 +1,12 @@
 import { Button, HTMLTable, Icon, InputGroup, NonIdealState, Spinner, SpinnerSize, Tag } from "@blueprintjs/core";
-import { entryHasMatch, UserOnly, useTitle } from "conlang-web-components";
+import { entryHasMatch, Meanings, UserOnly, useTitle } from "conlang-web-components";
 import { useCallback, useContext, useState } from "react";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 
+import { SectionTitle, SIMPLE_SECTIONS } from "common/sections";
 import { PARTS_OF_SPEECH } from "lang/extra";
-import { SectionTitle, SIMPLE_SECTIONS } from "page/EditWordPage";
-import { Dictionary, FullEntry, FullMeaning } from "providers/dictionary";
+import { Dictionary, FullEntry } from "providers/dictionary";
 import { LANGUAGE } from "api";
 
 function ExtraCell({ extra, cls }: { extra: string; cls: string | null }) {
@@ -25,25 +25,6 @@ function ExtraCell({ extra, cls }: { extra: string; cls: string | null }) {
   }
 }
 
-function mergeDefinitions(meanings: FullMeaning[]) {
-  let toBe = false;
-  return meanings.map((m, mi) => {
-    let eng = m.eng;
-    if (eng.startsWith("(")) {
-      const split = m.eng.split(")", 2);
-      eng = (split[1] ?? split[0]).trim();
-    }
-    if (eng.startsWith("to be ")) {
-      if (toBe) {
-        eng = eng.slice(6);
-      } else {
-        toBe = true;
-      }
-    }
-    return (mi === 0 ? "" : "; ") + eng;
-  });
-}
-
 function DictionaryRow({ entry }: { entry: FullEntry }) {
   const e = entry;
   return <tr>
@@ -55,7 +36,7 @@ function DictionaryRow({ entry }: { entry: FullEntry }) {
     <td>
       <Link to={e.link} className="link-fill">
         <span>
-          {e.tag && <Tag intent="danger">{e.tag}</Tag>} {mergeDefinitions(e.meanings)}
+          {e.tag && <Tag intent="danger">{e.tag}</Tag>} <Meanings meanings={e.meanings} />
           {e.meanings.some((m) => m.sections.some((s) => s.title === SectionTitle.TRANSLATION)) && <Icon
             icon="label"
             title="has a translation"
