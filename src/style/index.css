@@ -1,10 +1,4 @@
 @font-face {
-  font-family: "Solera";
-  src: url("./soleraOrigin3.ttf") format("truetype");
-  font-display: swap;
-}
-
-@font-face {
   font-family: "Andika";
   src: url("./AndikaNewBasic-Custom-R.ttf") format("truetype");
   font-display: swap;
@@ -49,22 +43,6 @@ body {
 
 .andika {
   font-family: "Andika", sans-serif;
-}
-
-[lang="x-sol"],
-table.bp6-html-table td[lang="x-sol"] {
-  font-family: "Solera", "Andika", sans-serif;
-  text-align: right;
-  font-size: 20px;
-}
-
-.dual {
-  display: flex;
-}
-
-.dual [lang="x-sol"] {
-  flex-grow: 1;
-  padding-left: 0.4rem;
 }
 
 header,
@@ -170,26 +148,10 @@ header .bp6-divider {
   flex-direction: row;
 }
 
-.margin-auto {
-  margin: auto;
-  margin-top: 2rem;
-}
-
 /* fix weird behaviour */
 .bp6-non-ideal-state > .bp6-fill.bp6-button-group {
   flex-grow: 0;
   flex-shrink: 0;
-}
-
-table.bp6-html-table.bp6-compact.dictionary th,
-table.bp6-html-table.bp6-compact.dictionary td {
-  padding-bottom: 4px;
-  padding-top: 4px;
-  vertical-align: middle;
-}
-
-table.bp6-html-table.bp6-compact.dictionary td.dual * {
-  margin: auto;
 }
 
 table.bp6-html-table.bp6-compact.inflection p {
@@ -289,16 +251,6 @@ h4 .bp6-icon {
   vertical-align: bottom;
 }
 
-@media (max-width: 690px) {
-  .dictionary td .dual [lang="x-sol"] {
-    display: none;
-  }
-
-  .dictionary td a.link-fill {
-    min-height: 34px;
-  }
-}
-
 .bp6-dark a.missing {
   color: #ff4242;
 }
@@ -315,60 +267,53 @@ h4 .bp6-icon {
   margin-bottom: 0;
 }
 
-.stats {
-  display: grid;
-  grid-template-areas:
-    "nh nh d1 vh vh d2 gh"
-    "nl nr d1 vl vr d2 gl";
-  grid-column-gap: 1rem;
-  grid-row-gap: 0px;
-  width: fit-content;
-}
-
-.stats .n-header {
-  grid-area: nh;
-  text-align: center;
-}
-.stats .n-left {
-  grid-area: nl;
-  height: fit-content;
-}
-.stats .n-right {
-  grid-area: nr;
-  height: fit-content;
-}
-.stats .divider-1 {
-  grid-area: d1;
-}
-.stats .v-header {
-  grid-area: vh;
-  text-align: center;
-}
-.stats .v-left {
-  grid-area: vl;
-  height: fit-content;
-}
-.stats .v-right {
-  grid-area: vr;
-  height: fit-content;
-}
-.stats .divider-2 {
-  grid-area: d2;
-}
-.stats .g-header {
-  grid-area: gh;
-  text-align: center;
-}
-.stats .g-left {
-  grid-area: gl;
-  height: fit-content;
-}
 .space-between {
   display: flex;
   justify-content: space-between;
 }
 .space-between .center {
   margin: auto;
+}
+
+.stats-page {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.stats {
+  display: flex;
+  flex-direction: row;
+  column-gap: 1rem;
+  padding-bottom: 1rem;
+}
+
+.stats h4 {
+  text-align: center;
+}
+
+.stats.general table tr :nth-child(odd) {
+  text-align: right;
+}
+
+.stats.general table td:nth-child(even):not(:last-child) {
+  border-right: solid rgba(255, 255, 255, 0.2);
+}
+
+.stats.rhyme table .br {
+  border-right: solid 1px rgba(255, 255, 255, 0.2);
+}
+
+.stats.rhyme table .bb {
+  border-bottom: solid 1px rgba(255, 255, 255, 0.2);
+}
+
+.stats.rhyme table td {
+  text-align: center;
+}
+
+.bp6-dark .stats.rhyme table.bp6-html-table td.unset {
+  color: #f6f7f999;
 }
 
 span.edit {
@@ -381,4 +326,17 @@ span.edit {
 .inter.middle {
   width: fit-content;
   margin: 0 auto;
+}
+
+.bp6-popover.bp6-popover-content-sizing.telephone .bp6-popover-content {
+  min-width: 600px;
+  max-width: 600px;
+}
+
+.translation {
+  scroll-margin-top: 6rem;
+}
+
+.translation.focus .interlinear > .original {
+  background-color: rgba(255, 255, 0, 0.2);
 }
