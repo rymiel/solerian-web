@@ -1,0 +1,19 @@
+table.bp6-html-table.bp6-compact.inflection p {
+  margin-bottom: 0;
+}
+
+.hl {
+  font-weight: bold;
+}
+
+.rb {
+  border-right: 3px solid;
+}
+
+.db {
+  border-bottom: 3px solid;
+}
+
+table.bp6-html-table.bp6-compact.inflection .rb {
+  text-align: right;
+}
