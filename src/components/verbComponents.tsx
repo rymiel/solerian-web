@@ -26,7 +26,7 @@ function GerundTableEntry({ word }: { word: DisplayWord }) {
     showError(err);
 
     return <td>
-      <Tag large intent="danger">
+      <Tag size="large" intent="danger">
         Gerund entry for <Code>{word.sol}</Code> failed to render
       </Tag>
     </td>;

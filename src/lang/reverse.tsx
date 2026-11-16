@@ -164,7 +164,7 @@ export function useReverseLookup(entries: readonly FullEntry[] | null): ReverseL
   const controls = <Button
     icon={includeOld ? "eye-on" : "eye-off"}
     intent="warning"
-    minimal={true}
+    variant="minimal"
     onClick={() => setIncludeOld((c) => !c)}
     title="Old forms"
   />;
