@@ -1,5 +1,5 @@
 import { Code, Dialog, DialogBody, HTMLTable, Tag } from "@blueprintjs/core";
-import { Abbr, useErrorHandler, zip } from "conlang-web-components";
+import { Abbr, showError, zip } from "conlang-web-components";
 import { useState } from "react";
 
 import { NounTable } from "components/nounComponents";
@@ -19,12 +19,11 @@ function VerbTableEntry({ word }: { word: DisplayWord }) {
 
 function GerundTableEntry({ word }: { word: DisplayWord }) {
   const [isOpen, setOpen] = useState(false);
-  const error = useErrorHandler();
   let forms;
   try {
     forms = formsFromDirect(word.sol, true, Part.Noun);
   } catch (err) {
-    error(err);
+    showError(err);
 
     return <td>
       <Tag large intent="danger">

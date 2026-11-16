@@ -124,16 +124,3 @@ export function markStress(word: { extra: string } | { original: { extra: string
   const extra = "extra" in word ? word.extra : word.original.extra;
   return !extra.startsWith("NAME");
 }
-
-export const PARTS_OF_SPEECH: Readonly<Record<string, string>> = {
-  N: "Noun (pattern %)",
-  NAME: "Onomatonym (pattern %)",
-  V: "Verb (pattern %)",
-  "adv.": "Adverb",
-  affix: "Affix",
-  "conj.": "Conjunction",
-  phrase: "Phrase",
-  "postpos.": "Postposition",
-  "pron.": "Pronoun (pattern %)",
-  particle: "Particle",
-};

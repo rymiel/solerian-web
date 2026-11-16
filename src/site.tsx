@@ -3,7 +3,6 @@ import { createApiClient, defineSite, UserOnly } from "conlang-web-components";
 import { languageConfig } from "lang/config";
 import { deriveFields } from "lang/dictionary";
 import { draftClass, EntryContent, generatedFields, useNewWordExtra } from "lang/entry";
-import { PARTS_OF_SPEECH } from "lang/extra";
 import { useReverseLookup } from "lang/reverse";
 import { STATS_SECTIONS } from "lang/stats";
 import { useValidationCandidates, validateLocal } from "lang/validation";
@@ -16,7 +15,6 @@ export const SITE = defineSite({
   tag: "x-sol",
   api: createApiClient({ language: "solerian", version: WEB_VERSION }),
   languageConfig,
-  defaultParts: PARTS_OF_SPEECH,
   deriveFields,
   menuLinks: [
     ["/", "Home"],
