@@ -1,4 +1,4 @@
-import { ApiWord, createTransformDictionary, DerivedFields, LangConfigData } from "conlang-web-components";
+import { ApiWord, DerivedFields, LangConfigData } from "conlang-web-components";
 
 import { AnyPattern, determinePattern, markStress, Part, partOfExtra } from "lang/extra";
 
@@ -10,7 +10,7 @@ declare module "conlang-web-components" {
   }
 }
 
-function deriveFields(lang: LangConfigData, word: ApiWord): DerivedFields {
+export function deriveFields(lang: LangConfigData, word: ApiWord): DerivedFields {
   const part = partOfExtra(word.extra);
   let cls: AnyPattern | null = null;
   if (part !== null) {
@@ -21,5 +21,3 @@ function deriveFields(lang: LangConfigData, word: ApiWord): DerivedFields {
   const disp = word.sol;
   return { part, class: cls, script, ipa, disp };
 }
-
-export const transformDictionary = createTransformDictionary(deriveFields);

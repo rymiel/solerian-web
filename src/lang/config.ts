@@ -1,19 +1,17 @@
 import {
   ApiConfig,
   configOrEmpty,
-  createTransformConfig,
   DEFAULT_SOUND_CHANGE,
   LanguageConfig,
   SoundChangeInstance,
 } from "conlang-web-components";
 
-import { PARTS_OF_SPEECH } from "lang/extra";
 import { scriptMultiUnicode } from "lang/script";
 import { LegacySoundChangeConfig, LegacySoundChangeInstance } from "lang/soundChange";
 
 import { applyKnownStress } from "./inflection";
 
-function languageConfig(config: ApiConfig): LanguageConfig {
+export function languageConfig(config: ApiConfig): LanguageConfig {
   const legacySoundChange = new LegacySoundChangeInstance(LEGACY_SOUND_CHANGE_CONFIG);
   const soundChange = new SoundChangeInstance(
     configOrEmpty(config.sound_change, DEFAULT_SOUND_CHANGE),
@@ -50,8 +48,6 @@ function languageConfig(config: ApiConfig): LanguageConfig {
   const hasScript = true;
   return { soundChange, script, hasScript };
 }
-
-export const transformConfig = createTransformConfig(languageConfig, PARTS_OF_SPEECH);
 
 const LEGACY_SOUND_CHANGE_CONFIG: LegacySoundChangeConfig = {
   vowel: "əaeiouyáéíóúýæÆɐ",

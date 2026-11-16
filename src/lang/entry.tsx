@@ -1,5 +1,5 @@
 import { Checkbox, Classes, FormGroup, H4, InputGroup, Tag } from "@blueprintjs/core";
-import { EditField, EntryStatus, FullEntry, GeneratedField, NewWordExtra } from "conlang-web-components";
+import { FullEntry, GeneratedField, NewWordExtra } from "conlang-web-components";
 import { useEffect, useState } from "react";
 
 import { NounInfo } from "components/nounComponents";
@@ -11,12 +11,6 @@ import { FORM_NAMES, InflectableEntry } from "./inflection";
 
 export function generatedFields(entry: FullEntry): readonly GeneratedField[] {
   return [["part", entry.part === null ? null : Part[entry.part]]];
-}
-
-export const EXTRA_EDIT_FIELDS: readonly EditField[] = [];
-
-export function entryStatus(_entry: FullEntry): readonly EntryStatus[] {
-  return [];
 }
 
 export function EntryContent({ entry }: { entry: FullEntry }) {
