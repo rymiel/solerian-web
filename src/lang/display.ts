@@ -1,7 +1,7 @@
+import { LangConfig } from "conlang-web-components";
 import { useContext } from "react";
 
 import { scriptMultiUnicode } from "lang/script";
-import { LangConfig } from "providers/langConfig";
 
 export interface DisplayWord {
   sol: string;

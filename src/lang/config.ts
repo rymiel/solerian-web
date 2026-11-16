@@ -1,23 +1,19 @@
 import {
   ApiConfig,
   configOrEmpty,
-  DEFAULT_GENERATION,
-  DEFAULT_KEY_VALUE,
+  createTransformConfig,
   DEFAULT_SOUND_CHANGE,
-  GenerationInstance,
+  LanguageConfig,
   SoundChangeInstance,
 } from "conlang-web-components";
 
 import { PARTS_OF_SPEECH } from "lang/extra";
 import { scriptMultiUnicode } from "lang/script";
 import { LegacySoundChangeConfig, LegacySoundChangeInstance } from "lang/soundChange";
-import { LangConfigData } from "providers/langConfig";
 
 import { applyKnownStress } from "./inflection";
 
-export interface LangConfigFields {}
-
-function languageConfig(config: ApiConfig) {
+function languageConfig(config: ApiConfig): LanguageConfig {
   const legacySoundChange = new LegacySoundChangeInstance(LEGACY_SOUND_CHANGE_CONFIG);
   const soundChange = new SoundChangeInstance(
     configOrEmpty(config.sound_change, DEFAULT_SOUND_CHANGE),
@@ -55,15 +51,7 @@ function languageConfig(config: ApiConfig) {
   return { soundChange, script, hasScript };
 }
 
-export function transformConfig(config: ApiConfig): LangConfigData {
-  const generation = new GenerationInstance(configOrEmpty(config.generation, DEFAULT_GENERATION));
-  const abbreviations = configOrEmpty(config.abbr, DEFAULT_KEY_VALUE);
-  const parts = configOrEmpty(config.parts, PARTS_OF_SPEECH);
-  const lang = languageConfig(config);
-  const ipa = (sentence: string) => lang.soundChange.soundChangeSentence(sentence);
-
-  return { ...lang, generation, abbreviations, parts, ipa, config };
-}
+export const transformConfig = createTransformConfig(languageConfig, PARTS_OF_SPEECH);
 
 const LEGACY_SOUND_CHANGE_CONFIG: LegacySoundChangeConfig = {
   vowel: "əaeiouyáéíóúýæÆɐ",

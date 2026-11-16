@@ -1,8 +1,8 @@
 import { Divider, H4, HTMLTable, NonIdealState, Spinner, SpinnerSize } from "@blueprintjs/core";
+import { Dictionary } from "conlang-web-components";
 import { FC, useContext } from "react";
 
 import { increment, PartsContent } from "common/stats";
-import { Dictionary } from "providers/dictionary";
 
 import { Part } from "./extra";
 

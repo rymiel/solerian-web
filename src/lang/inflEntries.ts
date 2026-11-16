@@ -1,8 +1,8 @@
+import { Dictionary, FullEntry } from "conlang-web-components";
 import { useCallback, useContext, useEffect, useState } from "react";
 
 import { markStress, separateRoot } from "lang/extra";
 import { applyFromSeparatedRoot } from "lang/inflection";
-import { Dictionary, FullEntry } from "providers/dictionary";
 
 export interface InflEntry {
   sol: string;

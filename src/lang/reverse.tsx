@@ -1,10 +1,7 @@
 import { Button, Tag } from "@blueprintjs/core";
-import { Abbr } from "conlang-web-components";
+import { Abbr, FullEntry, ReverseLookup, ReverseResult } from "conlang-web-components";
 import { ReactNode, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-
-import { ReverseLookup, ReverseResult } from "common/types";
-import { FullEntry } from "providers/dictionary";
 
 import { Part, patternNames } from "./extra";
 import { applyNormalize, FORM_NAMES, POSS_FORMS, POSS_SUFFIXES } from "./inflection";

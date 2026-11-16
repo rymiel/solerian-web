@@ -1,7 +1,5 @@
+import { Dictionary, FullEntry, ValidationCandidate, ValidationFailure } from "conlang-web-components";
 import { useContext } from "react";
-
-import { ValidationCandidate, ValidationFailure } from "common/types";
-import { Dictionary, FullEntry } from "providers/dictionary";
 
 import { applyDestress, applyNormalize } from "./inflection";
 import { useInflEntries } from "./inflEntries";

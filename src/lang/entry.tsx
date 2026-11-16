@@ -1,11 +1,10 @@
 import { Checkbox, Classes, FormGroup, H4, InputGroup, Tag } from "@blueprintjs/core";
+import { EditField, EntryStatus, FullEntry, GeneratedField, NewWordExtra } from "conlang-web-components";
 import { useEffect, useState } from "react";
 
-import { EditField, EntryStatus, GeneratedField, NewWordExtra } from "common/types";
 import { NounInfo } from "components/nounComponents";
 import { PronounInfo } from "components/pronounComponents";
 import { VerbInfo } from "components/verbComponents";
-import { FullEntry } from "providers/dictionary";
 
 import { determinePattern, Part, partOfExtra, patternNames, separateRoot } from "./extra";
 import { FORM_NAMES, InflectableEntry } from "./inflection";
