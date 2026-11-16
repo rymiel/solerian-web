@@ -1,12 +1,11 @@
 import { Code, Dialog, DialogBody, HTMLTable, Tag } from "@blueprintjs/core";
-import { Abbr, zip } from "conlang-web-components";
+import { Abbr, useErrorHandler, zip } from "conlang-web-components";
 import { useState } from "react";
 
 import { NounTable } from "components/nounComponents";
 import { DisplayWord, usePopulateDualInfo } from "lang/display";
 import { Part } from "lang/extra";
 import { FORM_NAMES, formsFromDirect, formsFromEntry, InflectableEntry } from "lang/inflection";
-import { toastErrorHandler } from "App";
 
 function VerbTableEntry({ word }: { word: DisplayWord }) {
   return <td>
@@ -20,11 +19,12 @@ function VerbTableEntry({ word }: { word: DisplayWord }) {
 
 function GerundTableEntry({ word }: { word: DisplayWord }) {
   const [isOpen, setOpen] = useState(false);
+  const error = useErrorHandler();
   let forms;
   try {
     forms = formsFromDirect(word.sol, true, Part.Noun);
   } catch (err) {
-    toastErrorHandler(err);
+    error(err);
 
     return <td>
       <Tag large intent="danger">
