@@ -7,7 +7,7 @@ import { FORM_NAMES, formsFromEntry, InflectableEntry } from "lang/inflection";
 
 function PronounTableEntry({ word }: { word: DisplayWord }) {
   return <td>
-    <span className="dual">
+    <span className="dual-script">
       <i>{word.sol}</i>
       <span lang="x-sol">{word.script}</span>
     </span>
@@ -23,19 +23,19 @@ function PronounTable({ forms }: { forms: readonly string[] }) {
   return <HTMLTable compact bordered className="inflection">
     <tbody>
       <tr>
-        <td className="hl rb">
+        <td className="inflection-label inflection-divider">
           <Abbr>NOM</Abbr>
         </td>
         <PronounTableEntry word={map.nom} />
       </tr>
       <tr>
-        <td className="hl rb">
+        <td className="inflection-label inflection-divider">
           <Abbr>ACC</Abbr>
         </td>
         <PronounTableEntry word={map.acc} />
       </tr>
       <tr>
-        <td className="hl rb">
+        <td className="inflection-label inflection-divider">
           <Abbr>GEN</Abbr>
         </td>
         <PronounTableEntry word={map.gen} />

@@ -9,7 +9,7 @@ import { FORM_NAMES, formsFromDirect, formsFromEntry, InflectableEntry } from "l
 
 function VerbTableEntry({ word }: { word: DisplayWord }) {
   return <td>
-    <span className="dual">
+    <span className="dual-script">
       <i>{word.sol}</i>
       <span lang="x-sol">{word.script}</span>
     </span>
@@ -33,7 +33,7 @@ function GerundTableEntry({ word }: { word: DisplayWord }) {
   }
 
   return <td>
-    <span className="dual">
+    <span className="dual-script">
       <a onClick={() => setOpen(true)}>
         <i>{word.sol}</i>
       </a>
@@ -82,17 +82,17 @@ export function VerbTable({ forms, old }: { forms: readonly string[]; old: boole
     <HTMLTable compact bordered className="inflection">
       <thead>
         <tr>
-          <th colSpan={2} className="rb db"></th>
-          <th className="db">non-past</th>
-          <th className="db">past</th>
+          <th colSpan={2} className="inflection-divider"></th>
+          <th>non-past</th>
+          <th>past</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td className="hl">
+          <td className="inflection-label">
             <Abbr>SG</Abbr>
           </td>
-          <td className="rb">
+          <td className="inflection-divider">
             <Abbr>1</Abbr>
           </td>
           <VerbTableEntry word={map["1sg_prs"]} />
@@ -100,7 +100,7 @@ export function VerbTable({ forms, old }: { forms: readonly string[]; old: boole
         </tr>
         <tr>
           <th></th>
-          <td className="rb">
+          <td className="inflection-divider">
             <Abbr>2</Abbr>
           </td>
           <VerbTableEntry word={map["2sg_prs"]} />
@@ -108,17 +108,17 @@ export function VerbTable({ forms, old }: { forms: readonly string[]; old: boole
         </tr>
         <tr>
           <th></th>
-          <td className="rb">
+          <td className="inflection-divider">
             <Abbr>3</Abbr>
           </td>
           <VerbTableEntry word={map["3sg_prs"]} />
           <VerbTableEntry word={map["3sg_pst"]} />
         </tr>
         <tr>
-          <td className="hl">
+          <td className="inflection-label">
             <Abbr>PL</Abbr>
           </td>
-          <td className="rb">
+          <td className="inflection-divider">
             <Abbr>1</Abbr>
           </td>
           <VerbTableEntry word={map["1pl_prs"]} />
@@ -126,7 +126,7 @@ export function VerbTable({ forms, old }: { forms: readonly string[]; old: boole
         </tr>
         <tr>
           <th></th>
-          <td className="rb">
+          <td className="inflection-divider">
             <Abbr>2</Abbr>
           </td>
           <VerbTableEntry word={map["2pl_prs"]} />
@@ -134,7 +134,7 @@ export function VerbTable({ forms, old }: { forms: readonly string[]; old: boole
         </tr>
         <tr>
           <th></th>
-          <td className="rb">
+          <td className="inflection-divider">
             <Abbr>3</Abbr>
           </td>
           <VerbTableEntry word={map["3pl_prs"]} />

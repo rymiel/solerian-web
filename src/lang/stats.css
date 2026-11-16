@@ -1,37 +1,43 @@
-.stats.classes {
+.stats-classes {
   display: grid;
   grid-template-areas:
-    "nh nh d1 vh vh"
-    "nl nr d1 vl vr";
+    "noun-title noun-title divider verb-title verb-title"
+    "noun-left  noun-right divider verb-left  verb-right";
   grid-column-gap: 1rem;
   grid-row-gap: 0px;
   width: fit-content;
 }
 
-.stats .n-header {
-  grid-area: nh;
+.noun-stats-title {
+  grid-area: noun-title;
   text-align: center;
 }
-.stats .n-left {
-  grid-area: nl;
+
+.noun-stats-left {
+  grid-area: noun-left;
   height: fit-content;
 }
-.stats .n-right {
-  grid-area: nr;
+
+.noun-stats-right {
+  grid-area: noun-right;
   height: fit-content;
 }
-.stats .divider-1 {
-  grid-area: d1;
+
+.class-stats-divider {
+  grid-area: divider;
 }
-.stats .v-header {
-  grid-area: vh;
+
+.verb-stats-title {
+  grid-area: verb-title;
   text-align: center;
 }
-.stats .v-left {
-  grid-area: vl;
+
+.verb-stats-left {
+  grid-area: verb-left;
   height: fit-content;
 }
-.stats .v-right {
-  grid-area: vr;
+
+.verb-stats-right {
+  grid-area: verb-right;
   height: fit-content;
 }

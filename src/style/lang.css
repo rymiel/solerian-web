@@ -8,20 +8,19 @@
   font-display: swap;
 }
 
-[lang="x-sol"],
-table.bp6-html-table td[lang="x-sol"] {
+[lang="x-sol"] {
   font-family: "Solera", "Andika", sans-serif;
   text-align: right;
   font-size: 20px;
 }
 
-.dual [lang="x-sol"] {
+.dual-script [lang="x-sol"] {
   flex-grow: 1;
   padding-left: 0.4rem;
 }
 
 @media (max-width: 690px) {
-  .dictionary td .dual [lang="x-sol"] {
+  .dictionary-table .dual-script [lang="x-sol"] {
     display: none;
   }
 }

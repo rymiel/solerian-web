@@ -1,8 +1,8 @@
-.flex-row {
+.exceptional-forms {
   display: flex;
   flex-direction: row;
 }
 
-.bp6-form-group.compact {
+.exceptional-form {
   margin-bottom: 0;
 }

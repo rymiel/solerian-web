@@ -69,14 +69,14 @@ export function useNewWordExtra(sol: string, extra: string): NewWordExtra {
     {showEx && part === null && <p className={Classes.TEXT_MUTED}>
       <i>This "Extra" value can't be exceptional.</i>
     </p>}
-    {showEx && part !== null && <div className="flex-row">
+    {showEx && part !== null && <div className="exceptional-forms">
       <div>
-        {FORM_NAMES[part].map((i, j) => <FormGroup key={i} label={i} inline className="compact">
+        {FORM_NAMES[part].map((i, j) => <FormGroup key={i} label={i} inline className="exceptional-form">
           <InputGroup placeholder={i} onValueChange={(v) => setExForms((e) => e.map((f, fi) => (fi === j ? v : f)))} />
         </FormGroup>)}
       </div>
       <div>
-        {FORM_NAMES[part].map((i, j) => <FormGroup key={i} label={`old ${i}`} inline className="compact">
+        {FORM_NAMES[part].map((i, j) => <FormGroup key={i} label={`old ${i}`} inline className="exceptional-form">
           <InputGroup
             placeholder={`old ${i}`}
             onValueChange={(v) => setExForms((e) => e.map((f, fi) => (fi === j + FORM_NAMES[part].length ? v : f)))}

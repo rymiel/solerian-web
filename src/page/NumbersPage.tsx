@@ -25,7 +25,7 @@ function Content() {
 export default function NumbersPage() {
   useTitle("Numbers");
 
-  return <div className="inter">
+  return <div className="page-content">
     <Content />
   </div>;
 }

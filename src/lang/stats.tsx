@@ -64,10 +64,10 @@ function ClassContent() {
       }
     }
 
-    content = <div className="stats classes">
-      <H4 className="n-header">Noun stats</H4>
+    content = <div className="stats-section stats-classes">
+      <H4 className="noun-stats-title">Noun stats</H4>
 
-      <HTMLTable className="n-left" compact striped>
+      <HTMLTable className="noun-stats-left" compact striped>
         <thead>
           <tr>
             <th>Class</th>
@@ -86,7 +86,7 @@ function ClassContent() {
             </tr>)}
         </tbody>
       </HTMLTable>
-      <HTMLTable className="n-right" compact striped>
+      <HTMLTable className="noun-stats-right" compact striped>
         <thead>
           <tr>
             <th>Gender</th>
@@ -96,7 +96,7 @@ function ClassContent() {
         <tbody>
           {Object.keys(NOUN_EXPLANATIONS).map((i) => <tr key={i}>
             <td>
-              <abbr className="il" title={NOUN_EXPLANATIONS[i]}>
+              <abbr className="gloss-abbr" title={NOUN_EXPLANATIONS[i]}>
                 {i}
               </abbr>
             </td>
@@ -104,9 +104,9 @@ function ClassContent() {
           </tr>)}
         </tbody>
       </HTMLTable>
-      <Divider className="divider-1" />
-      <H4 className="v-header">Verb stats</H4>
-      <HTMLTable className="v-left" compact striped>
+      <Divider className="class-stats-divider" />
+      <H4 className="verb-stats-title">Verb stats</H4>
+      <HTMLTable className="verb-stats-left" compact striped>
         <thead>
           <tr>
             <th>Class</th>
@@ -122,7 +122,7 @@ function ClassContent() {
             </tr>)}
         </tbody>
       </HTMLTable>
-      <HTMLTable className="v-right" compact striped>
+      <HTMLTable className="verb-stats-right" compact striped>
         <thead>
           <tr>
             <th>Base</th>
@@ -132,7 +132,7 @@ function ClassContent() {
         <tbody>
           {Object.keys(VERB_EXPLANATIONS).map((i) => <tr key={i}>
             <td>
-              <abbr className="il" title={VERB_EXPLANATIONS[i]}>
+              <abbr className="gloss-abbr" title={VERB_EXPLANATIONS[i]}>
                 {i}
               </abbr>
             </td>

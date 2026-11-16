@@ -15,7 +15,7 @@ import {
 
 function PossTableEntry({ word }: { word: DisplayWord }) {
   return <td>
-    <span className="dual">
+    <span className="dual-script">
       <i>{word.sol}</i>
       <span lang="x-sol">{word.script}</span>
     </span>
@@ -34,7 +34,7 @@ function NounTableEntry({ word, stress, old }: { word: DisplayWord; stress: bool
   );
 
   return <td>
-    <span className="dual">
+    <span className="dual-script">
       {stress ? (
         <a onClick={() => setOpen(true)}>
           <i>{word.sol}</i>
@@ -78,32 +78,32 @@ export function NounTable({ forms, stress, old }: { forms: readonly string[]; st
   return <HTMLTable compact bordered className="inflection">
     <thead>
       <tr>
-        <th className="rb"></th>
-        <th className="db">
+        <th className="inflection-divider"></th>
+        <th>
           <Abbr>SG</Abbr>
         </th>
-        <th className="db">
+        <th>
           <Abbr>PL</Abbr>
         </th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td className="hl rb">
+        <td className="inflection-label inflection-divider">
           <Abbr>NOM</Abbr>
         </td>
         <NounTableEntry word={map.nom_sg} stress={stress} old={old} />
         <NounTableEntry word={map.nom_pl} stress={stress} old={old} />
       </tr>
       <tr>
-        <td className="hl rb">
+        <td className="inflection-label inflection-divider">
           <Abbr>ACC</Abbr>
         </td>
         <NounTableEntry word={map.acc_sg} stress={stress} old={old} />
         <NounTableEntry word={map.acc_pl} stress={stress} old={old} />
       </tr>
       <tr>
-        <td className="hl rb">
+        <td className="inflection-label inflection-divider">
           <Abbr>GEN</Abbr>
         </td>
         <NounTableEntry word={map.gen_sg} stress={stress} old={old} />
