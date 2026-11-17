@@ -1,29 +1,48 @@
-import { FullEntry, useData, ValidationCandidate, ValidationFailure } from "conlang-web-components";
+import { FullEntry, uri, useData, ValidationCandidate, ValidationFailure } from "conlang-web-components";
+import { useMemo } from "react";
 
-import { applyDestress, applyNormalize } from "./inflection";
-import { useInflEntries } from "./inflEntries";
+import { LEGACY_SOUND_CHANGE } from "lang/config";
+import { applyDestress, applyNormalize } from "lang/inflection";
+import { useInflEntries } from "lang/inflEntries";
+
+export function validationValue(word: string): string {
+  return LEGACY_SOUND_CHANGE.unromanize(word);
+}
+
+function isAffix(sol: string): boolean {
+  return sol.includes("-");
+}
 
 export function useValidationCandidates(): readonly ValidationCandidate[] {
   const { entries } = useData();
   const infl = useInflEntries();
-  return [
-    ...entries.map((e) => ({ key: e.hash, sol: e.sol, label: `"${e.sol}"`, entry: e })),
-    ...infl
-      .filter((i) => i.old === false)
-      .map((i) => ({
-        key: `"${i.original.hash}"-${i.form}`,
-        sol: i.sol,
-        label: `"${i.sol}" (${i.form} of ${i.original.sol})`,
-      })),
-  ];
+  return useMemo(
+    () => [
+      ...entries
+        .filter((e) => !isAffix(e.sol))
+        .map((e) => ({
+          key: e.hash,
+          label: `"${e.sol}"`,
+          value: validationValue(e.sol),
+          link: uri`/reverse/${e.sol}`,
+          entry: e,
+        })),
+      ...infl
+        .filter((i) => !i.old && !isAffix(i.sol))
+        .map((i) => ({
+          key: `"${i.original.hash}"-${i.form}`,
+          label: `"${i.sol}" (${i.form} of ${i.original.sol})`,
+          value: validationValue(i.sol),
+          link: uri`/reverse/${i.sol}`,
+        })),
+    ],
+    [entries, infl],
+  );
 }
 
 function normalizationFailure(entry: FullEntry): string | null {
   if (entry.extra.includes("NAME")) {
     return null; // Skip onomatonyms for now
-  }
-  if (entry.sol.includes("-")) {
-    return null; // Skip affixes for now
   }
   const norm = applyNormalize(entry.sol);
   if (entry.extra === "conj." || entry.extra === "postpos.") {
@@ -42,6 +61,8 @@ function normalizationFailure(entry: FullEntry): string | null {
   return "not normalized";
 }
 
+const INVALID_CLUSTERS = ["aa", "rr"].map(validationValue);
+
 export function validateLocal(candidates: readonly ValidationCandidate[]): ValidationFailure[] {
   const fail: ValidationFailure[] = [];
   for (const c of candidates) {
@@ -51,7 +72,7 @@ export function validateLocal(candidates: readonly ValidationCandidate[]): Valid
     }
   }
   for (const c of candidates) {
-    if (c.sol.includes("aa") || c.sol.includes("rr")) {
+    if (INVALID_CLUSTERS.some((cluster) => c.value.includes(cluster))) {
       fail.push([c, "invalid cluster"]);
     }
   }

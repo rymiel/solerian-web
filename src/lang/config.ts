@@ -12,7 +12,6 @@ import { LegacySoundChangeConfig, LegacySoundChangeInstance } from "lang/soundCh
 import { applyKnownStress } from "./inflection";
 
 export function languageConfig(config: ApiConfig): LanguageConfig {
-  const legacySoundChange = new LegacySoundChangeInstance(LEGACY_SOUND_CHANGE_CONFIG);
   const soundChange = new SoundChangeInstance(
     configOrEmpty(config.sound_change, DEFAULT_SOUND_CHANGE),
     (word: string, { markStress }) => {
@@ -23,25 +22,25 @@ export function languageConfig(config: ApiConfig): LanguageConfig {
         if (word.includes("-")) {
           let [prefix, rest] = word.split("-");
           rest = applyKnownStress(rest);
-          prefix = legacySoundChange.preUnromanize(prefix);
-          rest = legacySoundChange.preUnromanize(rest);
+          prefix = LEGACY_SOUND_CHANGE.preUnromanize(prefix);
+          rest = LEGACY_SOUND_CHANGE.preUnromanize(rest);
           return `${prefix}‿${rest}`;
         }
         word = applyKnownStress(word);
       }
-      return legacySoundChange.preUnromanize(word);
+      return LEGACY_SOUND_CHANGE.preUnromanize(word);
     },
     (word: string, { markStress }) => {
       if (markStress === undefined) {
         if (word.includes("‿")) {
           let [prefix, rest] = word.split("‿");
-          prefix = legacySoundChange.syllabify(prefix, false);
-          rest = legacySoundChange.syllabify(rest, true);
+          prefix = LEGACY_SOUND_CHANGE.syllabify(prefix, false);
+          rest = LEGACY_SOUND_CHANGE.syllabify(rest, true);
           return `${prefix}‿${rest}`;
         }
         markStress = true;
       }
-      return legacySoundChange.syllabify(word, markStress);
+      return LEGACY_SOUND_CHANGE.syllabify(word, markStress);
     },
   );
   const script = scriptMultiUnicode;
@@ -72,3 +71,5 @@ const LEGACY_SOUND_CHANGE_CONFIG: LegacySoundChangeConfig = {
   },
   clusters: ["ts", "tɕ", "kʲ"],
 };
+
+export const LEGACY_SOUND_CHANGE = new LegacySoundChangeInstance(LEGACY_SOUND_CHANGE_CONFIG);

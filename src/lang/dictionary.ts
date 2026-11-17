@@ -1,6 +1,7 @@
 import { ApiWord, DerivedFields, LangConfigData } from "conlang-web-components";
 
 import { AnyPattern, determinePattern, markStress, Part, partOfExtra } from "lang/extra";
+import { LEGACY_SOUND_CHANGE } from "./config";
 
 declare module "conlang-web-components" {
   interface LangEntryFields {
@@ -18,7 +19,7 @@ export function deriveFields(lang: LangConfigData, word: ApiWord): DerivedFields
     cls = word.ex !== undefined ? "X" : (determinePattern(word.sol, part) ?? "?");
   }
   const script = lang.script(word.sol);
-  const phon = "/" + lang.soundChange.ipaWithoutSoundChange(word.sol, { markStress: markStress(word) }) + "/";
+  const phon = "/" + LEGACY_SOUND_CHANGE.unromanize(word.sol) + "/";
   const ipa = lang.soundChange.soundChange(word.sol, { markStress: markStress(word) });
   const disp = word.sol;
   return { part, class: cls, script, ipa, disp, phon };

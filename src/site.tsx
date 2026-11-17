@@ -5,7 +5,7 @@ import { deriveFields } from "lang/dictionary";
 import { draftClass, EntryContent, generatedFields, useNewWordExtra } from "lang/entry";
 import { useReverseLookup } from "lang/reverse";
 import { STATS_SECTIONS } from "lang/stats";
-import { useValidationCandidates, validateLocal } from "lang/validation";
+import { useValidationCandidates, validateLocal, validationValue } from "lang/validation";
 import NumbersPage from "page/NumbersPage";
 
 declare const WEB_VERSION: string;
@@ -44,6 +44,7 @@ export const SITE = defineSite({
   draftClass,
   useNewWordExtra,
   useReverseLookup,
+  validationValue,
   useValidationCandidates,
   validateLocal,
 });

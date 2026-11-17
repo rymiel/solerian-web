@@ -54,6 +54,10 @@ export class LegacySoundChangeInstance {
     return gsub(word, this.#config.unromanize.pre);
   }
 
+  public unromanize(word: string): string {
+    return gsub(gsub(word, this.#config.unromanize.pre), this.#config.unromanize.post);
+  }
+
   public get config(): LegacySoundChangeConfig {
     return this.#config;
   }
