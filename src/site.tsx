@@ -1,4 +1,4 @@
-import { createApiClient, defineSite, UserOnly } from "conlang-web-components";
+import { createApiClient, defineSite, RouteHandle, UserOnly } from "conlang-web-components";
 
 import { languageConfig } from "lang/config";
 import { deriveFields } from "lang/dictionary";
@@ -32,6 +32,7 @@ export const SITE = defineSite({
   routes: [
     {
       path: "/numbers",
+      handle: { title: "Numbers" } satisfies RouteHandle,
       element: <UserOnly error>
         <NumbersPage />
       </UserOnly>,

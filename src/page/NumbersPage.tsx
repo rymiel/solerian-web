@@ -1,5 +1,4 @@
 import { ControlGroup, InputGroup, NumericInput } from "@blueprintjs/core";
-import { useTitle } from "conlang-web-components";
 import { useState } from "react";
 
 import { b10Split, b10ToB12, b12toBijective, constructNumber } from "lang/numbers";
@@ -23,8 +22,6 @@ function Content() {
 }
 
 export default function NumbersPage() {
-  useTitle("Numbers");
-
   return <div className="page-content">
     <Content />
   </div>;
