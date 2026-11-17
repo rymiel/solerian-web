@@ -1,5 +1,4 @@
-import { LangConfig } from "conlang-web-components";
-import { useContext } from "react";
+import { useData } from "conlang-web-components";
 
 import { scriptMultiUnicode } from "lang/script";
 
@@ -10,11 +9,11 @@ export interface DisplayWord {
 }
 
 export function usePopulateDualInfo() {
-  const lang = useContext(LangConfig);
+  const { config: lang } = useData();
 
   return (word: string, markStress = true) => ({
     sol: word,
     script: scriptMultiUnicode(word),
-    ipa: lang ? lang.soundChange.soundChange(word, { markStress }) : "[ ... ]",
+    ipa: lang.soundChange.soundChange(word, { markStress }),
   });
 }

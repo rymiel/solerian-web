@@ -1,5 +1,5 @@
-import { Dictionary, FullEntry } from "conlang-web-components";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { FullEntry, useData } from "conlang-web-components";
+import { useMemo } from "react";
 
 import { markStress, separateRoot } from "lang/extra";
 import { applyFromSeparatedRoot } from "lang/inflection";
@@ -12,11 +12,8 @@ export interface InflEntry {
 }
 
 export function useInflEntries() {
-  const { entries } = useContext(Dictionary);
-  const [infl, setInfl] = useState<InflEntry[] | null>(null);
-
-  const refresh = useCallback(async () => {
-    if (!entries) return;
+  const { entries } = useData();
+  return useMemo(() => {
     const infls: InflEntry[] = [];
     for (const i of entries) {
       if (i.part === null) continue;
@@ -35,12 +32,6 @@ export function useInflEntries() {
         forms.old.forEach((f, fi) => infls.push({ sol: f, form: fi, original: i, old: true }));
       }
     }
-    setInfl(infls);
+    return infls;
   }, [entries]);
-
-  useEffect(() => {
-    refresh();
-  }, [refresh]);
-
-  return infl;
 }

@@ -1,13 +1,11 @@
-import { Dictionary, FullEntry, ValidationCandidate, ValidationFailure } from "conlang-web-components";
-import { useContext } from "react";
+import { FullEntry, useData, ValidationCandidate, ValidationFailure } from "conlang-web-components";
 
 import { applyDestress, applyNormalize } from "./inflection";
 import { useInflEntries } from "./inflEntries";
 
-export function useValidationCandidates(): readonly ValidationCandidate[] | null {
-  const { entries } = useContext(Dictionary);
+export function useValidationCandidates(): readonly ValidationCandidate[] {
+  const { entries } = useData();
   const infl = useInflEntries();
-  if (entries === null || infl === null) return null;
   return [
     ...entries.map((e) => ({ key: e.hash, sol: e.sol, label: `"${e.sol}"`, entry: e })),
     ...infl

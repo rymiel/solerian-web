@@ -132,11 +132,7 @@ function solerianLookup(
   return { items: r, entries: found };
 }
 
-function calculateFormsCount(infl: readonly InflEntry[] | null): string {
-  if (infl === null) {
-    return "...";
-  }
-
+function calculateFormsCount(infl: readonly InflEntry[]): string {
   let oldNouns = 0;
   let curNouns = 0;
   let verbs = 0;
@@ -154,13 +150,13 @@ function calculateFormsCount(infl: readonly InflEntry[] | null): string {
   return `${infl.length} forms, ${estimate} estimated`;
 }
 
-export function useReverseLookup(entries: readonly FullEntry[] | null): ReverseLookup {
+export function useReverseLookup(entries: readonly FullEntry[]): ReverseLookup {
   const [includeOld, setIncludeOld] = useState(false);
   const infl = useInflEntries();
-  const lookup = useMemo(() => {
-    if (entries === null || infl === null) return null;
-    return (query: string) => solerianLookup(infl, entries, includeOld, query);
-  }, [entries, infl, includeOld]);
+  const lookup = useMemo(
+    () => (query: string) => solerianLookup(infl, entries, includeOld, query),
+    [entries, infl, includeOld],
+  );
   const controls = <Button
     icon={includeOld ? "eye-on" : "eye-off"}
     intent="warning"
