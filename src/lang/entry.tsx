@@ -1,6 +1,6 @@
 import { Checkbox, Classes, FormGroup, H4, InputGroup, Tag } from "@blueprintjs/core";
 import { FullEntry, GeneratedField, NewWordExtra } from "conlang-web-components";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { NounInfo } from "components/nounComponents";
 import { PronounInfo } from "components/pronounComponents";
@@ -37,8 +37,18 @@ export function draftClass(sol: string, extra: string): string | null {
 
 export function useNewWordExtra(sol: string, extra: string): NewWordExtra {
   const [showEx, setShowEx] = useState(false);
-  const [exForms, setExForms] = useState<string[]>([]);
+  const [edited, setEdited] = useState<{ part: Part; forms: string[] } | null>(null);
   const part = partOfExtra(extra);
+  const exForms =
+    !showEx || part === null
+      ? []
+      : edited?.part === part
+        ? edited.forms
+        : Array<string>(FORM_NAMES[part].length * 2).fill("");
+  const setForm = (index: number, value: string) => {
+    if (part === null) return;
+    setEdited({ part, forms: exForms.map((f, fi) => (fi === index ? value : f)) });
+  };
   const pattern = determinePattern(sol, part);
   const names = patternNames(part, pattern);
 
@@ -49,14 +59,6 @@ export function useNewWordExtra(sol: string, extra: string): NewWordExtra {
     ex: exForms.length === 0 ? undefined : exForms.join(","),
   };
   const valid = (part === null ? false : separateRoot(sol, part) !== null) || exForms.length > 0;
-
-  useEffect(() => {
-    if (showEx) {
-      setExForms(part === null ? [] : Array(FORM_NAMES[part].length * 2).fill(""));
-    } else {
-      setExForms([]);
-    }
-  }, [part, showEx]);
 
   const content = <>
     {names !== null && part !== null && <p>
@@ -72,15 +74,12 @@ export function useNewWordExtra(sol: string, extra: string): NewWordExtra {
     {showEx && part !== null && <div className="exceptional-forms">
       <div>
         {FORM_NAMES[part].map((i, j) => <FormGroup key={i} label={i} inline className="exceptional-form">
-          <InputGroup placeholder={i} onValueChange={(v) => setExForms((e) => e.map((f, fi) => (fi === j ? v : f)))} />
+          <InputGroup placeholder={i} onValueChange={(v) => setForm(j, v)} />
         </FormGroup>)}
       </div>
       <div>
         {FORM_NAMES[part].map((i, j) => <FormGroup key={i} label={`old ${i}`} inline className="exceptional-form">
-          <InputGroup
-            placeholder={`old ${i}`}
-            onValueChange={(v) => setExForms((e) => e.map((f, fi) => (fi === j + FORM_NAMES[part].length ? v : f)))}
-          />
+          <InputGroup placeholder={`old ${i}`} onValueChange={(v) => setForm(j + FORM_NAMES[part].length, v)} />
         </FormGroup>)}
       </div>
     </div>}
@@ -93,7 +92,13 @@ export function useNewWordExtra(sol: string, extra: string): NewWordExtra {
   </>;
 
   return {
-    fields: <Checkbox onChange={(e) => setShowEx(e.currentTarget.checked)} label="Exceptional" />,
+    fields: <Checkbox
+      onChange={(e) => {
+        setShowEx(e.currentTarget.checked);
+        setEdited(null);
+      }}
+      label="Exceptional"
+    />,
     content,
     data: { ex: entry.ex },
   };
