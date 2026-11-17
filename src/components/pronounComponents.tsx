@@ -1,5 +1,5 @@
 import { HTMLTable } from "@blueprintjs/core";
-import { Abbr, zip } from "conlang-web-components";
+import { Abbr, zip } from "@rymiel/conlang-web-components";
 
 import { DisplayWord, usePopulateDualInfo } from "lang/display";
 import { Part } from "lang/extra";

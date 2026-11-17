@@ -1,5 +1,5 @@
 import { Dialog, DialogBody, HTMLTable, Tag } from "@blueprintjs/core";
-import { Abbr, zip } from "conlang-web-components";
+import { Abbr, zip } from "@rymiel/conlang-web-components";
 import { useState } from "react";
 
 import { DisplayWord, usePopulateDualInfo } from "lang/display";

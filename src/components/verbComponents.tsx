@@ -1,5 +1,5 @@
 import { Code, Dialog, DialogBody, HTMLTable, Tag } from "@blueprintjs/core";
-import { Abbr, showError, zip } from "conlang-web-components";
+import { Abbr, showError, zip } from "@rymiel/conlang-web-components";
 import { useState } from "react";
 
 import { NounTable } from "components/nounComponents";

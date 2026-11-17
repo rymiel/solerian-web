@@ -1,5 +1,5 @@
 import { Checkbox, Classes, FormGroup, H4, InputGroup, Tag } from "@blueprintjs/core";
-import { FullEntry, GeneratedField, NewWordExtra } from "conlang-web-components";
+import { FullEntry, GeneratedField, NewWordExtra } from "@rymiel/conlang-web-components";
 import { useState } from "react";
 
 import { NounInfo } from "components/nounComponents";

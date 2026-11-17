@@ -1,4 +1,4 @@
-import { gsub, sub, SubMap } from "conlang-web-components";
+import { gsub, sub, SubMap } from "@rymiel/conlang-web-components";
 
 import { markStress, Part, Patterns, SeparatedRoot, separateRoot } from "lang/extra";
 

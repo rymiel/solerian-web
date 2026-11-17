@@ -1,9 +1,10 @@
-import { ApiWord, DerivedFields, LangConfigData } from "conlang-web-components";
+import { ApiWord, DerivedFields, LangConfigData } from "@rymiel/conlang-web-components";
 
 import { AnyPattern, determinePattern, markStress, Part, partOfExtra } from "lang/extra";
+
 import { LEGACY_SOUND_CHANGE } from "./config";
 
-declare module "conlang-web-components" {
+declare module "@rymiel/conlang-web-components" {
   interface LangEntryFields {
     phon: string;
     part: Part | null;

@@ -1,4 +1,4 @@
-import { gsub } from "conlang-web-components";
+import { gsub } from "@rymiel/conlang-web-components";
 
 export type Unromanize = readonly (readonly [string, string])[];
 export type Change = readonly [from: string, to: string, leftContext: string | null, rightContext: string | null];

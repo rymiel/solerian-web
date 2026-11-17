@@ -1,5 +1,5 @@
 import { Divider, H4, HTMLTable } from "@blueprintjs/core";
-import { increment, PartsContent, useData } from "conlang-web-components";
+import { increment, PartsContent, useData } from "@rymiel/conlang-web-components";
 import { FC } from "react";
 
 import { Part } from "./extra";

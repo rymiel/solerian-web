@@ -1,4 +1,4 @@
-import { gsub, GSubMap } from "conlang-web-components";
+import { gsub, GSubMap } from "@rymiel/conlang-web-components";
 
 const LETTERSX: Readonly<(string | null)[]> = [
   "s",

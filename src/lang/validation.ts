@@ -1,4 +1,4 @@
-import { FullEntry, uri, useData, ValidationCandidate, ValidationFailure } from "conlang-web-components";
+import { FullEntry, uri, useData, ValidationCandidate, ValidationFailure } from "@rymiel/conlang-web-components";
 import { useMemo } from "react";
 
 import { LEGACY_SOUND_CHANGE } from "lang/config";

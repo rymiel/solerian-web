@@ -1,5 +1,5 @@
 import { Button, Tag } from "@blueprintjs/core";
-import { Abbr, FullEntry, ReverseLookup, ReverseResult } from "conlang-web-components";
+import { Abbr, FullEntry, ReverseLookup, ReverseResult } from "@rymiel/conlang-web-components";
 import { ReactNode, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 

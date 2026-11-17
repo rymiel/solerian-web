@@ -4,7 +4,7 @@ import {
   DEFAULT_SOUND_CHANGE,
   LanguageConfig,
   SoundChangeInstance,
-} from "conlang-web-components";
+} from "@rymiel/conlang-web-components";
 
 import { scriptMultiUnicode } from "lang/script";
 import { LegacySoundChangeConfig, LegacySoundChangeInstance } from "lang/soundChange";

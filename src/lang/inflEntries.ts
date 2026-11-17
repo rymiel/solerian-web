@@ -1,4 +1,4 @@
-import { FullEntry, useData } from "conlang-web-components";
+import { FullEntry, useData } from "@rymiel/conlang-web-components";
 import { useMemo } from "react";
 
 import { markStress, separateRoot } from "lang/extra";
