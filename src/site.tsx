@@ -20,6 +20,7 @@ export const SITE = defineSite({
     ["/", "Home"],
     ["/reverse", "Reverse"],
     ["/stats", "Stats"],
+    ["/docs", "Docs"],
     ["/translations", "Translations"],
   ],
   privateMenuLinks: [
